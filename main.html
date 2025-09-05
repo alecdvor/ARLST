@@ -86,8 +86,9 @@
     <script src="questions/g10_questions.js"></script>
 
     <script>
-        // This event listener waits for the HTML document to be fully loaded before running the script.
-        document.addEventListener('DOMContentLoaded', () => {
+        // This event listener waits for the entire window, including all scripts, to be fully loaded.
+        // This is more reliable than 'DOMContentLoaded' when scripts need to access variables from other loaded script files.
+        window.addEventListener('load', () => {
 
             // ----- DATA -----
             // This section now safely builds the CHAPTER_DATA array.
