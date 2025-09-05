@@ -1,4 +1,4 @@
-const chapter8 = {
+const g8_questions = {
   "name": "Signals and Emissions",
   "questions": [
     {
