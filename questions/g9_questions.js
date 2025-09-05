@@ -1,328 +1,334 @@
-const g9_questions = {
-  "name": "Antennas and Feed Lines",
-  "questions": [
-    {
-      "id": "G9A01",
-      "question": "What is a major difference between a vertical and horizontal antenna?",
-      "options": [
-        "The polarization of the radio waves they emit",
-        "Their impedance",
-        "The frequency range they cover",
-        "Their power handling capability"
-      ],
-      "answer": "The polarization of the radio waves they emit",
-      "go_to": "G9A02"
-    },
-    {
-      "id": "G9A02",
-      "question": "What does antenna gain mean?",
-      "options": [
-        "A measure of how well an antenna concentrates radio frequency energy in a particular direction",
-        "The ratio of the antenna's power input to its power output",
-        "The physical size of the antenna",
-        "The ability of an antenna to operate on multiple bands"
-      ],
-      "answer": "A measure of how well an antenna concentrates radio frequency energy in a particular direction",
-      "go_to": "G9A03"
-    },
-    {
-      "id": "G9A03",
-      "question": "What is the approximate length of a half-wave dipole antenna for the 2-meter band (146 MHz)?",
-      "options": [
-        "Approximately 38 inches",
-        "Approximately 19 inches",
-        "Approximately 112 inches",
-        "Approximately 21 inches"
-      ],
-      "answer": "Approximately 38 inches",
-      "go_to": "G9A04"
-    },
-    {
-      "id": "G9A04",
-      "question": "The orientation of the electric field of a radio wave is called what?",
-      "options": [
-        "Polarization",
-        "Impedance",
-        "Frequency",
-        "Wavelength"
-      ],
-      "answer": "Polarization",
-      "go_to": "G9A05"
-    },
-    {
-      "id": "G9A05",
-      "question": "Which of the following antennas is vertically polarized?",
-      "options": [
-        "A quarter-wave vertical antenna",
-        "A half-wave dipole mounted horizontally",
-        "A Yagi antenna with horizontal elements",
-        "A dish antenna"
-      ],
-      "answer": "A quarter-wave vertical antenna",
-      "go_to": "G9A06"
-    },
-    {
-      "id": "G9A06",
-      "question": "What is a directional antenna?",
-      "options": [
-        "An antenna that radiates or receives signals better in some directions than others",
-        "An antenna that radiates signals equally well in all directions",
-        "An antenna that can be used on all bands",
-        "An antenna that is only used for receiving"
-      ],
-      "answer": "An antenna that radiates or receives signals better in some directions than others",
-      "go_to": "G9A07"
-    },
-    {
-      "id": "G9A07",
-      "question": "Which of the following is a type of directional antenna?",
-      "options": [
-        "A Yagi antenna",
-        "A vertical antenna",
-        "A dipole antenna",
-        "A dummy load"
-      ],
-      "answer": "A Yagi antenna",
-      "go_to": "G9A08"
-    },
-    {
-      "id": "G9A08",
-      "question": "What is a main characteristic of a Yagi antenna?",
-      "options": [
-        "It is highly directional",
-        "It is omnidirectional",
-        "It is a very small antenna",
-        "It can only be used on HF bands"
-      ],
-      "answer": "It is highly directional",
-      "go_to": "G9A09"
-    },
-    {
-      "id": "G9A09",
-      "question": "What does a 'rubber duck' antenna, commonly found on handheld transceivers, consist of?",
-      "options": [
-        "A coil of wire sealed in a rubbery material",
-        "A small dipole antenna",
-        "A piece of straight, stiff wire",
-        "A long wire antenna"
-      ],
-      "answer": "A coil of wire sealed in a rubbery material",
-      "go_to": "G9A10"
-    },
-    {
-      "id": "G9A10",
-      "question": "Why are rubber duck antennas less effective than a full-sized quarter-wave antenna?",
-      "options": [
-        "They are physically shorter, which makes them less efficient radiators",
-        "The rubber material absorbs RF energy",
-        "They have a very high SWR",
-        "They are not properly grounded"
-      ],
-      "answer": "They are physically shorter, which makes them less efficient radiators",
-      "go_to": "G9A11"
-    },
-    {
-      "id": "G9A11",
-      "question": "What is the primary purpose of a mobile antenna?",
-      "options": [
-        "To provide communication capability from a vehicle",
-        "To be used as a base station antenna",
-        "To communicate over very long distances",
-        "To be used for satellite communication"
-      ],
-      "answer": "To provide communication capability from a vehicle",
-      "go_to": "G9B01"
-    },
-    {
-      "id": "G9B01",
-      "question": "What is the most common type of feed line used for amateur radio stations?",
-      "options": [
-        "Coaxial cable",
-        "Twin-lead",
-        "Waveguide",
-        "Fiber optic cable"
-      ],
-      "answer": "Coaxial cable",
-      "go_to": "G9B02"
-    },
-    {
-      "id": "G9B02",
-      "question": "What is the characteristic impedance of most coaxial cables used in amateur radio?",
-      "options": [
-        "50 ohms",
-        "75 ohms",
-        "300 ohms",
-        "600 ohms"
-      ],
-      "answer": "50 ohms",
-      "go_to": "G9B03"
-    },
-    {
-      "id": "G9B03",
-      "question": "Why is it important to have a low SWR?",
-      "options": [
-        "To ensure maximum power is transferred from the transmitter to the antenna",
-        "To increase the frequency of the signal",
-        "To reduce the antenna gain",
-        "To change the polarization of the signal"
-      ],
-      "answer": "To ensure maximum power is transferred from the transmitter to the antenna",
-      "go_to": "G9B04"
-    },
-    {
-      "id": "G9B04",
-      "question": "What happens to power that is not delivered to the antenna due to a high SWR?",
-      "options": [
-        "It is reflected back to the transmitter, which can cause damage",
-        "It is converted into sound",
-        "It is radiated as heat from the feed line",
-        "It is absorbed by the antenna tuner"
-      ],
-      "answer": "It is reflected back to the transmitter, which can cause damage",
-      "go_to": "G9B05"
-    },
-    {
-      "id": "G9B05",
-      "question": "What does an antenna tuner do?",
-      "options": [
-        "It matches the impedance of the transmitter to the impedance of the antenna system",
-        "It changes the frequency of the transmitter",
-        "It increases the power output of the transmitter",
-        "It filters out unwanted signals"
-      ],
-      "answer": "It matches the impedance of the transmitter to the impedance of the antenna system",
-      "go_to": "G9B06"
-    },
-    {
-      "id": "G9B06",
-      "question": "Which of the following causes the most loss in a coaxial cable?",
-      "options": [
-        "High frequency and long cable length",
-        "Low frequency and short cable length",
-        "A perfect SWR",
-        "Using the correct impedance cable"
-      ],
-      "answer": "High frequency and long cable length",
-      "go_to": "G9B07"
-    },
-    {
-      "id": "G9B07",
-      "question": "What is a common type of connector used for coaxial cable in amateur radio?",
-      "options": [
-        "PL-259",
-        "RJ-45",
-        "USB",
-        "HDMI"
-      ],
-      "answer": "PL-259",
-      "go_to": "G9B08"
-    },
-    {
-      "id": "G9B08",
-      "question": "What is an SWR meter used for?",
-      "options": [
-        "To measure the standing wave ratio in a feed line",
-        "To measure the power output of a transmitter",
-        "To measure the frequency of a signal",
-        "To measure the impedance of an antenna"
-      ],
-      "answer": "To measure the standing wave ratio in a feed line",
-      "go_to": "G9C01"
-    },
-    {
-      "id": "G9C01",
-      "question": "What is a major safety concern when installing an antenna?",
-      "options": [
-        "Contact with overhead power lines",
-        "Causing interference to neighbors",
-        "The antenna falling over in a light breeze",
-        "Getting a sunburn"
-      ],
-      "answer": "Contact with overhead power lines",
-      "go_to": "G9C02"
-    },
-    {
-      "id": "G9C02",
-      "question": "What is the purpose of grounding an antenna mast?",
-      "options": [
-        "To protect against lightning strikes",
-        "To improve the SWR",
-        "To increase the antenna gain",
-        "To prevent RF exposure"
-      ],
-      "answer": "To protect against lightning strikes",
-      "go_to": "G9C03"
-    },
-    {
-      "id": "G9C03",
-      "question": "What is RF exposure?",
-      "options": [
-        "The exposure of the human body to radio frequency energy",
-        "The amount of power a transmitter is producing",
-        "The strength of the signal received from a distant station",
-        "The type of modulation used by a transmitter"
-      ],
-      "answer": "The exposure of the human body to radio frequency energy",
-      "go_to": "G9C04"
-    },
-    {
-      "id": "G9C04",
-      "question": "Why is it a good idea to wear a hard hat and safety glasses when working on an antenna tower?",
-      "options": [
-        "To protect against falling objects and eye injuries",
-        "To improve your radio signal",
-        "To prevent RF exposure",
-        "To keep the sun out of your eyes"
-      ],
-      "answer": "To protect against falling objects and eye injuries",
-      "go_to": "G9C05"
-    },
-    {
-      "id": "G9C05",
-      "question": "What is a gin pole?",
-      "options": [
-        "A device used to lift antennas and tower sections",
-        "A type of antenna",
-        "A tool for measuring SWR",
-        "A safety harness"
-      ],
-      "answer": "A device used to lift antennas and tower sections",
-      "go_to": "G9C06"
-    },
-    {
-      "id": "G9C06",
-      "question": "What is the minimum safe distance to maintain from power lines when installing an antenna?",
-      "options": [
-        "A distance great enough so that if the antenna or mast falls, it cannot contact the power lines",
-        "1 foot",
-        "5 feet",
-        "There is no minimum distance"
-      ],
-      "answer": "A distance great enough so that if the antenna or mast falls, it cannot contact the power lines",
-      "go_to": "G9C07"
-    },
-    {
-      "id": "G9C07",
-      "question": "What should be done with coaxial cable that is run outdoors?",
-      "options": [
-        "It should be weather-sealed to prevent moisture from entering the cable",
-        "It should be painted to match the house",
-        "It should be buried at least 6 feet deep",
-        "It should be coiled up to increase inductance"
-      ],
-      "answer": "It should be weather-sealed to prevent moisture from entering the cable",
-      "go_to": "G9C08"
-    },
-    {
-      "id": "G9C08",
-      "question": "Which of the following factors affects the RF exposure risk to a person near an antenna?",
-      "options": [
-        "Transmitter power, distance from the antenna, and frequency",
-        "The type of modulation being used",
-        "The SWR of the antenna system",
-        "The time of day"
-      ],
-      "answer": "Transmitter power, distance from the antenna, and frequency"
-    }
-  ]
+var g9_questions = {
+    "questions": [
+        {
+            "id": "G9A01",
+            "question": "What is an antenna?",
+            "options": [
+                "A. A device that converts electrical energy into electromagnetic waves and vice versa",
+                "B. A device that amplifies a signal",
+                "C. A device that filters a signal",
+                "D. A device that generates a signal"
+            ],
+            "answer": "A. A device that converts electrical energy into electromagnetic waves and vice versa"
+        },
+        {
+            "id": "G9A02",
+            "question": "What is a resonant antenna?",
+            "options": [
+                "A. An antenna that has a physical length that is a multiple of a half-wavelength of the operating frequency",
+                "B. An antenna that has a physical length that is a quarter-wavelength of the operating frequency",
+                "C. An antenna that is designed to operate over a wide range of frequencies",
+                "D. An antenna that has a low SWR"
+            ],
+            "answer": "A. An antenna that has a physical length that is a multiple of a half-wavelength of the operating frequency"
+        },
+        {
+            "id": "G9A03",
+            "question": "What is a dipole antenna?",
+            "options": [
+                "A. A half-wave antenna consisting of two conductors separated by an insulator",
+                "B. A quarter-wave antenna mounted vertically with a ground plane",
+                "C. A multi-element directional antenna",
+                "D. A long wire antenna"
+            ],
+            "answer": "A. A half-wave antenna consisting of two conductors separated by an insulator"
+        },
+        {
+            "id": "G9A04",
+            "question": "What is a monopole antenna?",
+            "options": [
+                "A. A quarter-wave antenna mounted vertically with a ground plane",
+                "B. A half-wave antenna consisting of two conductors separated by an insulator",
+                "C. A multi-element directional antenna",
+                "D. A long wire antenna"
+            ],
+            "answer": "A. A quarter-wave antenna mounted vertically with a ground plane"
+        },
+        {
+            "id": "G9A05",
+            "question": "What is a Yagi antenna?",
+            "options": [
+                "A. A directional antenna consisting of a driven element, a reflector, and one or more directors",
+                "B. A half-wave antenna consisting of two conductors separated by an insulator",
+                "C. A quarter-wave antenna mounted vertically with a ground plane",
+                "D. A long wire antenna"
+            ],
+            "answer": "A. A directional antenna consisting of a driven element, a reflector, and one or more directors"
+        },
+        {
+            "id": "G9A06",
+            "question": "What is a quad antenna?",
+            "options": [
+                "A. A directional antenna consisting of two or more square loops of wire",
+                "B. A half-wave antenna consisting of two conductors separated by an insulator",
+                "C. A quarter-wave antenna mounted vertically with a ground plane",
+                "D. A long wire antenna"
+            ],
+            "answer": "A. A directional antenna consisting of two or more square loops of wire"
+        },
+        {
+            "id": "G9A07",
+            "question": "What is a log-periodic antenna?",
+            "options": [
+                "A. A directional antenna that can operate over a wide range of frequencies",
+                "B. A half-wave antenna consisting of two conductors separated by an insulator",
+                "C. A quarter-wave antenna mounted vertically with a ground plane",
+                "D. A long wire antenna"
+            ],
+            "answer": "A. A directional antenna that can operate over a wide range of frequencies"
+        },
+        {
+            "id": "G9A08",
+            "question": "What is a vertical antenna?",
+            "options": [
+                "A. An antenna that is mounted vertically",
+                "B. An antenna that has vertical polarization",
+                "C. An antenna that is often used for mobile operation",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
+        },
+        {
+            "id": "G9A09",
+            "question": "What is a horizontal antenna?",
+            "options": [
+                "A. An antenna that is mounted horizontally",
+                "B. An antenna that has horizontal polarization",
+                "C. An antenna that is often used for fixed station operation",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
+        },
+        {
+            "id": "G9A10",
+            "question": "What is antenna polarization?",
+            "options": [
+                "A. The orientation of the electric field of an electromagnetic wave",
+                "B. The orientation of the magnetic field of an electromagnetic wave",
+                "C. The direction of maximum radiation from an antenna",
+                "D. The ratio of the forward power to the reflected power of an antenna"
+            ],
+            "answer": "A. The orientation of the electric field of an electromagnetic wave"
+        },
+        {
+            "id": "G9A11",
+            "question": "What is circular polarization?",
+            "options": [
+                "A. A type of polarization in which the electric field rotates as the wave propagates",
+                "B. A type of polarization in which the electric field is in a fixed plane",
+                "C. A type of polarization that is used for satellite communication",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
+        },
+        {
+            "id": "G9B01",
+            "question": "What is antenna gain?",
+            "options": [
+                "A. The ratio of the power radiated by an antenna in a particular direction to the power radiated by a reference antenna",
+                "B. The ratio of the forward power to the reflected power of an antenna",
+                "C. The ratio of the input impedance to the output impedance of an antenna",
+                "D. The ratio of the bandwidth to the center frequency of an antenna"
+            ],
+            "answer": "A. The ratio of the power radiated by an antenna in a particular direction to the power radiated by a reference antenna"
+        },
+        {
+            "id": "G9B02",
+            "question": "What is an isotropic antenna?",
+            "options": [
+                "A. A theoretical antenna that radiates equally in all directions",
+                "B. A practical antenna that radiates equally in all directions",
+                "C. A directional antenna",
+                "D. A resonant antenna"
+            ],
+            "answer": "A. A theoretical antenna that radiates equally in all directions"
+        },
+        {
+            "id": "G9B03",
+            "question": "What is antenna beamwidth?",
+            "options": [
+                "A. The angle between the half-power points of the main lobe of an antenna's radiation pattern",
+                "B. The angle between the nulls of the main lobe of an antenna's radiation pattern",
+                "C. The angle between the first side lobes of an antenna's radiation pattern",
+                "D. The angle between the front and back of an antenna's radiation pattern"
+            ],
+            "answer": "A. The angle between the half-power points of the main lobe of an antenna's radiation pattern"
+        },
+        {
+            "id": "G9B04",
+            "question": "What is antenna front-to-back ratio?",
+            "options": [
+                "A. The ratio of the power radiated in the forward direction to the power radiated in the backward direction",
+                "B. The ratio of the power radiated in the backward direction to the power radiated in the forward direction",
+                "C. The ratio of the power radiated in the main lobe to the power radiated in the side lobes",
+                "D. The ratio of the power radiated in the side lobes to the power radiated in the main lobe"
+            ],
+            "answer": "A. The ratio of the power radiated in the forward direction to the power radiated in the backward direction"
+        },
+        {
+            "id": "G9B05",
+            "question": "What is antenna radiation resistance?",
+            "options": [
+                "A. The part of an antenna's feed point impedance that is due to the radiation of electromagnetic waves",
+                "B. The part of an antenna's feed point impedance that is due to the loss of energy as heat",
+                "C. The sum of the radiation resistance and the loss resistance",
+                "D. The reciprocal of the radiation resistance"
+            ],
+            "answer": "A. The part of an antenna's feed point impedance that is due to the radiation of electromagnetic waves"
+        },
+        {
+            "id": "G9B06",
+            "question": "What is antenna efficiency?",
+            "options": [
+                "A. The ratio of the power radiated by an antenna to the power delivered to the antenna",
+                "B. The ratio of the power delivered to the antenna to the power radiated by the antenna",
+                "C. The ratio of the radiation resistance to the total resistance of the antenna",
+                "D. Both A and C are correct"
+            ],
+            "answer": "D. Both A and C are correct"
+        },
+        {
+            "id": "G9B07",
+            "question": "What is the effect of antenna height on its radiation pattern?",
+            "options": [
+                "A. The takeoff angle of the radiation pattern decreases as the antenna height increases",
+                "B. The takeoff angle of the radiation pattern increases as the antenna height increases",
+                "C. The antenna height has no effect on the radiation pattern",
+                "D. The antenna height only affects the gain of the antenna"
+            ],
+            "answer": "A. The takeoff angle of the radiation pattern decreases as the antenna height increases"
+        },
+        {
+            "id": "G9B08",
+            "question": "What is the effect of ground conductivity on an antenna's performance?",
+            "options": [
+                "A. Poor ground conductivity can reduce the efficiency of a vertical antenna",
+                "B. Good ground conductivity can improve the efficiency of a vertical antenna",
+                "C. Ground conductivity has little effect on the performance of a horizontal antenna",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
+        },
+        {
+            "id": "G9C01",
+            "question": "What is a feed line?",
+            "options": [
+                "A. The transmission line that connects a transmitter or receiver to an antenna",
+                "B. The antenna itself",
+                "C. The power cord for a transmitter or receiver",
+                "D. The ground wire for a station"
+            ],
+            "answer": "A. The transmission line that connects a transmitter or receiver to an antenna"
+        },
+        {
+            "id": "G9C02",
+            "question": "Which of the following is a type of feed line?",
+            "options": [
+                "A. Coaxial cable",
+                "B. Open-wire line",
+                "C. Waveguide",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
+        },
+        {
+            "id": "G9C03",
+            "question": "What is characteristic impedance of a feed line?",
+            "options": [
+                "A. The impedance that a feed line would have if it were infinitely long",
+                "B. The impedance of a feed line at its resonant frequency",
+                "C. The impedance of a feed line when it is terminated in a short circuit",
+                "D. The impedance of a feed line when it is terminated in an open circuit"
+            ],
+            "answer": "A. The impedance that a feed line would have if it were infinitely long"
+        },
+        {
+            "id": "G9C04",
+            "question": "What is standing wave ratio (SWR)?",
+            "options": [
+                "A. A measure of the mismatch between a feed line and an antenna",
+                "B. A measure of the power radiated by an antenna",
+                "C. A measure of the gain of an antenna",
+                "D. A measure of the bandwidth of an antenna"
+            ],
+            "answer": "A. A measure of the mismatch between a feed line and an antenna"
+        },
+        {
+            "id": "G9C05",
+            "question": "What is a perfect match between a feed line and an antenna?",
+            "options": [
+                "A. An SWR of 1:1",
+                "B. An SWR of 2:1",
+                "C. An SWR of 3:1",
+                "D. An SWR of infinity:1"
+            ],
+            "answer": "A. An SWR of 1:1"
+        },
+        {
+            "id": "G9C06",
+            "question": "What is feed line loss?",
+            "options": [
+                "A. The loss of power in a feed line as heat",
+                "B. The loss of power in a feed line due to radiation",
+                "C. The loss of power in a feed line due to SWR",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
+        },
+        {
+            "id": "G9C07",
+            "question": "What is a balun?",
+            "options": [
+                "A. A device that is used to connect a balanced feed line to an unbalanced antenna",
+                "B. A device that is used to connect an unbalanced feed line to a balanced antenna",
+                "C. A device that is used to measure SWR",
+                "D. Both A and B are correct"
+            ],
+            "answer": "D. Both A and B are correct"
+        },
+        {
+            "id": "G9C08",
+            "question": "What is an antenna tuner?",
+            "options": [
+                "A. A device that is used to match the impedance of a transmitter to the impedance of a feed line and antenna system",
+                "B. A device that is used to measure SWR",
+                "C. A device that is used to change the resonant frequency of an antenna",
+                "D. A device that is used to increase the gain of an antenna"
+            ],
+            "answer": "A. A device that is used to match the impedance of a transmitter to the impedance of a feed line and antenna system"
+        },
+        {
+            "id": "G9C09",
+            "question": "What is a Smith chart?",
+            "options": [
+                "A. A graphical tool that is used to solve problems involving transmission lines and matching circuits",
+                "B. A graphical tool that is used to plot antenna radiation patterns",
+                "C. A graphical tool that is used to design filters",
+                "D. A graphical tool that is used to analyze amplifier stability"
+            ],
+            "answer": "A. A graphical tool that is used to solve problems involving transmission lines and matching circuits"
+        },
+        {
+            "id": "G9C10",
+            "question": "What is an antenna analyzer?",
+            "options": [
+                "A. An instrument that is used to measure the SWR and impedance of an antenna system",
+                "B. An instrument that is used to measure the gain of an antenna",
+                "C. An instrument that is used to measure the radiation pattern of an antenna",
+                "D. An instrument that is used to measure the polarization of an antenna"
+            ],
+            "answer": "A. An instrument that is used to measure the SWR and impedance of an antenna system"
+        },
+        {
+            "id": "G9C11",
+            "question": "What is time-domain reflectometry (TDR)?",
+            "options": [
+                "A. A technique that is used to locate faults in a transmission line",
+                "B. A technique that is used to measure the length of a transmission line",
+                "C. A technique that is used to measure the characteristic impedance of a transmission line",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
+        }
+    ]
 }
