@@ -1,406 +1,389 @@
-// Subelement G5 – Electrical Principles
-const g5_questions = [
-    // G5A
-    {
-        question: "What happens when inductive and capacitive reactance are equal in a series LC circuit?",
-        answers: {
-            A: "Resonance causes impedance to be very high",
-            B: "Impedance is equal to the geometric mean of the inductance and capacitance",
-            C: "Resonance causes impedance to be very low",
-            D: "Impedance is equal to the arithmetic mean of the inductance and capacitance"
+var g5_questions = {
+    "questions": [
+        {
+            "id": "G5A01",
+            "question": "What is the definition of a volt?",
+            "options": [
+                "A. The basic unit of electromotive force",
+                "B. The basic unit of current",
+                "C. The basic unit of resistance",
+                "D. The basic unit of power"
+            ],
+            "answer": "A. The basic unit of electromotive force"
         },
-        correct: "C"
-    },
-    {
-        question: "What is reactance?",
-        answers: {
-            A: "Opposition to the flow of direct current caused by resistance",
-            B: "Opposition to the flow of alternating current caused by capacitance or inductance",
-            C: "Reinforcement of the flow of direct current caused by resistance",
-            D: "Reinforcement of the flow of alternating current caused by capacitance or inductance"
+        {
+            "id": "G5A02",
+            "question": "What is the definition of an ampere?",
+            "options": [
+                "A. The basic unit of electromotive force",
+                "B. The basic unit of current",
+                "C. The basic unit of resistance",
+                "D. The basic unit of power"
+            ],
+            "answer": "B. The basic unit of current"
         },
-        correct: "B"
-    },
-    {
-        question: "Which of the following is opposition to the flow of alternating current in an inductor?",
-        answers: {
-            A: "Conductance",
-            B: "Reluctance",
-            C: "Admittance",
-            D: "Reactance"
+        {
+            "id": "G5A03",
+            "question": "What is the definition of an ohm?",
+            "options": [
+                "A. The basic unit of electromotive force",
+                "B. The basic unit of current",
+                "C. The basic unit of resistance",
+                "D. The basic unit of power"
+            ],
+            "answer": "C. The basic unit of resistance"
         },
-        correct: "D"
-    },
-    {
-        question: "Which of the following is opposition to the flow of alternating current in a capacitor?",
-        answers: {
-            A: "Conductance",
-            B: "Reluctance",
-            C: "Reactance",
-            D: "Admittance"
+        {
+            "id": "G5A04",
+            "question": "What is the definition of a watt?",
+            "options": [
+                "A. The basic unit of electromotive force",
+                "B. The basic unit of current",
+                "C. The basic unit of resistance",
+                "D. The basic unit of power"
+            ],
+            "answer": "D. The basic unit of power"
         },
-        correct: "C"
-    },
-    {
-        question: "How does an inductor react to AC?",
-        answers: {
-            A: "As the frequency of the applied AC increases, the reactance decreases",
-            B: "As the amplitude of the applied AC increases, the reactance increases",
-            C: "As the amplitude of the applied AC increases, the reactance decreases",
-            D: "As the frequency of the applied AC increases, the reactance increases"
+        {
+            "id": "G5A05",
+            "question": "What is the formula for Ohm's Law?",
+            "options": [
+                "A. E = I x R",
+                "B. I = E x R",
+                "C. R = E x I",
+                "D. P = E x I"
+            ],
+            "answer": "A. E = I x R"
         },
-        correct: "D"
-    },
-    {
-        question: "How does a capacitor react to AC?",
-        answers: {
-            A: "As the frequency of the applied AC increases, the reactance decreases",
-            B: "As the frequency of the applied AC increases, the reactance increases",
-            C: "As the amplitude of the applied AC increases, the reactance increases",
-            D: "As the amplitude of the applied AC increases, the reactance decreases"
+        {
+            "id": "G5A06",
+            "question": "If a circuit has a voltage of 12 volts and a current of 2 amperes, what is the resistance?",
+            "options": [
+                "A. 6 ohms",
+                "B. 10 ohms",
+                "C. 14 ohms",
+                "D. 24 ohms"
+            ],
+            "answer": "A. 6 ohms"
         },
-        correct: "A"
-    },
-    {
-        question: "What is the term for the inverse of impedance?",
-        answers: {
-            A: "Conductance",
-            B: "Susceptance",
-            C: "Reluctance",
-            D: "Admittance"
+        {
+            "id": "G5A07",
+            "question": "If a circuit has a voltage of 120 volts and a resistance of 10 ohms, what is the current?",
+            "options": [
+                "A. 1.2 amperes",
+                "B. 12 amperes",
+                "C. 120 amperes",
+                "D. 1200 amperes"
+            ],
+            "answer": "B. 12 amperes"
         },
-        correct: "D"
-    },
-    {
-        question: "What is impedance?",
-        answers: {
-            A: "The ratio of current to voltage",
-            B: "The product of current and voltage",
-            C: "The ratio of voltage to current",
-            D: "The product of current and reactance"
+        {
+            "id": "G5A08",
+            "question": "If a circuit has a current of 3 amperes and a resistance of 4 ohms, what is the voltage?",
+            "options": [
+                "A. 0.75 volts",
+                "B. 1.33 volts",
+                "C. 7 volts",
+                "D. 12 volts"
+            ],
+            "answer": "D. 12 volts"
         },
-        correct: "C"
-    },
-    {
-        question: "What unit is used to measure reactance?",
-        answers: {
-            A: "Farad",
-            B: "Ohm",
-            C: "Ampere",
-            D: "Siemens"
+        {
+            "id": "G5A09",
+            "question": "What is the formula for power?",
+            "options": [
+                "A. P = E x I",
+                "B. P = I x R",
+                "C. P = E / R",
+                "D. P = I / E"
+            ],
+            "answer": "A. P = E x I"
         },
-        correct: "B"
-    },
-    {
-        question: "Which of the following devices can be used for impedance matching at radio frequencies?",
-        answers: {
-            A: "A transformer",
-            B: "A Pi-network",
-            C: "A length of transmission line",
-            D: "All these choices are correct"
+        {
+            "id": "G5A10",
+            "question": "If a circuit has a voltage of 12 volts and a current of 2 amperes, what is the power?",
+            "options": [
+                "A. 6 watts",
+                "B. 10 watts",
+                "C. 14 watts",
+                "D. 24 watts"
+            ],
+            "answer": "D. 24 watts"
         },
-        correct: "D"
-    },
-    {
-        question: "What letter is used to represent reactance?",
-        answers: {
-            A: "Z",
-            B: "X",
-            C: "B",
-            D: "Y"
+        {
+            "id": "G5A11",
+            "question": "If a circuit has a power of 120 watts and a voltage of 12 volts, what is the current?",
+            "options": [
+                "A. 0.1 amperes",
+                "B. 1 ampere",
+                "C. 10 amperes",
+                "D. 100 amperes"
+            ],
+            "answer": "C. 10 amperes"
         },
-        correct: "B"
-    },
-    {
-        question: "What occurs in an LC circuit at resonance?",
-        answers: {
-            A: "Current and voltage are equal",
-            B: "Resistance is cancelled",
-            C: "The circuit radiates all its energy in the form of radio waves",
-            D: "Inductive reactance and capacitive reactance cancel"
+        {
+            "id": "G5A12",
+            "question": "If a circuit has a power of 100 watts and a current of 2 amperes, what is the voltage?",
+            "options": [
+                "A. 50 volts",
+                "B. 102 volts",
+                "C. 200 volts",
+                "D. 500 volts"
+            ],
+            "answer": "A. 50 volts"
         },
-        correct: "D"
-    },
-    // G5B
-    {
-        question: "What dB change represents a factor of two increase or decrease in power?",
-        answers: {
-            A: "Approximately 2 dB",
-            B: "Approximately 3 dB",
-            C: "Approximately 6 dB",
-            D: "Approximately 9 dB"
+        {
+            "id": "G5B01",
+            "question": "What is the definition of inductance?",
+            "options": [
+                "A. The property of a circuit that opposes a change in current",
+                "B. The property of a circuit that opposes a change in voltage",
+                "C. The property of a circuit that stores energy in an electric field",
+                "D. The property of a circuit that dissipates energy as heat"
+            ],
+            "answer": "A. The property of a circuit that opposes a change in current"
         },
-        correct: "B"
-    },
-    {
-        question: "How does the total current relate to the individual currents in a circuit of parallel resistors?",
-        answers: {
-            A: "It equals the average of the branch currents",
-            B: "It decreases as more parallel branches are added to the circuit",
-            C: "It equals the sum of the currents through each branch",
-            D: "It is the sum of the reciprocal of each individual voltage drop"
+        {
+            "id": "G5B02",
+            "question": "What is the basic unit of inductance?",
+            "options": [
+                "A. The henry",
+                "B. The farad",
+                "C. The ohm",
+                "D. The coulomb"
+            ],
+            "answer": "A. The henry"
         },
-        correct: "C"
-    },
-    {
-        question: "How many watts of electrical power are consumed if 400 VDC is supplied to an 800-ohm load?",
-        answers: {
-            A: "0.5 watts",
-            B: "200 watts",
-            C: "400 watts",
-            D: "3200 watts"
+        {
+            "id": "G5B03",
+            "question": "What is the definition of capacitance?",
+            "options": [
+                "A. The property of a circuit that stores energy in an electric field",
+                "B. The property of a circuit that opposes a change in current",
+                "C. The property of a circuit that opposes a change in voltage",
+                "D. The property of a circuit that dissipates energy as heat"
+            ],
+            "answer": "A. The property of a circuit that stores energy in an electric field"
         },
-        correct: "B"
-    },
-    {
-        question: "How many watts of electrical power are consumed by a 12 VDC light bulb that draws 0.2 amperes?",
-        answers: {
-            A: "2.4 watts",
-            B: "24 watts",
-            C: "6 watts",
-            D: "60 watts"
+        {
+            "id": "G5B04",
+            "question": "What is the basic unit of capacitance?",
+            "options": [
+                "A. The farad",
+                "B. The henry",
+                "C. The ohm",
+                "D. The coulomb"
+            ],
+            "answer": "A. The farad"
         },
-        correct: "A"
-    },
-    {
-        question: "How many watts are consumed when a current of 7.0 milliamperes flows through a 1,250-ohm resistance?",
-        answers: {
-            A: "Approximately 61 milliwatts",
-            B: "Approximately 61 watts",
-            C: "Approximately 11 milliwatts",
-            D: "Approximately 11 watts"
+        {
+            "id": "G5B05",
+            "question": "What is the definition of reactance?",
+            "options": [
+                "A. The opposition to the flow of alternating current caused by inductance or capacitance",
+                "B. The opposition to the flow of direct current",
+                "C. The combination of resistance and reactance",
+                "D. The inverse of impedance"
+            ],
+            "answer": "A. The opposition to the flow of alternating current caused by inductance or capacitance"
         },
-        correct: "A"
-    },
-    {
-        question: "What is the PEP produced by 200 volts peak-to-peak across a 50-ohm dummy load?",
-        answers: {
-            A: "1.4 watts",
-            B: "100 watts",
-            C: "353.5 watts",
-            D: "400 watts"
+        {
+            "id": "G5B06",
+            "question": "What is the formula for inductive reactance?",
+            "options": [
+                "A. XL = 2πfL",
+                "B. XL = 1 / (2πfL)",
+                "C. XC = 2πfC",
+                "D. XC = 1 / (2πfC)"
+            ],
+            "answer": "A. XL = 2πfL"
         },
-        correct: "B"
-    },
-    {
-        question: "What value of an AC signal produces the same power dissipation in a resistor as a DC voltage of the same value?",
-        answers: {
-            A: "The peak-to-peak value",
-            B: "The peak value",
-            C: "The RMS value",
-            D: "The reciprocal of the RMS value"
+        {
+            "id": "G5B07",
+            "question": "What is the formula for capacitive reactance?",
+            "options": [
+                "A. XC = 1 / (2πfC)",
+                "B. XC = 2πfC",
+                "C. XL = 1 / (2πfL)",
+                "D. XL = 2πfL"
+            ],
+            "answer": "A. XC = 1 / (2πfC)"
         },
-        correct: "C"
-    },
-    {
-        question: "What is the peak-to-peak voltage of a sine wave with an RMS voltage of 120 volts?",
-        answers: {
-            A: "84.8 volts",
-            B: "169.7 volts",
-            C: "240.0 volts",
-            D: "339.4 volts"
+        {
+            "id": "G5B08",
+            "question": "What is the definition of impedance?",
+            "options": [
+                "A. The total opposition to the flow of alternating current",
+                "B. The opposition to the flow of direct current",
+                "C. The combination of resistance and reactance",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "D"
-    },
-    {
-        question: "What is the RMS voltage of a sine wave with a value of 17 volts peak?",
-        answers: {
-            A: "8.5 volts",
-            B: "12 volts",
-            C: "24 volts",
-            D: "34 volts"
+        {
+            "id": "G5B09",
+            "question": "What is the formula for impedance in a series circuit?",
+            "options": [
+                "A. Z = √(R² + X²)",
+                "B. Z = R + X",
+                "C. Z = R x X",
+                "D. Z = R / X"
+            ],
+            "answer": "A. Z = √(R² + X²)"
         },
-        correct: "B"
-    },
-    {
-        question: "What percentage of power loss is equivalent to a loss of 1 dB?",
-        answers: {
-            A: "10.9 percent",
-            B: "12.2 percent",
-            C: "20.6 percent",
-            D: "25.9 percent"
+        {
+            "id": "G5B10",
+            "question": "What is the definition of resonance?",
+            "options": [
+                "A. The condition in a circuit where the inductive reactance equals the capacitive reactance",
+                "B. The condition in a circuit where the resistance equals the reactance",
+                "C. The condition in a circuit where the voltage and current are in phase",
+                "D. The condition in a circuit where the impedance is at a maximum"
+            ],
+            "answer": "A. The condition in a circuit where the inductive reactance equals the capacitive reactance"
         },
-        correct: "C"
-    },
-    {
-        question: "What is the ratio of PEP to average power for an unmodulated carrier?",
-        answers: {
-            A: "0.707",
-            B: "1.00",
-            C: "1.414",
-            D: "2.00"
+        {
+            "id": "G5B11",
+            "question": "What is the formula for the resonant frequency of a circuit?",
+            "options": [
+                "A. f = 1 / (2π√(LC))",
+                "B. f = 2π√(LC)",
+                "C. f = L / C",
+                "D. f = C / L"
+            ],
+            "answer": "A. f = 1 / (2π√(LC))"
         },
-        correct: "B"
-    },
-    {
-        question: "What is the RMS voltage across a 50-ohm dummy load dissipating 1200 watts?",
-        answers: {
-            A: "173 volts",
-            B: "245 volts",
-            C: "346 volts",
-            D: "692 volts"
+        {
+            "id": "G5B12",
+            "question": "What is the definition of Q, or quality factor, of a resonant circuit?",
+            "options": [
+                "A. A measure of the sharpness of the resonant peak",
+                "B. A measure of the bandwidth of the resonant circuit",
+                "C. A measure of the ratio of the stored energy to the energy dissipated per cycle",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "B"
-    },
-    {
-        question: "What is the output PEP of an unmodulated carrier if the average power is 1060 watts?",
-        answers: {
-            A: "530 watts",
-            B: "1060 watts",
-            C: "1500 watts",
-            D: "2120 watts"
+        {
+            "id": "G5C01",
+            "question": "What is the definition of a decibel?",
+            "options": [
+                "A. A logarithmic unit used to express the ratio of two values of a physical quantity, often power or intensity",
+                "B. A linear unit used to express the ratio of two values of a physical quantity, often power or intensity",
+                "C. A unit of power",
+                "D. A unit of voltage"
+            ],
+            "answer": "A. A logarithmic unit used to express the ratio of two values of a physical quantity, often power or intensity"
         },
-        correct: "B"
-    },
-    {
-        question: "What is the output PEP of 500 volts peak-to-peak across a 50-ohm load?",
-        answers: {
-            A: "8.75 watts",
-            B: "625 watts",
-            C: "2500 watts",
-            D: "5000 watts"
+        {
+            "id": "G5C02",
+            "question": "A power increase of 3 dB is equivalent to what ratio of power?",
+            "options": [
+                "A. 2:1",
+                "B. 3:1",
+                "C. 4:1",
+                "D. 10:1"
+            ],
+            "answer": "A. 2:1"
         },
-        correct: "B"
-    },
-    // G5C
-    {
-        question: "What causes a voltage to appear across the secondary winding of a transformer when an AC voltage source is connected across its primary winding?",
-        answers: {
-            A: "Capacitive coupling",
-            B: "Displacement current coupling",
-            C: "Mutual inductance",
-            D: "Mutual capacitance"
+        {
+            "id": "G5C03",
+            "question": "A power decrease of 6 dB is equivalent to what ratio of power?",
+            "options": [
+                "A. 1:4",
+                "B. 1:6",
+                "C. 1:8",
+                "D. 1:10"
+            ],
+            "answer": "A. 1:4"
         },
-        correct: "C"
-    },
-    {
-        question: "What is the output voltage if an input signal is applied to the secondary winding of a 4:1 voltage step-down transformer instead of the primary winding?",
-        answers: {
-            A: "The input voltage is multiplied by 4",
-            B: "The input voltage is divided by 4",
-            C: "Additional resistance must be added in series with the primary to prevent overload",
-            D: "Additional resistance must be added in parallel with the secondary to prevent overload"
+        {
+            "id": "G5C04",
+            "question": "A power increase of 10 dB is equivalent to what ratio of power?",
+            "options": [
+                "A. 10:1",
+                "B. 20:1",
+                "C. 100:1",
+                "D. 1000:1"
+            ],
+            "answer": "A. 10:1"
         },
-        correct: "A"
-    },
-    {
-        question: "What is the total resistance of a 10-, a 20-, and a 50-ohm resistor connected in parallel?",
-        answers: {
-            A: "5.9 ohms",
-            B: "0.17 ohms",
-            C: "17 ohms",
-            D: "80 ohms"
+        {
+            "id": "G5C05",
+            "question": "A power decrease of 20 dB is equivalent to what ratio of power?",
+            "options": [
+                "A. 1:100",
+                "B. 1:20",
+                "C. 1:10",
+                "D. 1:2"
+            ],
+            "answer": "A. 1:100"
         },
-        correct: "A"
-    },
-    {
-        question: "What is the approximate total resistance of a 100- and a 200-ohm resistor in parallel?",
-        answers: {
-            A: "300 ohms",
-            B: "150 ohms",
-            C: "75 ohms",
-            D: "67 ohms"
+        {
+            "id": "G5C06",
+            "question": "What is the definition of dBm?",
+            "options": [
+                "A. A decibel level referenced to 1 milliwatt",
+                "B. A decibel level referenced to 1 watt",
+                "C. A decibel level referenced to 1 volt",
+                "D. A decibel level referenced to 1 microvolt"
+            ],
+            "answer": "A. A decibel level referenced to 1 milliwatt"
         },
-        correct: "D"
-    },
-    {
-        question: "Why is the primary winding wire of a voltage step-up transformer usually a larger size than that of the secondary winding?",
-        answers: {
-            A: "To improve the coupling between the primary and secondary",
-            B: "To accommodate the higher current of the primary",
-            C: "To prevent parasitic oscillations due to resistive losses in the primary",
-            D: "To ensure that the volume of the primary winding is equal to the volume of the secondary winding"
+        {
+            "id": "G5C07",
+            "question": "What is the definition of peak envelope power (PEP)?",
+            "options": [
+                "A. The average power of an RF signal during one cycle at the crest of the modulation envelope",
+                "B. The average power of an RF signal over a given time period",
+                "C. The instantaneous power of an RF signal",
+                "D. The power of the carrier of an RF signal"
+            ],
+            "answer": "A. The average power of an RF signal during one cycle at the crest of the modulation envelope"
         },
-        correct: "B"
-    },
-    {
-        question: "What is the voltage output of a transformer with a 500-turn primary and a 1500-turn secondary when 120 VAC is applied to the primary?",
-        answers: {
-            A: "360 volts",
-            B: "120 volts",
-            C: "40 volts",
-            D: "25.5 volts"
+        {
+            "id": "G5C08",
+            "question": "What is the relationship between PEP and average power for a single-sideband phone signal?",
+            "options": [
+                "A. PEP is typically 2.5 times the average power",
+                "B. PEP is equal to the average power",
+                "C. PEP is less than the average power",
+                "D. There is no fixed relationship between PEP and average power"
+            ],
+            "answer": "A. PEP is typically 2.5 times the average power"
         },
-        correct: "A"
-    },
-    {
-        question: "What transformer turns ratio matches an antenna’s 600-ohm feed point impedance to a 50-ohm coaxial cable?",
-        answers: {
-            A: "3.5 to 1",
-            B: "12 to 1",
-            C: "24 to 1",
-            D: "144 to 1"
+        {
+            "id": "G5C09",
+            "question": "What is the definition of root-mean-square (RMS)?",
+            "options": [
+                "A. The value of an AC voltage or current that produces the same heating effect as a DC voltage or current of the same value",
+                "B. The peak value of an AC voltage or current",
+                "C. The average value of an AC voltage or current",
+                "D. The instantaneous value of an AC voltage or current"
+            ],
+            "answer": "A. The value of an AC voltage or current that produces the same heating effect as a DC voltage or current of the same value"
         },
-        correct: "A"
-    },
-    {
-        question: "What is the equivalent capacitance of two 5.0-nanofarad capacitors and one 750-picofarad capacitor connected in parallel?",
-        answers: {
-            A: "576.9 nanofarads",
-            B: "1,733 picofarads",
-            C: "3,583 picofarads",
-            D: "10.750 nanofarads"
+        {
+            "id": "G5C10",
+            "question": "What is the RMS value of a sine wave with a peak voltage of 170 volts?",
+            "options": [
+                "A. 120 volts",
+                "B. 170 volts",
+                "C. 240 volts",
+                "D. 340 volts"
+            ],
+            "answer": "A. 120 volts"
         },
-        correct: "D"
-    },
-    {
-        question: "What is the capacitance of three 100-microfarad capacitors connected in series?",
-        answers: {
-            A: "0.33 microfarads",
-            B: "3.0 microfarads",
-            C: "33.3 microfarads",
-            D: "300 microfarads"
-        },
-        correct: "C"
-    },
-    {
-        question: "What is the inductance of three 10-millihenry inductors connected in parallel?",
-        answers: {
-            A: "0.30 henries",
-            B: "3.3 henries",
-            C: "3.3 millihenries",
-            D: "30 millihenries"
-        },
-        correct: "C"
-    },
-    {
-        question: "What is the inductance of a circuit with a 20-millihenry inductor connected in series with a 50-millihenry inductor?",
-        answers: {
-            A: "7 millihenries",
-            B: "14.3 millihenries",
-            C: "70 millihenries",
-            D: "1,000 millihenries"
-        },
-        correct: "C"
-    },
-    {
-        question: "What is the capacitance of a 20-microfarad capacitor connected in series with a 50-microfarad capacitor?",
-        answers: {
-            A: "0.07 microfarads",
-            B: "14.3 microfarads",
-            C: "70 microfarads",
-            D: "1,000 microfarads"
-        },
-        correct: "B"
-    },
-    {
-        question: "Which of the following components should be added to a capacitor to increase the capacitance?",
-        answers: {
-            A: "An inductor in series",
-            B: "An inductor in parallel",
-            C: "A capacitor in parallel",
-            D: "A capacitor in series"
-        },
-        correct: "C"
-    },
-    {
-        question: "Which of the following components should be added to an inductor to increase the inductance?",
-        answers: {
-            A: "A capacitor in series",
-            B: "A capacitor in parallel",
-            C: "An inductor in parallel",
-            D: "An inductor in series"
-        },
-        correct: "D"
-    }
-];
+        {
+            "id": "G5C11",
+            "question": "What is the definition of a time constant?",
+            "options": [
+                "A. The time it takes for the voltage across a capacitor in an RC circuit to rise to 63.2% of its final value",
+                "B. The time it takes for the current in an RL circuit to rise to 63.2% of its final value",
+                "C. The time it takes for a circuit to reach a steady state",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
+        }
+    ]
+}
