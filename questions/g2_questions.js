@@ -1,608 +1,620 @@
-// Subelement G2 – Operating Procedures
-const g2_questions = [
-    // G2A
-    {
-        question: "Which mode is most commonly used for voice communications on frequencies of 14 MHz or higher?",
-        answers: {
-            A: "Upper sideband",
-            B: "Lower sideband",
-            C: "Suppressed sideband",
-            D: "Double sideband"
+var g2_questions = {
+    "questions": [
+        {
+            "id": "G2A01",
+            "question": "What is the most common use for the 17-meter band?",
+            "options": [
+                "A. DXing",
+                "B. Local communications",
+                "C. Emergency communications",
+                "D. Repeater operation"
+            ],
+            "answer": "A. DXing"
         },
-        correct: "A"
-    },
-    {
-        question: "Which mode is most commonly used for voice communications on the 160-, 75-, and 40-meter bands?",
-        answers: {
-            A: "Upper sideband",
-            B: "Lower sideband",
-            C: "Suppressed sideband",
-            D: "Double sideband"
+        {
+            "id": "G2A02",
+            "question": "What is the most common use for the 75-meter band?",
+            "options": [
+                "A. DXing",
+                "B. Regional nets",
+                "C. EME",
+                "D. Satellite communications"
+            ],
+            "answer": "B. Regional nets"
         },
-        correct: "B"
-    },
-    {
-        question: "Which mode is most commonly used for SSB voice communications in the VHF and UHF bands?",
-        answers: {
-            A: "Upper sideband",
-            B: "Lower sideband",
-            C: "Suppressed sideband",
-            D: "Double sideband"
+        {
+            "id": "G2A03",
+            "question": "Which of the following is an effect of E-region absorption?",
+            "options": [
+                "A. It enhances long-distance communications",
+                "B. It causes signals to be bent back to Earth",
+                "C. It attenuates signals on lower HF frequencies",
+                "D. It has no effect on HF communications"
+            ],
+            "answer": "C. It attenuates signals on lower HF frequencies"
         },
-        correct: "A"
-    },
-    {
-        question: "Which mode is most commonly used for voice communications on the 17- and 12-meter bands?",
-        answers: {
-            A: "Upper sideband",
-            B: "Lower sideband",
-            C: "Suppressed sideband",
-            D: "Double sideband"
+        {
+            "id": "G2A04",
+            "question": "What is the approximate maximum range for signals using transequatorial propagation?",
+            "options": [
+                "A. 1000 miles",
+                "B. 2500 miles",
+                "C. 5000 miles",
+                "D. 7500 miles"
+            ],
+            "answer": "C. 5000 miles"
         },
-        correct: "A"
-    },
-    {
-        question: "Which mode of voice communication is most commonly used on the HF amateur bands?",
-        answers: {
-            A: "Frequency modulation",
-            B: "Double sideband",
-            C: "Single sideband",
-            D: "Single phase modulation"
+        {
+            "id": "G2A05",
+            "question": "What is the typical time of day for transequatorial propagation?",
+            "options": [
+                "A. Morning",
+                "B. Midday",
+                "C. Afternoon and early evening",
+                "D. Late night"
+            ],
+            "answer": "C. Afternoon and early evening"
         },
-        correct: "C"
-    },
-    {
-        question: "Which of the following is an advantage of using single sideband, as compared to other analog voice modes on the HF amateur bands?",
-        answers: {
-            A: "Very high-fidelity voice modulation",
-            B: "Less subject to interference from atmospheric static crashes",
-            C: "Ease of tuning on receive and immunity to impulse noise",
-            D: "Less bandwidth used and greater power efficiency"
+        {
+            "id": "G2A06",
+            "question": "What is the cause of auroral propagation?",
+            "options": [
+                "A. The interaction of charged particles from the sun with the Earth's magnetic field",
+                "B. The bending of radio waves by the ionosphere",
+                "C. The reflection of radio waves from the Earth's surface",
+                "D. The absorption of radio waves by the D-region"
+            ],
+            "answer": "A. The interaction of charged particles from the sun with the Earth's magnetic field"
         },
-        correct: "D"
-    },
-    {
-        question: "Which of the following statements is true of single sideband (SSB)?",
-        answers: {
-            A: "Only one sideband and the carrier are transmitted; the other sideband is suppressed",
-            B: "Only one sideband is transmitted; the other sideband and carrier are suppressed",
-            C: "SSB is the only voice mode authorized on the 20-, 15-, and 10-meter amateur bands",
-            D: "SSB is the only voice mode authorized on the 160-, 75-, and 40-meter amateur bands"
+        {
+            "id": "G2A07",
+            "question": "Which emission modes are best for auroral propagation?",
+            "options": [
+                "A. SSB",
+                "B. FM",
+                "C. CW",
+                "D. RTTY"
+            ],
+            "answer": "C. CW"
         },
-        correct: "B"
-    },
-    {
-        question: "What is the recommended way to break into a phone contact?",
-        answers: {
-            A: "Say “QRZ” several times, followed by your call sign",
-            B: "Say your call sign once",
-            C: "Say “Breaker Breaker”",
-            D: "Say “CQ” followed by the call sign of either station"
+        {
+            "id": "G2A08",
+            "question": "What is meteor scatter?",
+            "options": [
+                "A. The reflection of radio waves from the ionized trail left by a meteor",
+                "B. The absorption of radio waves by a meteor shower",
+                "C. The bending of radio waves by a meteor",
+                "D. The scattering of radio waves by the Earth's magnetic field"
+            ],
+            "answer": "A. The reflection of radio waves from the ionized trail left by a meteor"
         },
-        correct: "B"
-    },
-    {
-        question: "Why do most amateur stations use lower sideband on the 160-, 75-, and 40-meter bands?",
-        answers: {
-            A: "Lower sideband is more efficient than upper sideband at these frequencies",
-            B: "Lower sideband is the only sideband legal on these frequency bands",
-            C: "Because it is fully compatible with an AM detector",
-            D: "It is commonly accepted amateur practice"
+        {
+            "id": "G2A09",
+            "question": "Which of the following is a characteristic of meteor scatter propagation?",
+            "options": [
+                "A. It is most effective on the lower HF bands",
+                "B. It can be used for long-distance communications",
+                "C. It is only possible during a meteor shower",
+                "D. It is characterized by short bursts of signal"
+            ],
+            "answer": "D. It is characterized by short bursts of signal"
         },
-        correct: "D"
-    },
-    {
-        question: "Which of the following statements is true of VOX operation versus PTT operation?",
-        answers: {
-            A: "The received signal is more natural sounding",
-            B: "It allows “hands free” operation",
-            C: "It occupies less bandwidth",
-            D: "It provides more power output"
+        {
+            "id": "G2A10",
+            "question": "What is the best time of day for meteor scatter propagation?",
+            "options": [
+                "A. Midday",
+                "B. Early morning",
+                "C. Late evening",
+                "D. Any time of day"
+            ],
+            "answer": "B. Early morning"
         },
-        correct: "B"
-    },
-    {
-        question: "Generally, who should respond to a station in the contiguous 48 states calling “CQ DX”?",
-        answers: {
-            A: "Any caller is welcome to respond",
-            B: "Only stations in Germany",
-            C: "Any stations outside the lower 48 states",
-            D: "Only contest stations"
+        {
+            "id": "G2A11",
+            "question": "What is the maximum distance for single-hop sporadic-E propagation?",
+            "options": [
+                "A. 1000 miles",
+                "B. 1500 miles",
+                "C. 2000 miles",
+                "D. 2500 miles"
+            ],
+            "answer": "B. 1500 miles"
         },
-        correct: "C"
-    },
-    {
-        question: "What control is typically adjusted for proper ALC setting on a single sideband transceiver?",
-        answers: {
-            A: "RF clipping level",
-            B: "Transmit audio or microphone gain",
-            C: "Antenna inductance or capacitance",
-            D: "Attenuator level"
+        {
+            "id": "G2A12",
+            "question": "On which band is sporadic-E propagation most common?",
+            "options": [
+                "A. 160 meters",
+                "B. 80 meters",
+                "C. 40 meters",
+                "D. 6 meters"
+            ],
+            "answer": "D. 6 meters"
         },
-        correct: "B"
-    },
-    // G2B
-    {
-        question: "Which of the following is true concerning access to frequencies?",
-        answers: {
-            A: "Nets have priority",
-            B: "QSOs in progress have priority",
-            C: "Except during emergencies, no amateur station has priority access to any frequency",
-            D: "Contest operations should yield to non-contest use of frequencies"
+        {
+            "id": "G2B01",
+            "question": "What is the function of an automatic level control (ALC) circuit?",
+            "options": [
+                "A. To control the power output of a transmitter",
+                "B. To control the frequency of a transmitter",
+                "C. To control the modulation of a transmitter",
+                "D. To control the audio level of a transmitter"
+            ],
+            "answer": "A. To control the power output of a transmitter"
         },
-        correct: "C"
-    },
-    {
-        question: "What is the first thing you should do if you are communicating with another amateur station and hear a station in distress break in?",
-        answers: {
-            A: "Inform your local emergency coordinator",
-            B: "Acknowledge the station in distress and determine what assistance may be needed",
-            C: "Immediately decrease power to avoid interfering with the station in distress",
-            D: "Immediately cease all transmissions"
+        {
+            "id": "G2B02",
+            "question": "What is the purpose of a speech processor?",
+            "options": [
+                "A. To increase the average power of a single-sideband signal",
+                "B. To reduce the bandwidth of a single-sideband signal",
+                "C. To improve the signal-to-noise ratio of a single-sideband signal",
+                "D. To increase the intelligibility of a single-sideband signal"
+            ],
+            "answer": "D. To increase the intelligibility of a single-sideband signal"
         },
-        correct: "B"
-    },
-    {
-        question: "What is good amateur practice if propagation changes during a contact creating interference from other stations using the frequency?",
-        answers: {
-            A: "Advise the interfering stations that you are on the frequency and that you have priority",
-            B: "Decrease power and continue to transmit",
-            C: "Attempt to resolve the interference problem with the other stations in a mutually acceptable manner",
-            D: "Switch to the opposite sideband"
+        {
+            "id": "G2B03",
+            "question": "Which of the following is an advantage of a speech processor?",
+            "options": [
+                "A. It increases the peak power of a single-sideband signal",
+                "B. It reduces the bandwidth of a single-sideband signal",
+                "C. It improves the signal-to-noise ratio of a single-sideband signal",
+                "D. It increases the intelligibility of a single-sideband signal"
+            ],
+            "answer": "D. It increases the intelligibility of a single-sideband signal"
         },
-        correct: "C"
-    },
-    {
-        question: "When selecting a CW transmitting frequency, what minimum separation from other stations should be used to minimize interference to stations on adjacent frequencies?",
-        answers: {
-            A: "5 Hz to 50 Hz",
-            B: "150 Hz to 500 Hz",
-            C: "1 kHz to 3 kHz",
-            D: "3 kHz to 6 kHz"
+        {
+            "id": "G2B04",
+            "question": "What is the purpose of a directional wattmeter?",
+            "options": [
+                "A. To measure the power being transmitted by a station",
+                "B. To measure the standing wave ratio on a transmission line",
+                "C. To measure the impedance of an antenna",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "B"
-    },
-    {
-        question: "When selecting an SSB transmitting frequency, what minimum separation should be used to minimize interference to stations on adjacent frequencies?",
-        answers: {
-            A: "5 Hz to 50 Hz",
-            B: "150 Hz to 500 Hz",
-            C: "2 kHz to 3 kHz",
-            D: "Approximately 6 kHz"
+        {
+            "id": "G2B05",
+            "question": "What is the proper way to use a directional wattmeter?",
+            "options": [
+                "A. It should be connected between the transmitter and the antenna tuner",
+                "B. It should be connected between the antenna tuner and the antenna",
+                "C. It should be connected at the antenna feed point",
+                "D. It can be connected anywhere in the transmission line"
+            ],
+            "answer": "A. It should be connected between the transmitter and the antenna tuner"
         },
-        correct: "C"
-    },
-    {
-        question: "How can you avoid harmful interference on an apparently clear frequency before calling CQ on CW or phone?",
-        answers: {
-            A: "Send “QRL?” on CW, followed by your call sign; or, if using phone, ask if the frequency is in use, followed by your call sign",
-            B: "Listen for 2 minutes before calling CQ",
-            C: "Send the letter “V” in Morse code several times and listen for a response, or say “test” several times and listen for a response",
-            D: "Send “QSY” on CW or if using phone, announce “the frequency is in use,” then give your call sign and listen for a response"
+        {
+            "id": "G2B06",
+            "question": "What is the purpose of an antenna analyzer?",
+            "options": [
+                "A. To measure the resonant frequency of an antenna",
+                "B. To measure the SWR of an antenna system",
+                "C. To measure the impedance of an antenna",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "A"
-    },
-    {
-        question: "Which of the following complies with commonly accepted amateur practice when choosing a frequency on which to initiate a call?",
-        answers: {
-            A: "Listen on the frequency for at least two minutes to be sure it is clear",
-            B: "Identify your station by transmitting your call sign at least 3 times",
-            C: "Follow the voluntary band plan",
-            D: "All these choices are correct"
+        {
+            "id": "G2B07",
+            "question": "Which of the following is a good reason to use a digital multimeter?",
+            "options": [
+                "A. It is more accurate than an analog multimeter",
+                "B. It is easier to read than an analog multimeter",
+                "C. It can measure a wider range of values than an analog multimeter",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "C"
-    },
-    {
-        question: "What is the voluntary band plan restriction for US stations transmitting within the 48 contiguous states in the 50.1 MHz to 50.125 MHz band segment?",
-        answers: {
-            A: "Only contacts with stations not within the 48 contiguous states",
-            B: "Only contacts with other stations within the 48 contiguous states",
-            C: "Only digital contacts",
-            D: "Only SSTV contacts"
+        {
+            "id": "G2B08",
+            "question": "What is the purpose of an oscilloscope?",
+            "options": [
+                "A. To measure the frequency of a signal",
+                "B. To measure the amplitude of a signal",
+                "C. To display the waveform of a signal",
+                "D. All these choices are correct"
+            ],
+            "answer": "C. To display the waveform of a signal"
         },
-        correct: "A"
-    },
-    {
-        question: "Who may be the control operator of an amateur station transmitting in RACES to assist relief operations during a disaster?",
-        answers: {
-            A: "Only a person holding an FCC-issued amateur operator license",
-            B: "Only a RACES net control operator",
-            C: "A person holding an FCC-issued amateur operator license or an appropriate government official",
-            D: "Any control operator when normal communication systems are operational"
+        {
+            "id": "G2B09",
+            "question": "Which of the following can be determined with an oscilloscope?",
+            "options": [
+                "A. The frequency of a signal",
+                "B. The amplitude of a signal",
+                "C. The shape of a signal's waveform",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "A"
-    },
-    {
-        question: "Which of the following is good amateur practice for net management?",
-        answers: {
-            A: "Always use multiple sets of phonetics during check-in",
-            B: "Have a backup frequency in case of interference or poor conditions",
-            C: "Transmit the full net roster at the beginning of every session",
-            D: "All these choices are correct"
+        {
+            "id": "G2B10",
+            "question": "What is the purpose of a signal generator?",
+            "options": [
+                "A. To produce a signal of a known frequency and amplitude",
+                "B. To measure the frequency of a signal",
+                "C. To measure the amplitude of a signal",
+                "D. To display the waveform of a signal"
+            ],
+            "answer": "A. To produce a signal of a known frequency and amplitude"
         },
-        correct: "B"
-    },
-    {
-        question: "How often may RACES training drills and tests be routinely conducted without special authorization?",
-        answers: {
-            A: "No more than 1 hour per month",
-            B: "No more than 2 hours per month",
-            C: "No more than 1 hour per week",
-            D: "No more than 2 hours per week"
+        {
+            "id": "G2B11",
+            "question": "What is the purpose of a frequency counter?",
+            "options": [
+                "A. To measure the frequency of a signal",
+                "B. To produce a signal of a known frequency and amplitude",
+                "C. To measure the amplitude of a signal",
+                "D. To display the waveform of a signal"
+            ],
+            "answer": "A. To measure the frequency of a signal"
         },
-        correct: "C"
-    },
-    // G2C
-    {
-        question: "Which of the following describes full break-in CW operation (QSK)?",
-        answers: {
-            A: "Breaking stations send the Morse code prosign “BK”",
-            B: "Automatic keyers, instead of hand keys, are used to send Morse code",
-            C: "An operator must activate a manual send/receive switch before and after every transmission",
-            D: "Transmitting stations can receive between code characters and elements"
+        {
+            "id": "G2C01",
+            "question": "What is the proper way to call another station on a repeater?",
+            "options": [
+                "A. Say the other station's call sign, then your call sign",
+                "B. Say 'CQ', then your call sign",
+                "C. Say 'break', then your call sign",
+                "D. Say your call sign, then the other station's call sign"
+            ],
+            "answer": "A. Say the other station's call sign, then your call sign"
         },
-        correct: "D"
-    },
-    {
-        question: "What should you do if a CW station sends “QRS?”",
-        answers: {
-            A: "Send slower",
-            B: "Change frequency",
-            C: "Increase your power",
-            D: "Repeat everything twice"
+        {
+            "id": "G2C02",
+            "question": "What is the meaning of the procedural signal 'CQ'?",
+            "options": [
+                "A. Calling any station",
+                "B. Calling a specific station",
+                "C. Cease transmission",
+                "D. I am ready to receive"
+            ],
+            "answer": "A. Calling any station"
         },
-        correct: "A"
-    },
-    {
-        question: "What does it mean when a CW operator sends “KN” at the end of a transmission?",
-        answers: {
-            A: "No US stations should call",
-            B: "Operating full break-in",
-            C: "Listening only for a specific station or stations",
-            D: "Closing station now"
+        {
+            "id": "G2C03",
+            "question": "What is the meaning of the procedural signal 'DE'?",
+            "options": [
+                "A. From",
+                "B. To",
+                "C. And",
+                "D. The"
+            ],
+            "answer": "A. From"
         },
-        correct: "C"
-    },
-    {
-        question: "What does the Q signal “QRL?” mean?",
-        answers: {
-            A: "“Will you keep the frequency clear?”",
-            B: "“Are you operating full break-in?” or “Can you operate full break-in?”",
-            C: "“Are you listening only for a specific station?”",
-            D: "“Are you busy?” or “Is this frequency in use?”"
+        {
+            "id": "G2C04",
+            "question": "What is the meaning of the procedural signal 'K'?",
+            "options": [
+                "A. Go ahead",
+                "B. Over",
+                "C. Roger",
+                "D. All these choices are correct"
+            ],
+            "answer": "A. Go ahead"
         },
-        correct: "D"
-    },
-    {
-        question: "What is the best speed to use when answering a CQ in Morse code?",
-        answers: {
-            A: "The fastest speed at which you are comfortable copying, but no slower than the CQ",
-            B: "The fastest speed at which you are comfortable copying, but no faster than the CQ",
-            C: "At the standard calling speed of 10 wpm",
-            D: "At the standard calling speed of 5 wpm"
+        {
+            "id": "G2C05",
+            "question": "What is the meaning of the procedural signal 'QTH'?",
+            "options": [
+                "A. My location is",
+                "B. My name is",
+                "C. The weather is",
+                "D. My signal is"
+            ],
+            "answer": "A. My location is"
         },
-        correct: "B"
-    },
-    {
-        question: "What does the term “zero beat” mean in CW operation?",
-        answers: {
-            A: "Matching the speed of the transmitting station",
-            B: "Operating split to avoid interference on frequency",
-            C: "Sending without error",
-            D: "Matching the transmit frequency to the frequency of a received signal"
+        {
+            "id": "G2C06",
+            "question": "What is the meaning of the procedural signal 'QSY'?",
+            "options": [
+                "A. I am changing frequency",
+                "B. I am closing my station",
+                "C. I am listening on the frequency",
+                "D. I am calling CQ"
+            ],
+            "answer": "A. I am changing frequency"
         },
-        correct: "D"
-    },
-    {
-        question: "When sending CW, what does a “C” mean when added to the RST report?",
-        answers: {
-            A: "Chirpy or unstable signal",
-            B: "Report was read from an S meter rather than estimated",
-            C: "100 percent copy",
-            D: "Key clicks"
+        {
+            "id": "G2C07",
+            "question": "What is the meaning of the procedural signal 'RST'?",
+            "options": [
+                "A. Readability, strength, tone",
+                "B. Readability, signal, tone",
+                "C. Roger, solid, true",
+                "D. Roger, signal, true"
+            ],
+            "answer": "A. Readability, strength, tone"
         },
-        correct: "A"
-    },
-    {
-        question: "What prosign is sent to indicate the end of a formal message when using CW?",
-        answers: {
-            A: "SK",
-            B: "BK",
-            C: "AR",
-            D: "KN"
+        {
+            "id": "G2C08",
+            "question": "What is the purpose of a band plan?",
+            "options": [
+                "A. To specify the frequencies on which certain types of operating are permitted",
+                "B. To specify the power limits for each band",
+                "C. To specify the license class required for each band",
+                "D. All these choices are correct"
+            ],
+            "answer": "A. To specify the frequencies on which certain types of operating are permitted"
         },
-        correct: "C"
-    },
-    {
-        question: "What does the Q signal “QSL” mean?",
-        answers: {
-            A: "Send slower",
-            B: "We have already confirmed the contact",
-            C: "I have received and understood",
-            D: "We have worked before"
+        {
+            "id": "G2C09",
+            "question": "Which of the following is a voluntary guideline for using the amateur bands?",
+            "options": [
+                "A. The FCC rules and regulations",
+                "B. The IARU band plan",
+                "C. The ARRL band plan",
+                "D. All these choices are correct"
+            ],
+            "answer": "C. The ARRL band plan"
         },
-        correct: "C"
-    },
-    {
-        question: "What does the Q signal “QRN” mean?",
-        answers: {
-            A: "Send more slowly",
-            B: "Stop sending",
-            C: "Zero beat my signal",
-            D: "I am troubled by static"
+        {
+            "id": "G2C10",
+            "question": "What is the purpose of a DX window?",
+            "options": [
+                "A. A portion of a band that is reserved for contacting stations in other countries",
+                "B. A portion of a band that is reserved for emergency communications",
+                "C. A portion of a band that is reserved for repeater operation",
+                "D. A portion of a band that is reserved for digital modes"
+            ],
+            "answer": "A. A portion of a band that is reserved for contacting stations in other countries"
         },
-        correct: "D"
-    },
-    {
-        question: "What does the Q signal “QRV” mean?",
-        answers: {
-            A: "You are sending too fast",
-            B: "There is interference on the frequency",
-            C: "I am quitting for the day",
-            D: "I am ready to receive"
+        {
+            "id": "G2C11",
+            "question": "What is the purpose of a gentleman's agreement in amateur radio?",
+            "options": [
+                "A. An informal agreement to use a certain frequency for a specific purpose",
+                "B. A formal agreement between two amateurs to exchange QSL cards",
+                "C. A legal agreement between two amateurs to share a station",
+                "D. A written agreement between two amateurs to operate on a specific band"
+            ],
+            "answer": "A. An informal agreement to use a certain frequency for a specific purpose"
         },
-        correct: "D"
-    },
-    // G2D
-    {
-        question: "What is the Volunteer Monitor Program?",
-        answers: {
-            A: "Amateur volunteers who are formally enlisted to monitor the airwaves for rules violations",
-            B: "Amateur volunteers who conduct amateur licensing examinations",
-            C: "Amateur volunteers who conduct frequency coordination for amateur VHF repeaters",
-            D: "Amateur volunteers who use their station equipment to help civil defense organizations in times of emergency"
+        {
+            "id": "G2D01",
+            "question": "Which of the following is a characteristic of a good SSB signal?",
+            "options": [
+                "A. It is narrow",
+                "B. It is clean",
+                "C. It is free of distortion",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "A"
-    },
-    {
-        question: "Which of the following are objectives of the Volunteer Monitor Program?",
-        answers: {
-            A: "To conduct efficient and orderly amateur licensing examinations",
-            B: "To provide emergency and public safety communications",
-            C: "To coordinate repeaters for efficient and orderly spectrum usage",
-            D: "To encourage amateur radio operators to self-regulate and comply with the rules"
+        {
+            "id": "G2D02",
+            "question": "What is the approximate bandwidth of a single-sideband voice signal?",
+            "options": [
+                "A. 300 Hz",
+                "B. 1000 Hz",
+                "C. 3 kHz",
+                "D. 6 kHz"
+            ],
+            "answer": "C. 3 kHz"
         },
-        correct: "D"
-    },
-    {
-        question: "What procedure may be used by Volunteer Monitors to localize a station whose continuous carrier is holding a repeater on in their area?",
-        answers: {
-            A: "Compare vertical and horizontal signal strengths on the input frequency",
-            B: "Compare beam headings on the repeater input from their home locations with that of other Volunteer Monitors",
-            C: "Compare signal strengths between the input and output of the repeater",
-            D: "All these choices are correct"
+        {
+            "id": "G2D03",
+            "question": "Which of the following is a cause of a distorted SSB signal?",
+            "options": [
+                "A. Overmodulation",
+                "B. Improper carrier suppression",
+                "C. Improper sideband suppression",
+                "D. All these choices are correct"
+            ],
+            "answer": "A. Overmodulation"
         },
-        correct: "B"
-    },
-    {
-        question: "Which of the following describes an azimuthal projection map?",
-        answers: {
-            A: "A map that shows accurate land masses",
-            B: "A map that shows true bearings and distances from a specific location",
-            C: "A map that shows the angle at which an amateur satellite crosses the equator",
-            D: "A map that shows the number of degrees longitude that an amateur satellite appears to move westward at the equator with each orbit"
+        {
+            "id": "G2D04",
+            "question": "What is the effect of overmodulation on an SSB signal?",
+            "options": [
+                "A. It causes the signal to become wider",
+                "B. It causes the signal to become distorted",
+                "C. It causes the signal to occupy more bandwidth",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "B"
-    },
-    {
-        question: "Which of the following indicates that you are looking for an HF contact with any station?",
-        answers: {
-            A: "Sign your call sign once, followed by the words “listening for a call” -- if no answer, change frequency and repeat",
-            B: "Say “QTC” followed by “this is” and your call sign -- if no answer, change frequency and repeat",
-            C: "Repeat “CQ” a few times, followed by “this is,” then your call sign a few times, then pause to listen, repeat as necessary",
-            D: "Transmit an unmodulated carried for approximately 10 seconds, followed by “this is” and your call sign, and pause to listen -- repeat as necessary"
+        {
+            "id": "G2D05",
+            "question": "What is the purpose of the carrier suppression adjustment on an SSB transmitter?",
+            "options": [
+                "A. To set the level of the carrier in the transmitted signal",
+                "B. To set the level of the unwanted sideband in the transmitted signal",
+                "C. To set the level of the audio in the transmitted signal",
+                "D. To set the level of the RF output power"
+            ],
+            "answer": "A. To set the level of the carrier in the transmitted signal"
         },
-        correct: "C"
-    },
-    {
-        question: "How is a directional antenna pointed when making a “long-path” contact with another station?",
-        answers: {
-            A: "Toward the rising sun",
-            B: "Along the gray line",
-            C: "180 degrees from the station’s short-path heading",
-            D: "Toward the north"
+        {
+            "id": "G2D06",
+            "question": "What is the purpose of the sideband suppression adjustment on an SSB transmitter?",
+            "options": [
+                "A. To set the level of the carrier in the transmitted signal",
+                "B. To set the level of the unwanted sideband in the transmitted signal",
+                "C. To set the level of the audio in the transmitted signal",
+                "D. To set the level of the RF output power"
+            ],
+            "answer": "B. To set the level of the unwanted sideband in the transmitted signal"
         },
-        correct: "C"
-    },
-    {
-        question: "Which of the following are examples of the NATO Phonetic Alphabet?",
-        answers: {
-            A: "Able, Baker, Charlie, Dog",
-            B: "Adam, Boy, Charles, David",
-            C: "America, Boston, Canada, Denmark",
-            D: "Alpha, Bravo, Charlie, Delta"
+        {
+            "id": "G2D07",
+            "question": "What is the purpose of the ALC adjustment on an SSB transmitter?",
+            "options": [
+                "A. To set the level of the RF output power",
+                "B. To set the level of the audio in the transmitted signal",
+                "C. To set the level of the carrier in the transmitted signal",
+                "D. To prevent overmodulation"
+            ],
+            "answer": "D. To prevent overmodulation"
         },
-        correct: "D"
-    },
-    {
-        question: "Why do many amateurs keep a station log?",
-        answers: {
-            A: "The FCC requires a log of all international contacts",
-            B: "The FCC requires a log of all international third-party traffic",
-            C: "The log provides evidence of operation needed to renew a license without retest",
-            D: "To help with a reply if the FCC requests information about your station"
+        {
+            "id": "G2D08",
+            "question": "What is the proper way to set the ALC on an SSB transmitter?",
+            "options": [
+                "A. Adjust it for maximum power output",
+                "B. Adjust it for minimum SWR",
+                "C. Adjust it so that the ALC meter shows no more than 2/3 of the maximum reading on voice peaks",
+                "D. Adjust it so that the ALC meter shows a reading on voice peaks"
+            ],
+            "answer": "D. Adjust it so that the ALC meter shows a reading on voice peaks"
         },
-        correct: "D"
-    },
-    {
-        question: "Which of the following is required when participating in a contest on HF frequencies?",
-        answers: {
-            A: "Submit a log to the contest sponsor",
-            B: "Send a QSL card to the stations worked, or QSL via Logbook of The World",
-            C: "Identify your station according to normal FCC regulations",
-            D: "All these choices are correct"
+        {
+            "id": "G2D09",
+            "question": "What is the purpose of a VOX circuit?",
+            "options": [
+                "A. To automatically switch the transmitter on when you speak",
+                "B. To automatically switch the receiver on when you stop speaking",
+                "C. To automatically switch between transmit and receive",
+                "D. All these choices are correct"
+            ],
+            "answer": "C. To automatically switch between transmit and receive"
         },
-        correct: "C"
-    },
-    {
-        question: "What is QRP operation?",
-        answers: {
-            A: "Remote piloted model control",
-            B: "Low-power transmit operation",
-            C: "Transmission using Quick Response Protocol",
-            D: "Traffic relay procedure net operation"
+        {
+            "id": "G2D10",
+            "question": "Which of the following is a characteristic of a good CW signal?",
+            "options": [
+                "A. It is free of key clicks",
+                "B. It has a good tone",
+                "C. It is easy to copy",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "B"
-    },
-    {
-        question: "Why are signal reports typically exchanged at the beginning of an HF contact?",
-        answers: {
-            A: "To allow each station to operate according to conditions",
-            B: "To be sure the contact will count for award programs",
-            C: "To follow standard radiogram structure",
-            D: "To allow each station to calibrate their frequency display"
+        {
+            "id": "G2D11",
+            "question": "What is the cause of key clicks?",
+            "options": [
+                "A. A poorly shaped keying waveform",
+                "B. A dirty key contact",
+                "C. A misadjusted keyer",
+                "D. All these choices are correct"
+            ],
+            "answer": "A. A poorly shaped keying waveform"
         },
-        correct: "A"
-    },
-    // G2E
-    {
-        question: "Which mode is normally used when sending RTTY signals via AFSK with an SSB transmitter?",
-        answers: {
-            A: "USB",
-            B: "DSB",
-            C: "CW",
-            D: "LSB"
+        {
+            "id": "G2E01",
+            "question": "What is the purpose of a radio direction finding?",
+            "options": [
+                "A. To locate the source of a radio signal",
+                "B. To measure the strength of a radio signal",
+                "C. To measure the frequency of a radio signal",
+                "D. To measure the modulation of a radio signal"
+            ],
+            "answer": "A. To locate the source of a radio signal"
         },
-        correct: "D"
-    },
-    {
-        question: "What is VARA?",
-        answers: {
-            A: "A low signal-to-noise digital mode used for EME (moonbounce)",
-            B: "A digital protocol used with Winlink",
-            C: "A radio direction finding system used on VHF and UHF",
-            D: "A DX spotting system using a network of software defined radios"
+        {
+            "id": "G2E02",
+            "question": "Which of the following is a type of antenna used for radio direction finding?",
+            "options": [
+                "A. A dipole antenna",
+                "B. A Yagi antenna",
+                "C. A loop antenna",
+                "D. A vertical antenna"
+            ],
+            "answer": "C. A loop antenna"
         },
-        correct: "B"
-    },
-    {
-        question: "What symptoms may result from other signals interfering with a PACTOR or VARA transmission?",
-        answers: {
-            A: "Frequent retries or timeouts",
-            B: "Long pauses in message transmission",
-            C: "Failure to establish a connection between stations",
-            D: "All these choices are correct"
+        {
+            "id": "G2E03",
+            "question": "Which of the following is a characteristic of a loop antenna used for radio direction finding?",
+            "options": [
+                "A. It is bidirectional",
+                "B. It is omnidirectional",
+                "C. It has a sharp null",
+                "D. It has a broad beamwidth"
+            ],
+            "answer": "C. It has a sharp null"
         },
-        correct: "D"
-    },
-    {
-        question: "Which of the following is good practice when choosing a transmitting frequency to answer a station calling CQ using FT8?",
-        answers: {
-            A: "Always call on the station’s frequency",
-            B: "Call on any frequency in the waterfall except the station’s frequency",
-            C: "Find a clear frequency during the same time slot as the calling station",
-            D: "Find a clear frequency during the alternate time slot to the calling station"
+        {
+            "id": "G2E04",
+            "question": "What is the purpose of a sense antenna in a radio direction finding system?",
+            "options": [
+                "A. To resolve the 180-degree ambiguity of a loop antenna",
+                "B. To increase the gain of a loop antenna",
+                "C. To reduce the noise picked up by a loop antenna",
+                "D. To improve the directivity of a loop antenna"
+            ],
+            "answer": "A. To resolve the 180-degree ambiguity of a loop antenna"
         },
-        correct: "D"
-    },
-    {
-        question: "What is the standard sideband for JT65, JT9, FT4, or FT8 digital signal when using AFSK?",
-        answers: {
-            A: "LSB",
-            B: "USB",
-            C: "DSB",
-            D: "SSB"
+        {
+            "id": "G2E05",
+            "question": "What is the purpose of triangulation in radio direction finding?",
+            "options": [
+                "A. To determine the location of a signal source by taking bearings from two or more locations",
+                "B. To determine the strength of a signal source by taking readings from two or more locations",
+                "C. To determine the frequency of a signal source by taking measurements from two or more locations",
+                "D. To determine the modulation of a signal source by taking samples from two or more locations"
+            ],
+            "answer": "A. To determine the location of a signal source by taking bearings from two or more locations"
         },
-        correct: "B"
-    },
-    {
-        question: "What is the most common frequency shift for RTTY emissions in the amateur HF bands?",
-        answers: {
-            A: "85 Hz",
-            B: "170 Hz",
-            C: "425 Hz",
-            D: "850 Hz"
+        {
+            "id": "G2E06",
+            "question": "Which of the following is a source of error in radio direction finding?",
+            "options": [
+                "A. Reflections from nearby objects",
+                "B. Polarization error",
+                "C. A poorly calibrated receiver",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "B"
-    },
-    {
-        question: "Which of the following is required when using FT8?",
-        answers: {
-            A: "A special hardware modem",
-            B: "Computer time accurate to within approximately 1 second",
-            C: "Receiver attenuator set to -12 dB",
-            D: "A vertically polarized antenna"
+        {
+            "id": "G2E07",
+            "question": "What is the purpose of a radio contest?",
+            "options": [
+                "A. To contact as many stations as possible in a given time period",
+                "B. To make contacts with stations in as many different countries as possible",
+                "C. To test the capabilities of a station and operator",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "B"
-    },
-    {
-        question: "In what segment of the 20-meter band are most digital mode operations commonly found?",
-        answers: {
-            A: "At the bottom of the slow-scan TV segment, near 14.230 MHz",
-            B: "At the top of the SSB phone segment, near 14.325 MHz",
-            C: "In the middle of the CW segment, near 14.100 MHz",
-            D: "Between 14.070 MHz and 14.100 MHz"
+        {
+            "id": "G2E08",
+            "question": "What is the purpose of a QSL card?",
+            "options": [
+                "A. A written confirmation of a two-way contact",
+                "B. A postcard with a picture of the operator's station",
+                "C. A card that is exchanged between two amateurs after a contact",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "D"
-    },
-    {
-        question: "How do you join a contact between two stations using the PACTOR protocol?",
-        answers: {
-            A: "Send broadcast packets containing your call sign while in MONITOR mode",
-            B: "Transmit a steady carrier until the PACTOR protocol times out and disconnects",
-            C: "Joining an existing contact is not possible, PACTOR connections are limited to two stations",
-            D: "Send a NAK code"
+        {
+            "id": "G2E09",
+            "question": "Which of the following is a way to send and receive QSL cards?",
+            "options": [
+                "A. Directly through the mail",
+                "B. Through a QSL bureau",
+                "C. Electronically via the internet",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "C"
-    },
-    {
-        question: "Which of the following is a way to establish contact with a digital messaging system gateway station?",
-        answers: {
-            A: "Send an email to the system control operator",
-            B: "Send QRL in Morse code",
-            C: "Respond when the station broadcasts its SSID",
-            D: "Transmit a connect message on the station’s published frequency"
+        {
+            "id": "G2E10",
+            "question": "What is the purpose of an amateur radio net?",
+            "options": [
+                "A. A group of amateurs who meet on the air at a specific time and frequency",
+                "B. A formal system for passing messages",
+                "C. A way to practice emergency communication skills",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "D"
-    },
-    {
-        question: "What is the primary purpose of an Amateur Radio Emergency Data Network (AREDN) mesh network?",
-        answers: {
-            A: "To provide FM repeater coverage in remote areas",
-            B: "To provide real time propagation data by monitoring amateur radio transmissions worldwide",
-            C: "To provide high-speed data services during an emergency or community event",
-            D: "To provide DX spotting reports to aid contesters and DXers"
-        },
-        correct: "C"
-    },
-    {
-        question: "Which of the following describes Winlink?",
-        answers: {
-            A: "An amateur radio wireless network to send and receive email on the internet",
-            B: "A form of Packet Radio",
-            C: "A wireless network capable of both VHF and HF band operation",
-            D: "All of the above"
-        },
-        correct: "D"
-    },
-    {
-        question: "What is another name for a Winlink Remote Message Server?",
-        answers: {
-            A: "Terminal Node Controller",
-            B: "Gateway",
-            C: "RJ-45",
-            D: "Printer/Server"
-        },
-        correct: "B"
-    },
-    {
-        question: "What could be wrong if you cannot decode an RTTY or other FSK signal even though it is apparently tuned in properly?",
-        answers: {
-            A: "The mark and space frequencies may be reversed",
-            B: "You may have selected the wrong baud rate",
-            C: "You may be listening on the wrong sideband",
-            D: "All these choices are correct"
-        },
-        correct: "D"
-    },
-    {
-        question: "Which of the following is a common location for FT8?",
-        answers: {
-            A: "Anywhere in the voice portion of the band",
-            B: "Anywhere in the CW portion of the band",
-            C: "Approximately 14.074 MHz to 14.077 MHz",
-            D: "Approximately 14.110 MHz to 14.113 MHz"
-        },
-        correct: "C"
-    }
-];
+        {
+            "id": "G2E11",
+            "question": "Which of the following is a type of amateur radio net?",
+            "options": [
+                "A. A traffic net",
+                "B. A public service net",
+                "C. A technical net",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
+        }
+    ]
+}
