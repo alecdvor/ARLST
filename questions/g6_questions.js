@@ -1,235 +1,367 @@
-// Subelement G6 – Circuit Components
-const g6_questions = [
-    // G6A
-    {
-        question: "What is the minimum allowable discharge voltage for maximum life of a standard 12-volt lead-acid battery?",
-        answers: {
-            A: "6 volts",
-            B: "8.5 volts",
-            C: "10.5 volts",
-            D: "12 volts"
+var g6_questions = {
+    "questions": [
+        {
+            "id": "G6A01",
+            "question": "What is the function of a resistor?",
+            "options": [
+                "A. To oppose the flow of current",
+                "B. To store energy in an electric field",
+                "C. To store energy in a magnetic field",
+                "D. To convert AC to DC"
+            ],
+            "answer": "A. To oppose the flow of current"
         },
-        correct: "C"
-    },
-    {
-        question: "What is an advantage of batteries with low internal resistance?",
-        answers: {
-            A: "Long life",
-            B: "High discharge current",
-            C: "High voltage",
-            D: "Rapid recharge"
+        {
+            "id": "G6A02",
+            "question": "Which of the following is a type of resistor?",
+            "options": [
+                "A. Carbon composition",
+                "B. Wirewound",
+                "C. Metal film",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "B"
-    },
-    {
-        question: "What is the approximate forward threshold voltage of a germanium diode?",
-        answers: {
-            A: "0.1 volt",
-            B: "0.3 volts",
-            C: "0.7 volts",
-            D: "1.0 volts"
+        {
+            "id": "G6A03",
+            "question": "What is the meaning of the color code on a resistor?",
+            "options": [
+                "A. The resistance value, tolerance, and temperature coefficient",
+                "B. The voltage rating, current rating, and power rating",
+                "C. The manufacturer, date of manufacture, and lot number",
+                "D. The type of material, length, and diameter"
+            ],
+            "answer": "A. The resistance value, tolerance, and temperature coefficient"
         },
-        correct: "B"
-    },
-    {
-        question: "Which of the following is characteristic of an electrolytic capacitor?",
-        answers: {
-            A: "Tight tolerance",
-            B: "Much less leakage than any other type",
-            C: "High capacitance for a given volume",
-            D: "Inexpensive RF capacitor"
+        {
+            "id": "G6A04",
+            "question": "What is the function of a capacitor?",
+            "options": [
+                "A. To store energy in an electric field",
+                "B. To oppose the flow of current",
+                "C. To store energy in a magnetic field",
+                "D. To convert AC to DC"
+            ],
+            "answer": "A. To store energy in an electric field"
         },
-        correct: "C"
-    },
-    {
-        question: "What is the approximate forward threshold voltage of a silicon junction diode?",
-        answers: {
-            A: "0.1 volt",
-            B: "0.3 volts",
-            C: "0.7 volts",
-            D: "1.0 volts"
+        {
+            "id": "G6A05",
+            "question": "Which of the following is a type of capacitor?",
+            "options": [
+                "A. Ceramic",
+                "B. Electrolytic",
+                "C. Tantalum",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "C"
-    },
-    {
-        question: "Why should wire-wound resistors not be used in RF circuits?",
-        answers: {
-            A: "The resistor’s tolerance value would not be adequate",
-            B: "The resistor’s inductance could make circuit performance unpredictable",
-            C: "The resistor could overheat",
-            D: "The resistor’s internal capacitance would detune the circuit"
+        {
+            "id": "G6A06",
+            "question": "What is the function of an inductor?",
+            "options": [
+                "A. To store energy in a magnetic field",
+                "B. To store energy in an electric field",
+                "C. To oppose the flow of current",
+                "D. To convert AC to DC"
+            ],
+            "answer": "A. To store energy in a magnetic field"
         },
-        correct: "B"
-    },
-    {
-        question: "What are the operating points for a bipolar transistor used as a switch?",
-        answers: {
-            A: "Saturation and cutoff",
-            B: "The active region (between cutoff and saturation)",
-            C: "Peak and valley current points",
-            D: "Enhancement and depletion modes"
+        {
+            "id": "G6A07",
+            "question": "Which of the following is a type of inductor?",
+            "options": [
+                "A. Air core",
+                "B. Iron core",
+                "C. Ferrite core",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "A"
-    },
-    {
-        question: "Which of the following is characteristic of low voltage ceramic capacitors?",
-        answers: {
-            A: "Tight tolerance",
-            B: "High stability",
-            C: "High capacitance for given volume",
-            D: "Comparatively low cost"
+        {
+            "id": "G6A08",
+            "question": "What is the function of a transformer?",
+            "options": [
+                "A. To transfer energy from one circuit to another by magnetic coupling",
+                "B. To step up or step down AC voltage",
+                "C. To provide impedance matching",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "D"
-    },
-    {
-        question: "Which of the following describes MOSFET construction?",
-        answers: {
-            A: "The gate is formed by a back-biased junction",
-            B: "The gate is separated from the channel by a thin insulating layer",
-            C: "The source is separated from the drain by a thin insulating layer",
-            D: "The source is formed by depositing metal on silicon"
+        {
+            "id": "G6A09",
+            "question": "Which of the following is a type of transformer?",
+            "options": [
+                "A. Step-up",
+                "B. Step-down",
+                "C. Isolation",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "B"
-    },
-    {
-        question: "Which element of a vacuum tube regulates the flow of electrons between cathode and plate?",
-        answers: {
-            A: "Control grid",
-            B: "Suppressor grid",
-            C: "Screen grid",
-            D: "Trigger electrode"
+        {
+            "id": "G6A10",
+            "question": "What is the function of a diode?",
+            "options": [
+                "A. To allow current to flow in only one direction",
+                "B. To amplify a signal",
+                "C. To switch a signal",
+                "D. To regulate voltage"
+            ],
+            "answer": "A. To allow current to flow in only one direction"
         },
-        correct: "A"
-    },
-    {
-        question: "What happens when an inductor is operated above its self-resonant frequency?",
-        answers: {
-            A: "Its reactance increases",
-            B: "Harmonics are generated",
-            C: "It becomes capacitive",
-            D: "Catastrophic failure is likely"
+        {
+            "id": "G6A11",
+            "question": "Which of the following is a type of diode?",
+            "options": [
+                "A. Rectifier diode",
+                "B. Zener diode",
+                "C. Light-emitting diode (LED)",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "C"
-    },
-    {
-        question: "What is the primary purpose of a screen grid in a vacuum tube?",
-        answers: {
-            A: "To reduce grid-to-plate capacitance",
-            B: "To increase efficiency",
-            C: "To increase the control grid resistance",
-            D: "To decrease plate resistance"
+        {
+            "id": "G6B01",
+            "question": "What is the function of a transistor?",
+            "options": [
+                "A. To amplify or switch electronic signals and electrical power",
+                "B. To allow current to flow in only one direction",
+                "C. To store energy in a magnetic field",
+                "D. To store energy in an electric field"
+            ],
+            "answer": "A. To amplify or switch electronic signals and electrical power"
         },
-        correct: "A"
-    },
-    // G6B
-    {
-        question: "What determines the performance of a ferrite core at different frequencies?",
-        answers: {
-            A: "Its conductivity",
-            B: "Its thickness",
-            C: "The composition, or “mix,” of materials used",
-            D: "The ratio of outer diameter to inner diameter"
+        {
+            "id": "G6B02",
+            "question": "Which of the following is a type of transistor?",
+            "options": [
+                "A. Bipolar junction transistor (BJT)",
+                "B. Field-effect transistor (FET)",
+                "C. Metal-oxide-semiconductor field-effect transistor (MOSFET)",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "C"
-    },
-    {
-        question: "What is meant by the term MMIC?",
-        answers: {
-            A: "Multi-Mode Integrated Circuit",
-            B: "Monolithic Microwave Integrated Circuit",
-            C: "Metal Monolayer Integrated Circuit",
-            D: "Mode Modulated Integrated Circuit"
+        {
+            "id": "G6B03",
+            "question": "What are the three terminals of a BJT?",
+            "options": [
+                "A. Emitter, base, collector",
+                "B. Source, gate, drain",
+                "C. Anode, cathode, gate",
+                "D. Main terminal 1, main terminal 2, gate"
+            ],
+            "answer": "A. Emitter, base, collector"
         },
-        correct: "B"
-    },
-    {
-        question: "Which of the following is an advantage of CMOS integrated circuits compared to TTL integrated circuits?",
-        answers: {
-            A: "Low power consumption",
-            B: "High power handling capability",
-            C: "Better suited for RF amplification",
-            D: "Better suited for power supply regulation"
+        {
+            "id": "G6B04",
+            "question": "What are the two types of BJTs?",
+            "options": [
+                "A. NPN and PNP",
+                "B. N-channel and P-channel",
+                "C. Enhancement mode and depletion mode",
+                "D. Forward biased and reverse biased"
+            ],
+            "answer": "A. NPN and PNP"
         },
-        correct: "A"
-    },
-    {
-        question: "What is a typical upper frequency limit for low SWR operation of 50-ohm BNC connectors?",
-        answers: {
-            A: "50 MHz",
-            B: "500 MHz",
-            C: "4 GHz",
-            D: "40 GHz"
+        {
+            "id": "G6B05",
+            "question": "What are the three terminals of a FET?",
+            "options": [
+                "A. Source, gate, drain",
+                "B. Emitter, base, collector",
+                "C. Anode, cathode, gate",
+                "D. Main terminal 1, main terminal 2, gate"
+            ],
+            "answer": "A. Source, gate, drain"
         },
-        correct: "C"
-    },
-    {
-        question: "What is an advantage of using a ferrite core toroidal inductor?",
-        answers: {
-            A: "Large values of inductance may be obtained",
-            B: "The magnetic properties of the core may be optimized for a specific range of frequencies",
-            C: "Most of the magnetic field is contained in the core",
-            D: "All these choices are correct"
+        {
+            "id": "G6B06",
+            "question": "What are the two types of FETs?",
+            "options": [
+                "A. JFET and MOSFET",
+                "B. NPN and PNP",
+                "C. N-channel and P-channel",
+                "D. Enhancement mode and depletion mode"
+            ],
+            "answer": "A. JFET and MOSFET"
         },
-        correct: "D"
-    },
-    {
-        question: "What kind of device is an integrated circuit operational amplifier?",
-        answers: {
-            A: "Digital",
-            B: "MMIC",
-            C: "Programmable Logic",
-            D: "Analog"
+        {
+            "id": "G6B07",
+            "question": "What is the function of an operational amplifier (op-amp)?",
+            "options": [
+                "A. To amplify the difference between two input voltages",
+                "B. To amplify a single input voltage",
+                "C. To switch a signal",
+                "D. To regulate voltage"
+            ],
+            "answer": "A. To amplify the difference between two input voltages"
         },
-        correct: "D"
-    },
-    {
-        question: "Which of the following describes a type N connector?",
-        answers: {
-            A: "A moisture-resistant RF connector useful to 10 GHz",
-            B: "A small bayonet connector used for data circuits",
-            C: "A low noise figure VHF connector",
-            D: "A nickel plated version of the PL-259"
+        {
+            "id": "G6B08",
+            "question": "Which of the following is a characteristic of an ideal op-amp?",
+            "options": [
+                "A. Infinite open-loop gain",
+                "B. Infinite input impedance",
+                "C. Zero output impedance",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "A"
-    },
-    {
-        question: "How is an LED biased when emitting light?",
-        answers: {
-            A: "In the tunnel-effect region",
-            B: "At the Zener voltage",
-            C: "Reverse biased",
-            D: "Forward biased"
+        {
+            "id": "G6B09",
+            "question": "What is the function of a voltage regulator?",
+            "options": [
+                "A. To maintain a constant output voltage",
+                "B. To amplify a voltage",
+                "C. To switch a voltage",
+                "D. To filter a voltage"
+            ],
+            "answer": "A. To maintain a constant output voltage"
         },
-        correct: "D"
-    },
-    {
-        question: "How does a ferrite bead or core reduce common-mode RF current on the shield of a coaxial cable?",
-        answers: {
-            A: "By creating an impedance in the current’s path",
-            B: "It converts common-mode current to differential mode current",
-            C: "By creating an out-of-phase current to cancel the common-mode current",
-            D: "Ferrites expel magnetic fields"
+        {
+            "id": "G6B10",
+            "question": "Which of the following is a type of voltage regulator?",
+            "options": [
+                "A. Linear regulator",
+                "B. Switching regulator",
+                "C. Zener diode regulator",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "A"
-    },
-    {
-        question: "What is an SMA connector?",
-        answers: {
-            A: "A type-S to type-M adaptor",
-            B: "A small threaded connector suitable for signals up to several GHz",
-            C: "A connector designed for serial multiple access signals",
-            D: "A type of push-on connector intended for high-voltage applications"
+        {
+            "id": "G6B11",
+            "question": "What is the function of an integrated circuit (IC)?",
+            "options": [
+                "A. To combine multiple electronic components into a single package",
+                "B. To amplify a signal",
+                "C. To switch a signal",
+                "D. To regulate voltage"
+            ],
+            "answer": "A. To combine multiple electronic components into a single package"
         },
-        correct: "B"
-    },
-    {
-        question: "Which of these connector types is commonly used for low frequency or dc signal connections to a transceiver?",
-        answers: {
-            A: "PL-259",
-            B: "BNC",
-            C: "RCA Phono",
-            D: "Type N"
+        {
+            "id": "G6C01",
+            "question": "What is the function of a schematic diagram?",
+            "options": [
+                "A. To show the electrical connections of a circuit",
+                "B. To show the physical layout of a circuit",
+                "C. To show the values of the components in a circuit",
+                "D. To show the function of a circuit"
+            ],
+            "answer": "A. To show the electrical connections of a circuit"
         },
-        correct: "C"
-    }
-];
+        {
+            "id": "G6C02",
+            "question": "What is the symbol for a resistor on a schematic diagram?",
+            "options": [
+                "A. A zigzag line",
+                "B. A straight line with a break in the middle",
+                "C. A circle with a line through it",
+                "D. A rectangle"
+            ],
+            "answer": "A. A zigzag line"
+        },
+        {
+            "id": "G6C03",
+            "question": "What is the symbol for a capacitor on a schematic diagram?",
+            "options": [
+                "A. Two parallel lines",
+                "B. A curved line and a straight line",
+                "C. A coil",
+                "D. A zigzag line"
+            ],
+            "answer": "A. Two parallel lines"
+        },
+        {
+            "id": "G6C04",
+            "question": "What is the symbol for an inductor on a schematic diagram?",
+            "options": [
+                "A. A coil",
+                "B. A zigzag line",
+                "C. Two parallel lines",
+                "D. A circle with a line through it"
+            ],
+            "answer": "A. A coil"
+        },
+        {
+            "id": "G6C05",
+            "question": "What is the symbol for a diode on a schematic diagram?",
+            "options": [
+                "A. An arrow pointing to a line",
+                "B. A circle with a line through it",
+                "C. A zigzag line",
+                "D. A coil"
+            ],
+            "answer": "A. An arrow pointing to a line"
+        },
+        {
+            "id": "G6C06",
+            "question": "What is the symbol for a transistor on a schematic diagram?",
+            "options": [
+                "A. A circle with three lines connected to it",
+                "B. A circle with a line through it",
+                "C. A zigzag line",
+                "D. A coil"
+            ],
+            "answer": "A. A circle with three lines connected to it"
+        },
+        {
+            "id": "G6C07",
+            "question": "What is the symbol for a transformer on a schematic diagram?",
+            "options": [
+                "A. Two coils with lines between them",
+                "B. A zigzag line",
+                "C. Two parallel lines",
+                "D. A circle with a line through it"
+            ],
+            "answer": "A. Two coils with lines between them"
+        },
+        {
+            "id": "G6C08",
+            "question": "What is the symbol for a ground connection on a schematic diagram?",
+            "options": [
+                "A. A series of parallel lines of decreasing length",
+                "B. A circle",
+                "C. A triangle",
+                "D. A square"
+            ],
+            "answer": "A. A series of parallel lines of decreasing length"
+        },
+        {
+            "id": "G6C09",
+            "question": "What is the symbol for a battery on a schematic diagram?",
+            "options": [
+                "A. A series of long and short parallel lines",
+                "B. A circle with a plus and minus sign",
+                "C. A rectangle with a plus and minus sign",
+                "D. A zigzag line"
+            ],
+            "answer": "A. A series of long and short parallel lines"
+        },
+        {
+            "id": "G6C10",
+            "question": "What is the symbol for an antenna on a schematic diagram?",
+            "options": [
+                "A. A triangular or Y-shaped symbol",
+                "B. A circle with a line through it",
+                "C. A zigzag line",
+                "D. A coil"
+            ],
+            "answer": "A. A triangular or Y-shaped symbol"
+        },
+        {
+            "id": "G6C11",
+            "question": "What is the function of a block diagram?",
+            "options": [
+                "A. To show the functional relationship between the stages of a circuit",
+                "B. To show the electrical connections of a circuit",
+                "C. To show the physical layout of a circuit",
+                "D. To show the values of the components in a circuit"
+            ],
+            "answer": "A. To show the functional relationship between the stages of a circuit"
+        }
+    ]
+}
