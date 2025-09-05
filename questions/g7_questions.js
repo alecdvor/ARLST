@@ -1,4 +1,4 @@
-const chapter7 = {
+const g7_questions = {
   "name": "Practical Circuits",
   "questions": [
     {
