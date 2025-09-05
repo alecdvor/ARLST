@@ -5,25 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amateur Radio General Exam Study Game</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            touch-action: manipulation; /* Prevents double-tap zoom on mobile, improving button responsiveness */
-        }
-        .option-btn {
-            transition: background-color 0.2s ease-in-out, transform 0.1s ease;
-        }
-        .option-btn:active {
-            transform: scale(0.98); /* Adds a "press" effect to buttons */
-        }
-        .correct {
-            background-color: #22c55e !important; /* Tailwind green-500 */
-            color: white !important;
-        }
-        .incorrect {
-            background-color: #ef4444 !important; /* Tailwind red-500 */
-            color: white !important;
+            touch-action: manipulation;
         }
         /* Custom checkbox style */
         .chapter-checkbox:checked + label {
@@ -47,30 +34,9 @@
         </button>
     </div>
 
-    <!-- Main Game Screen (Initially Hidden) -->
-    <div id="game-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 hidden">
-        <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-2">General Class Exam Prep</h1>
-        <p id="progress-text" class="text-center text-gray-500 dark:text-gray-400 mb-6"></p>
-
-        <!-- Image container for questions that have a figure -->
-        <div id="image-container" class="mb-6 text-center">
-            <img id="question-image" src="" alt="Question Figure" class="max-w-full h-auto mx-auto rounded-lg shadow-md hidden">
-        </div>
-
-        <div id="question-container">
-            <p id="question-id" class="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-2"></p>
-            <p id="question-text" class="text-lg md:text-xl font-medium mb-6"></p>
-        </div>
-
-        <div id="options-container" class="space-y-4">
-            <!-- Option buttons will be dynamically inserted here -->
-        </div>
-
-        <div class="mt-8 text-center">
-            <button id="next-btn" class="w-full sm:w-auto bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 transition-all duration-300 disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed">
-                Next Question
-            </button>
-        </div>
+    <!-- Main Game Screen (Phaser will inject canvas here) -->
+    <div id="game-container" class="w-full max-w-2xl mx-auto hidden">
+        <!-- Game Canvas will be created here by Phaser -->
     </div>
 
     <!-- Chapter Question Files -->
@@ -86,14 +52,13 @@
     <script src="questions/g10_questions.js"></script>
 
     <script>
-        // This event listener waits for the entire window, including all scripts, to be fully loaded.
-        // This is more reliable than 'DOMContentLoaded' when scripts need to access variables from other loaded script files.
+        // Use the 'window.load' event to ensure everything, including external scripts, is fully loaded.
+        // This solves the timing issue where chapter variables were not ready.
         window.addEventListener('load', () => {
+            // DEBUG: Confirm that the load event has fired.
+            console.log("Window loaded. Starting script execution.");
 
             // ----- DATA -----
-            // This section now safely builds the CHAPTER_DATA array.
-            // It checks if each chapter's variable (e.g., 'chapter1') exists in the global scope (window)
-            // before trying to add it to the list of available chapters. This prevents the script from crashing.
             const CHAPTER_DATA = [];
             const potentialChapters = [
                 { id: 1, name: 'chapter1', title: "Commission's Rules" },
@@ -107,54 +72,50 @@
                 { id: 9, name: 'chapter9', title: "Antennas and Feed Lines" },
                 { id: 10, name: 'chapter10', title: "Electrical Safety" }
             ];
-
+            
+            // DEBUG: Log the process of finding chapter data.
+            console.log("Searching for chapter data on the window object...");
             potentialChapters.forEach(chapter => {
-                // `window[chapter.name]` checks if the global variable (e.g., 'chapter1') exists.
                 if (typeof window[chapter.name] !== 'undefined') {
-                    CHAPTER_DATA.push({
-                        id: chapter.id,
-                        var: window[chapter.name],
-                        title: chapter.title
-                    });
+                    // DEBUG: Log each successfully found chapter.
+                    console.log(`Found data for: ${chapter.name}`);
+                    CHAPTER_DATA.push({ id: chapter.id, var: window[chapter.name], title: chapter.title });
                 } else {
-                    console.warn(`Chapter data for "${chapter.name}" not found. The corresponding JS file might be missing or have an error.`);
+                    // This is expected if a question file is missing or named incorrectly.
+                    console.warn(`Chapter data for "${chapter.name}" not found.`);
                 }
             });
 
+            // DEBUG: Show the final populated CHAPTER_DATA array.
+            console.log("Final CHAPTER_DATA array:", CHAPTER_DATA);
 
             // ----- DOM ELEMENT REFERENCES -----
-            // Getting references to all the interactive parts of the page we need to manipulate.
             const selectionContainer = document.getElementById('selection-container');
             const gameContainer = document.getElementById('game-container');
             const chapterList = document.getElementById('chapter-list');
             const startBtn = document.getElementById('start-btn');
-            const nextBtn = document.getElementById('next-btn');
-            const progressText = document.getElementById('progress-text');
-            const questionIdText = document.getElementById('question-id');
-            const questionText = document.getElementById('question-text');
-            const optionsContainer = document.getElementById('options-container');
-            const questionImage = document.getElementById('question-image');
 
-            // ----- GAME STATE VARIABLES -----
-            // These variables will keep track of the game's progress.
-            let allQuestions = []; // Will be filled with questions from selected chapters.
-            let currentQuestionIndex = 0;
-            let optionsDisabled = false; // Prevents multiple answers from being selected.
+            // ----- GLOBAL GAME STATE -----
+            let allQuestions = [];
+            let gameInstance = null;
 
             // ----- INITIALIZATION -----
-            
-            /**
-             * Populates the chapter selection list on the initial screen.
-             */
             function initializeChapterSelection() {
+                // DEBUG: Confirm this function is called and log the data it's working with.
+                console.log("Initializing chapter selection screen with data:", CHAPTER_DATA);
+
+                chapterList.innerHTML = ''; // Clear any previous content
                 CHAPTER_DATA.forEach(chapter => {
+                    // DEBUG: Confirm the loop for creating checkboxes is running.
+                    console.log(`Creating checkbox for Chapter ${chapter.id}`);
+
                     const div = document.createElement('div');
                     const input = document.createElement('input');
                     input.type = 'checkbox';
                     input.id = `chapter-${chapter.id}`;
                     input.name = 'chapter';
                     input.value = chapter.id;
-                    input.classList.add('hidden', 'chapter-checkbox'); // Hide default checkbox
+                    input.classList.add('hidden', 'chapter-checkbox');
 
                     const label = document.createElement('label');
                     label.htmlFor = `chapter-${chapter.id}`;
@@ -167,145 +128,146 @@
                 });
             }
 
-            /**
-             * Starts the game with questions from the chapters the user selected.
-             */
-            function startGame() {
-                // Find all checked checkboxes.
-                const selectedChapters = Array.from(document.querySelectorAll('input[name="chapter"]:checked'))
-                                              .map(cb => parseInt(cb.value));
+            // ----- PHASER GAME SCENE -----
+            // This class contains all the logic for the actual quiz game canvas.
+            class GameScene extends Phaser.Scene {
+                constructor() {
+                    super('GameScene');
+                }
 
-                // If no chapters are selected, do nothing.
+                preload() {
+                    // Preload the figure image asset so it's ready to be used.
+                    this.load.image('figureG7_1', 'figureG7_1.png');
+                }
+
+                create() {
+                    this.cameras.main.setBackgroundColor('#ffffff'); // Set a white background
+                    this.currentQuestionIndex = 0;
+                    this.questionObjects = []; // To keep track of objects to destroy later
+                    this.displayQuestion();
+                }
+                
+                displayQuestion() {
+                    // Clear all objects from the previous question.
+                    this.questionObjects.forEach(obj => obj.destroy());
+                    this.questionObjects = [];
+
+                    if (this.currentQuestionIndex >= allQuestions.length) {
+                        this.showEndScreen();
+                        return;
+                    }
+
+                    const question = allQuestions[this.currentQuestionIndex];
+                    const canvasWidth = this.sys.game.config.width;
+
+                    // Text styles
+                    const textStyle = { fontFamily: 'Inter', fontSize: '18px', color: '#1f2937', align: 'left', wordWrap: { width: canvasWidth - 40 } };
+                    const idStyle = { fontFamily: 'Inter', fontSize: '14px', color: '#4b5563' };
+                    const optionStyle = { fontFamily: 'Inter', fontSize: '16px', color: '#111827', backgroundColor: '#f9fafb', padding: { x: 10, y: 5 }, wordWrap: { width: canvasWidth - 60 } };
+
+                    // Display Question Info
+                    let yPos = 20;
+                    const progressText = this.add.text(20, yPos, `Question ${this.currentQuestionIndex + 1} of ${allQuestions.length}`, idStyle);
+                    yPos += 25;
+                    const idText = this.add.text(20, yPos, `ID: ${question.id}`, idStyle);
+                    yPos += 30;
+                    const qText = this.add.text(20, yPos, question.question, textStyle);
+                    yPos += qText.height + 20;
+                    
+                    this.questionObjects.push(progressText, idText, qText);
+
+                    // Display Image if it exists
+                    if (question.image) {
+                        const img = this.add.image(canvasWidth / 2, yPos + 100, 'figureG7_1').setScale(0.5);
+                        yPos += img.displayHeight + 20;
+                        this.questionObjects.push(img);
+                    }
+
+                    // Display Options
+                    question.options.forEach(optionText => {
+                        const option = this.add.text(20, yPos, optionText, optionStyle)
+                            .setInteractive({ useHandCursor: true });
+                        
+                        option.on('pointerdown', () => {
+                            this.handleOptionClick(option, question.answer, question.options);
+                        });
+                        
+                        yPos += option.height + 15;
+                        this.questionObjects.push(option);
+                    });
+                }
+
+                handleOptionClick(selectedOption, correctAnswer, allOptions) {
+                    // Disable all options after one is clicked
+                    this.questionObjects.filter(o => o.type === 'Text' && allOptions.includes(o.text)).forEach(o => o.disableInteractive());
+                    
+                    if (selectedOption.text === correctAnswer) {
+                        selectedOption.setStyle({ color: '#ffffff', backgroundColor: '#22c55e' });
+                    } else {
+                        selectedOption.setStyle({ color: '#ffffff', backgroundColor: '#ef4444' });
+                        // Highlight the correct answer
+                        this.questionObjects.find(o => o.text === correctAnswer).setStyle({ color: '#ffffff', backgroundColor: '#22c55e' });
+                    }
+
+                    // Show "Next" button
+                    const nextBtn = this.add.text(this.sys.game.config.width / 2, this.sys.game.config.height - 40, 'Next Question', { fontSize: '20px', color: '#ffffff', backgroundColor: '#3b82f6', padding: {x: 15, y: 10}})
+                        .setOrigin(0.5)
+                        .setInteractive({ useHandCursor: true });
+
+                    nextBtn.on('pointerdown', () => {
+                        this.currentQuestionIndex++;
+                        this.displayQuestion();
+                    });
+                    this.questionObjects.push(nextBtn);
+                }
+
+                showEndScreen() {
+                     const centerX = this.sys.game.config.width / 2;
+                     const centerY = this.sys.game.config.height / 2;
+                     this.add.text(centerX, centerY - 50, 'Congratulations!', { fontSize: '28px', color: '#1f2937', fontFamily: 'Inter' }).setOrigin(0.5);
+                     this.add.text(centerX, centerY, `You've completed all ${allQuestions.length} questions.`, { fontSize: '18px', color: '#4b5563', fontFamily: 'Inter' }).setOrigin(0.5);
+                     const restartBtn = this.add.text(centerX, centerY + 60, 'Study Again', { fontSize: '20px', color: '#ffffff', backgroundColor: '#3b82f6', padding: {x: 15, y: 10}})
+                        .setOrigin(0.5)
+                        .setInteractive({ useHandCursor: true });
+                    
+                    restartBtn.on('pointerdown', () => location.reload());
+                }
+            }
+            
+            // ----- START GAME FUNCTION -----
+            function startGame() {
+                const selectedChapters = Array.from(document.querySelectorAll('input[name="chapter"]:checked')).map(cb => parseInt(cb.value));
                 if (selectedChapters.length === 0) return;
 
-                // Filter CHAPTER_DATA to get the data for the selected chapters.
-                const questionSets = CHAPTER_DATA.filter(ch => selectedChapters.includes(ch.id))
-                                                 .map(ch => ch.var.questions);
+                const questionSets = CHAPTER_DATA.filter(ch => selectedChapters.includes(ch.id)).map(ch => ch.var.questions);
+                allQuestions = questionSets.flat().sort(() => Math.random() - 0.5);
 
-                // Combine the questions from all selected chapters into a single array.
-                allQuestions = questionSets.flat();
-                // Optional: Shuffle the questions for a random order each time.
-                allQuestions.sort(() => Math.random() - 0.5);
-
-                // Reset game state.
-                currentQuestionIndex = 0;
-                
-                // Switch from the selection screen to the game screen.
                 selectionContainer.classList.add('hidden');
                 gameContainer.classList.remove('hidden');
 
-                // Display the first question.
-                displayQuestion(currentQuestionIndex);
-            }
+                // Phaser game configuration
+                const config = {
+                    type: Phaser.AUTO,
+                    width: 700,
+                    height: 800,
+                    parent: 'game-container',
+                    scene: GameScene
+                };
 
-            // ----- CORE GAME LOGIC -----
-
-            /**
-             * Displays a question and its options on the screen.
-             * @param {number} index - The index of the question to display from the allQuestions array.
-             */
-            function displayQuestion(index) {
-                optionsDisabled = false;
-                const question = allQuestions[index];
-
-                // Update progress text.
-                progressText.textContent = `Question ${index + 1} of ${allQuestions.length}`;
-                questionIdText.textContent = `ID: ${question.id}`;
-                questionText.textContent = question.question;
-
-                // Clear out options from the previous question.
-                optionsContainer.innerHTML = '';
-
-                // Create and display a button for each answer option.
-                question.options.forEach(option => {
-                    const button = document.createElement('button');
-                    button.textContent = option;
-                    button.classList.add('option-btn', 'w-full', 'text-left', 'p-4', 'rounded-lg', 'border', 'border-gray-300', 'dark:border-gray-600', 'bg-gray-50', 'dark:bg-gray-700', 'hover:bg-gray-200', 'dark:hover:bg-gray-600');
-                    button.addEventListener('click', () => handleOptionClick(button, option, question.answer));
-                    optionsContainer.appendChild(button);
-                });
-
-                // Show the image if the question data includes one.
-                if (question.image) {
-                    questionImage.src = question.image;
-                    questionImage.alt = `Figure for question ${question.id}`;
-                    questionImage.classList.remove('hidden');
-                } else {
-                    questionImage.classList.add('hidden');
-                }
-
-                // Disable the "Next" button until an answer is selected.
-                nextBtn.disabled = true;
-            }
-
-            /**
-             * Handles what happens when a user clicks an answer option.
-             * @param {HTMLElement} button - The button element that was clicked.
-             * @param {string} selectedOption - The text content of the selected answer.
-             * @param {string} correctAnswer - The correct answer for the question.
-             */
-            function handleOptionClick(button, selectedOption, correctAnswer) {
-                if (optionsDisabled) return; // Stop if an answer has already been chosen.
-                optionsDisabled = true;
-
-                const optionButtons = optionsContainer.querySelectorAll('.option-btn');
-
-                // Check if the selected answer is correct.
-                if (selectedOption === correctAnswer) {
-                    button.classList.add('correct'); // Style as correct.
-                } else {
-                    button.classList.add('incorrect'); // Style as incorrect.
-                    // Find and highlight the correct answer so the user can learn.
-                    optionButtons.forEach(btn => {
-                        if (btn.textContent === correctAnswer) {
-                            btn.classList.add('correct');
-                        }
-                    });
-                }
-                // Enable the "Next" button.
-                nextBtn.disabled = false;
-            }
-            
-            /**
-             * Resets the game and returns to the chapter selection screen.
-             */
-            function returnToSelection() {
-                gameContainer.classList.add('hidden');
-                selectionContainer.classList.remove('hidden');
-                
-                // Uncheck all checkboxes for the next round.
-                document.querySelectorAll('input[name="chapter"]:checked').forEach(cb => cb.checked = false);
-                startBtn.disabled = true; // Disable start button.
+                gameInstance = new Phaser.Game(config);
             }
 
             // ----- EVENT LISTENERS -----
-            
-            // When a checkbox is clicked, check if the "Start Game" button should be enabled.
             chapterList.addEventListener('change', () => {
                 const anyChapterSelected = document.querySelectorAll('input[name="chapter"]:checked').length > 0;
                 startBtn.disabled = !anyChapterSelected;
             });
 
-            // Start the game when the start button is clicked.
             startBtn.addEventListener('click', startGame);
 
-            // Move to the next question or end the game.
-            nextBtn.addEventListener('click', () => {
-                currentQuestionIndex++;
-                if (currentQuestionIndex < allQuestions.length) {
-                    displayQuestion(currentQuestionIndex);
-                } else {
-                    // Game is over.
-                    gameContainer.innerHTML = `<div class="text-center">
-                        <h2 class="text-2xl font-bold mb-4">Congratulations!</h2>
-                        <p class="mb-6">You've completed all ${allQuestions.length} questions from the selected chapters.</p>
-                        <button id="restart-btn" class="w-full sm:w-auto bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700">Study Again</button>
-                    </div>`;
-                    document.getElementById('restart-btn').addEventListener('click', () => location.reload()); // Simple reload to reset everything.
-                }
-            });
-
             // ----- START THE APP -----
+            // DEBUG: Explicitly calling the function to start the process.
+            console.log("Calling initializeChapterSelection()...");
             initializeChapterSelection();
         });
     </script>
