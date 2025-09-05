@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amateur Radio General Exam Study Game</title>
+    <title>Amateur Radio General Exam Study Game - v0.1.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
             touch-action: manipulation;
         }
         /* Custom checkbox style */
-        .chapter-checkbox:checked + label {
+        .chapter-checkbox:checked + label, .option-checkbox:checked + label {
             background-color: #3b82f6; /* Tailwind blue-500 */
             border-color: #3b82f6;
             color: white;
@@ -26,8 +26,15 @@
     <div id="selection-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8">
         <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-4">Select Chapters to Study</h1>
         <p class="text-center text-gray-500 dark:text-gray-400 mb-6">Choose one or more chapters to begin.</p>
-        <div id="chapter-list" class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
-            <!-- Checkboxes will be dynamically inserted here -->
+        <div id="chapter-list" class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+            <!-- Chapter checkboxes will be dynamically inserted here -->
+        </div>
+        <div class="flex items-center justify-center mb-8">
+            <input type="checkbox" id="randomize-questions" name="randomize" class="hidden option-checkbox" checked>
+            <label for="randomize-questions" class="flex items-center justify-center w-auto px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <svg class="w-5 h-5 mr-2 text-gray-500 checkmark-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                <span>Randomize Questions</span>
+            </label>
         </div>
         <button id="start-btn" class="w-full bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 transition-all duration-300 disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed" disabled>
             Start Game
@@ -38,6 +45,12 @@
     <div id="game-container" class="w-full max-w-2xl mx-auto hidden">
         <!-- Game Canvas will be created here by Phaser -->
     </div>
+
+    <!-- Final Score Screen -->
+    <div id="score-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 hidden">
+        <!-- Score details will be dynamically inserted here -->
+    </div>
+
 
     <!-- Chapter Question Files -->
     <script src="questions/g1_questions.js"></script>
@@ -53,228 +66,294 @@
 
     <script>
         window.addEventListener('load', () => {
-            // By wrapping our main logic in a setTimeout with a delay of 0, we push it to the end of the
-            // execution queue. This ensures that all other scripts have been fully parsed and their
-            // global variables are available before this code runs.
-            setTimeout(() => {
-                // DEBUG: Confirm that the load event has fired.
-                console.log("Window loaded. Starting script execution inside setTimeout.");
+        setTimeout(() => { // Delay script to ensure all chapter files are loaded
+            console.log("Window loaded. Starting script execution.");
 
-                // ----- DATA -----
-                const CHAPTER_DATA = [];
-                const potentialChapters = [
-                    { id: 1, name: 'g1_questions', title: "Commission's Rules" },
-                    { id: 2, name: 'g2_questions', title: "Operating Procedures" },
-                    { id: 3, name: 'g3_questions', title: "Radio Wave Propagation" },
-                    { id: 4, name: 'g4_questions', title: "Amateur Radio Practices" },
-                    { id: 5, name: 'g5_questions', title: "Electrical Principles" },
-                    { id: 6, name: 'g6_questions', title: "Circuit Components" },
-                    { id: 7, name: 'g7_questions', title: "Practical Circuits" },
-                    { id: 8, name: 'g8_questions', title: "Signals and Emissions" },
-                    { id: 9, name: 'g9_questions', title: "Antennas and Feed Lines" },
-                    { id: 10, name: 'g10_questions', title: "Electrical Safety" }
-                ];
-                
-                // DEBUG: Log the process of finding chapter data.
-                console.log("Searching for chapter data on the window object...");
-                potentialChapters.forEach(chapter => {
-                    if (typeof window[chapter.name] !== 'undefined') {
-                        // DEBUG: Log each successfully found chapter.
-                        console.log(`Found data for: ${chapter.name}`);
-                        CHAPTER_DATA.push({ id: chapter.id, var: window[chapter.name], title: chapter.title });
-                    } else {
-                        // This is expected if a question file is missing or named incorrectly.
-                        console.warn(`Chapter data for "${chapter.name}" not found.`);
-                    }
+            // ----- DATA -----
+            const CHAPTER_DATA = [];
+            const potentialChapters = [
+                { id: 1, name: 'g1_questions', title: "Commission's Rules" },
+                { id: 2, name: 'g2_questions', title: "Operating Procedures" },
+                { id: 3, name: 'g3_questions', title: "Radio Wave Propagation" },
+                { id: 4, name: 'g4_questions', title: "Amateur Radio Practices" },
+                { id: 5, name: 'g5_questions', title: "Electrical Principles" },
+                { id: 6, name: 'g6_questions', title: "Circuit Components" },
+                { id: 7, name: 'g7_questions', title: "Practical Circuits" },
+                { id: 8, name: 'g8_questions', title: "Signals and Emissions" },
+                { id: 9, name: 'g9_questions', title: "Antennas and Feed Lines" },
+                { id: 10, name: 'g10_questions', title: "Electrical Safety" }
+            ];
+
+            console.log("Searching for chapter data on the window object...");
+            potentialChapters.forEach(chapter => {
+                if (typeof window[chapter.name] !== 'undefined' && window[chapter.name].questions) {
+                    CHAPTER_DATA.push({ id: chapter.id, varName: chapter.name, data: window[chapter.name], title: chapter.title });
+                } else {
+                    console.warn(`Chapter data for "${chapter.name}" not found or malformed.`);
+                }
+            });
+            console.log("Final CHAPTER_DATA array:", CHAPTER_DATA);
+
+
+            // ----- DOM ELEMENT REFERENCES -----
+            const selectionContainer = document.getElementById('selection-container');
+            const gameContainer = document.getElementById('game-container');
+            const scoreContainer = document.getElementById('score-container');
+            const chapterList = document.getElementById('chapter-list');
+            const startBtn = document.getElementById('start-btn');
+            const randomizeCheckbox = document.getElementById('randomize-questions');
+
+            // ----- GLOBAL GAME STATE -----
+            let allQuestions = [];
+            let gameInstance = null;
+            let chapterScores = {};
+            let missedQuestions = [];
+            let overallScore = { correct: 0, attempted: 0 };
+
+
+            // ----- INITIALIZATION -----
+            function initializeChapterSelection() {
+                console.log("Calling initializeChapterSelection()...");
+                chapterList.innerHTML = ''; 
+                console.log("Initializing chapter selection screen with data:", CHAPTER_DATA);
+                CHAPTER_DATA.forEach(chapter => {
+                    const div = document.createElement('div');
+                    const input = document.createElement('input');
+                    input.type = 'checkbox';
+                    input.id = `chapter-${chapter.id}`;
+                    input.name = 'chapter';
+                    input.value = chapter.id;
+                    input.classList.add('hidden', 'chapter-checkbox');
+
+                    const label = document.createElement('label');
+                    label.htmlFor = `chapter-${chapter.id}`;
+                    label.textContent = `Chapter ${chapter.id}`;
+                    label.classList.add('block', 'w-full', 'text-center', 'p-4', 'rounded-lg', 'border', 'border-gray-300', 'dark:border-gray-600', 'cursor-pointer', 'hover:bg-gray-100', 'dark:hover:bg-gray-700', 'transition-colors');
+                    
+                    div.appendChild(input);
+                    div.appendChild(label);
+                    chapterList.appendChild(div);
                 });
+            }
 
-                // DEBUG: Show the final populated CHAPTER_DATA array.
-                console.log("Final CHAPTER_DATA array:", CHAPTER_DATA);
+            // ----- PHASER GAME SCENE -----
+            class GameScene extends Phaser.Scene {
+                constructor() {
+                    super('GameScene');
+                }
 
-                // ----- DOM ELEMENT REFERENCES -----
-                const selectionContainer = document.getElementById('selection-container');
-                const gameContainer = document.getElementById('game-container');
-                const chapterList = document.getElementById('chapter-list');
-                const startBtn = document.getElementById('start-btn');
+                preload() {
+                    this.load.image('figureG7_1', 'figureG7_1.png');
+                }
 
-                // ----- GLOBAL GAME STATE -----
-                let allQuestions = [];
-                let gameInstance = null;
+                create() {
+                    this.cameras.main.setBackgroundColor('#ffffff'); 
+                    this.currentQuestionIndex = 0;
+                    this.questionObjects = []; 
 
-                // ----- INITIALIZATION -----
-                function initializeChapterSelection() {
-                    // DEBUG: Confirm this function is called and log the data it's working with.
-                    console.log("Initializing chapter selection screen with data:", CHAPTER_DATA);
+                    // --- UI for Live Score ---
+                    this.scoreText = this.add.text(this.sys.game.config.width - 20, 20, '', { fontFamily: 'Inter', fontSize: '16px', color: '#4b5563', align: 'right' }).setOrigin(1, 0);
+                    this.questionObjects.push(this.scoreText);
 
-                    chapterList.innerHTML = ''; // Clear any previous content
-                    CHAPTER_DATA.forEach(chapter => {
-                        // DEBUG: Confirm the loop for creating checkboxes is running.
-                        console.log(`Creating checkbox for Chapter ${chapter.id}`);
+                    this.displayQuestion();
+                }
+                
+                displayQuestion() {
+                    this.questionObjects.forEach(obj => obj.destroy());
+                    this.questionObjects = [this.scoreText]; // Keep score text
 
-                        const div = document.createElement('div');
-                        const input = document.createElement('input');
-                        input.type = 'checkbox';
-                        input.id = `chapter-${chapter.id}`;
-                        input.name = 'chapter';
-                        input.value = chapter.id;
-                        input.classList.add('hidden', 'chapter-checkbox');
+                    if (this.currentQuestionIndex >= allQuestions.length) {
+                        this.showEndScreen();
+                        return;
+                    }
+                    
+                    // Update live score
+                    this.scoreText.setText(`Score: ${overallScore.correct} / ${overallScore.attempted}`);
 
-                        const label = document.createElement('label');
-                        label.htmlFor = `chapter-${chapter.id}`;
-                        label.textContent = `Chapter ${chapter.id}`;
-                        label.classList.add('block', 'w-full', 'text-center', 'p-4', 'rounded-lg', 'border', 'border-gray-300', 'dark:border-gray-600', 'cursor-pointer', 'hover:bg-gray-100', 'dark:hover:bg-gray-700', 'transition-colors');
+                    const question = allQuestions[this.currentQuestionIndex];
+                    const canvasWidth = this.sys.game.config.width;
+
+                    const textStyle = { fontFamily: 'Inter', fontSize: '18px', color: '#1f2937', align: 'left', wordWrap: { width: canvasWidth - 40 } };
+                    const idStyle = { fontFamily: 'Inter', fontSize: '14px', color: '#4b5563' };
+                    const optionStyle = { fontFamily: 'Inter', fontSize: '16px', color: '#111827', backgroundColor: '#f9fafb', padding: { x: 10, y: 5 }, wordWrap: { width: canvasWidth - 60 }, fixedWidth: canvasWidth - 40, };
+
+                    let yPos = 20;
+                    const progressText = this.add.text(20, yPos, `Question ${this.currentQuestionIndex + 1} of ${allQuestions.length}`, idStyle);
+                    yPos += 25;
+                    const idText = this.add.text(20, yPos, `ID: ${question.id}`, idStyle);
+                    yPos += 30;
+                    const qText = this.add.text(20, yPos, question.question, textStyle);
+                    yPos += qText.height + 20;
+                    
+                    this.questionObjects.push(progressText, idText, qText);
+
+                    if (question.image) {
+                        const img = this.add.image(canvasWidth / 2, yPos + 100, 'figureG7_1').setScale(0.5);
+                        yPos += img.displayHeight + 20;
+                        this.questionObjects.push(img);
+                    }
+
+                    question.options.forEach(optionText => {
+                        const option = this.add.text(20, yPos, optionText, optionStyle)
+                            .setInteractive({ useHandCursor: true });
                         
-                        div.appendChild(input);
-                        div.appendChild(label);
-                        chapterList.appendChild(div);
+                        option.on('pointerdown', () => {
+                            this.handleOptionClick(option, question);
+                        });
+                        
+                        yPos += option.height + 15;
+                        this.questionObjects.push(option);
                     });
                 }
 
-                // ----- PHASER GAME SCENE -----
-                // This class contains all the logic for the actual quiz game canvas.
-                class GameScene extends Phaser.Scene {
-                    constructor() {
-                        super('GameScene');
-                    }
+                handleOptionClick(selectedOption, question) {
+                    const selectedAnswer = selectedOption.text;
+                    const correctAnswer = question.answer;
+                    
+                    overallScore.attempted++;
+                    chapterScores[question.sourceChapter].attempted++;
 
-                    preload() {
-                        // Preload the figure image asset so it's ready to be used.
-                        this.load.image('figureG7_1', 'figureG7_1.png');
-                    }
-
-                    create() {
-                        this.cameras.main.setBackgroundColor('#ffffff'); // Set a white background
-                        this.currentQuestionIndex = 0;
-                        this.questionObjects = []; // To keep track of objects to destroy later
-                        this.displayQuestion();
+                    // Disable all options
+                    this.questionObjects.filter(o => o.type === 'Text' && question.options.includes(o.text)).forEach(o => o.disableInteractive());
+                    
+                    if (selectedAnswer === correctAnswer) {
+                        overallScore.correct++;
+                        chapterScores[question.sourceChapter].correct++;
+                        selectedOption.setStyle({ color: '#ffffff', backgroundColor: '#22c55e' });
+                    } else {
+                        missedQuestions.push({ question: question.question, yourAnswer: selectedAnswer, correctAnswer: correctAnswer, id: question.id });
+                        selectedOption.setStyle({ color: '#ffffff', backgroundColor: '#ef4444' });
+                        this.questionObjects.find(o => o.text === correctAnswer).setStyle({ color: '#ffffff', backgroundColor: '#22c55e' });
                     }
                     
-                    displayQuestion() {
-                        // Clear all objects from the previous question.
-                        this.questionObjects.forEach(obj => obj.destroy());
-                        this.questionObjects = [];
+                    this.scoreText.setText(`Score: ${overallScore.correct} / ${overallScore.attempted}`);
 
-                        if (this.currentQuestionIndex >= allQuestions.length) {
-                            this.showEndScreen();
-                            return;
-                        }
 
-                        const question = allQuestions[this.currentQuestionIndex];
-                        const canvasWidth = this.sys.game.config.width;
+                    const nextBtn = this.add.text(this.sys.game.config.width / 2, this.sys.game.config.height - 40, 'Next Question', { fontSize: '20px', color: '#ffffff', backgroundColor: '#3b82f6', padding: {x: 15, y: 10}})
+                        .setOrigin(0.5)
+                        .setInteractive({ useHandCursor: true });
 
-                        // Text styles
-                        const textStyle = { fontFamily: 'Inter', fontSize: '18px', color: '#1f2937', align: 'left', wordWrap: { width: canvasWidth - 40 } };
-                        const idStyle = { fontFamily: 'Inter', fontSize: '14px', color: '#4b5563' };
-                        const optionStyle = { fontFamily: 'Inter', fontSize: '16px', color: '#111827', backgroundColor: '#f9fafb', padding: { x: 10, y: 5 }, wordWrap: { width: canvasWidth - 60 } };
-
-                        // Display Question Info
-                        let yPos = 20;
-                        const progressText = this.add.text(20, yPos, `Question ${this.currentQuestionIndex + 1} of ${allQuestions.length}`, idStyle);
-                        yPos += 25;
-                        const idText = this.add.text(20, yPos, `ID: ${question.id}`, idStyle);
-                        yPos += 30;
-                        const qText = this.add.text(20, yPos, question.question, textStyle);
-                        yPos += qText.height + 20;
-                        
-                        this.questionObjects.push(progressText, idText, qText);
-
-                        // Display Image if it exists
-                        if (question.image) {
-                            const img = this.add.image(canvasWidth / 2, yPos + 100, 'figureG7_1').setScale(0.5);
-                            yPos += img.displayHeight + 20;
-                            this.questionObjects.push(img);
-                        }
-
-                        // Display Options
-                        question.options.forEach(optionText => {
-                            const option = this.add.text(20, yPos, optionText, optionStyle)
-                                .setInteractive({ useHandCursor: true });
-                            
-                            option.on('pointerdown', () => {
-                                this.handleOptionClick(option, question.answer, question.options);
-                            });
-                            
-                            yPos += option.height + 15;
-                            this.questionObjects.push(option);
-                        });
-                    }
-
-                    handleOptionClick(selectedOption, correctAnswer, allOptions) {
-                        // Disable all options after one is clicked
-                        this.questionObjects.filter(o => o.type === 'Text' && allOptions.includes(o.text)).forEach(o => o.disableInteractive());
-                        
-                        if (selectedOption.text === correctAnswer) {
-                            selectedOption.setStyle({ color: '#ffffff', backgroundColor: '#22c55e' });
-                        } else {
-                            selectedOption.setStyle({ color: '#ffffff', backgroundColor: '#ef4444' });
-                            // Highlight the correct answer
-                            this.questionObjects.find(o => o.text === correctAnswer).setStyle({ color: '#ffffff', backgroundColor: '#22c55e' });
-                        }
-
-                        // Show "Next" button
-                        const nextBtn = this.add.text(this.sys.game.config.width / 2, this.sys.game.config.height - 40, 'Next Question', { fontSize: '20px', color: '#ffffff', backgroundColor: '#3b82f6', padding: {x: 15, y: 10}})
-                            .setOrigin(0.5)
-                            .setInteractive({ useHandCursor: true });
-
-                        nextBtn.on('pointerdown', () => {
-                            this.currentQuestionIndex++;
-                            this.displayQuestion();
-                        });
-                        this.questionObjects.push(nextBtn);
-                    }
-
-                    showEndScreen() {
-                         const centerX = this.sys.game.config.width / 2;
-                         const centerY = this.sys.game.config.height / 2;
-                         this.add.text(centerX, centerY - 50, 'Congratulations!', { fontSize: '28px', color: '#1f2937', fontFamily: 'Inter' }).setOrigin(0.5);
-                         this.add.text(centerX, centerY, `You've completed all ${allQuestions.length} questions.`, { fontSize: '18px', color: '#4b5563', fontFamily: 'Inter' }).setOrigin(0.5);
-                         const restartBtn = this.add.text(centerX, centerY + 60, 'Study Again', { fontSize: '20px', color: '#ffffff', backgroundColor: '#3b82f6', padding: {x: 15, y: 10}})
-                            .setOrigin(0.5)
-                            .setInteractive({ useHandCursor: true });
-                        
-                        restartBtn.on('pointerdown', () => location.reload());
-                    }
-                }
-                
-                // ----- START GAME FUNCTION -----
-                function startGame() {
-                    const selectedChapters = Array.from(document.querySelectorAll('input[name="chapter"]:checked')).map(cb => parseInt(cb.value));
-                    if (selectedChapters.length === 0) return;
-
-                    const questionSets = CHAPTER_DATA.filter(ch => selectedChapters.includes(ch.id)).map(ch => ch.var.questions);
-                    allQuestions = questionSets.flat().sort(() => Math.random() - 0.5);
-
-                    selectionContainer.classList.add('hidden');
-                    gameContainer.classList.remove('hidden');
-
-                    // Phaser game configuration
-                    const config = {
-                        type: Phaser.AUTO,
-                        width: 700,
-                        height: 800,
-                        parent: 'game-container',
-                        scene: GameScene
-                    };
-
-                    gameInstance = new Phaser.Game(config);
+                    nextBtn.on('pointerdown', () => {
+                        this.currentQuestionIndex++;
+                        this.displayQuestion();
+                    });
+                    this.questionObjects.push(nextBtn);
                 }
 
-                // ----- EVENT LISTENERS -----
-                chapterList.addEventListener('change', () => {
-                    const anyChapterSelected = document.querySelectorAll('input[name="chapter"]:checked').length > 0;
-                    startBtn.disabled = !anyChapterSelected;
+                showEndScreen() {
+                     displayFinalScore();
+                     this.game.destroy(true); // Clean up the Phaser instance
+                }
+            }
+            
+            // ----- GAME LOGIC FUNCTIONS -----
+            function startGame() {
+                const selectedChapters = Array.from(document.querySelectorAll('input[name="chapter"]:checked')).map(cb => parseInt(cb.value));
+                if (selectedChapters.length === 0) return;
+
+                // Reset state
+                allQuestions = [];
+                missedQuestions = [];
+                chapterScores = {};
+                overallScore = { correct: 0, attempted: 0 };
+
+                CHAPTER_DATA.forEach(ch => {
+                    if (selectedChapters.includes(ch.id)) {
+                        // Initialize score object for this chapter
+                        chapterScores[ch.varName] = { 
+                            title: `Chapter ${ch.id}: ${ch.title}`, 
+                            correct: 0, 
+                            attempted: 0,
+                            total: ch.data.questions.length
+                        };
+                        
+                        // Add questions to the main pool, tagging them with their source
+                        ch.data.questions.forEach(q => {
+                            allQuestions.push({ ...q, sourceChapter: ch.varName });
+                        });
+                    }
                 });
 
-                startBtn.addEventListener('click', startGame);
+                if (randomizeCheckbox.checked) {
+                    allQuestions.sort(() => Math.random() - 0.5); // Shuffle questions
+                }
 
-                // ----- START THE APP -----
-                // DEBUG: Explicitly calling the function to start the process.
-                console.log("Calling initializeChapterSelection()...");
-                initializeChapterSelection();
-            }, 0);
+                selectionContainer.classList.add('hidden');
+                gameContainer.classList.remove('hidden');
+
+                const config = {
+                    type: Phaser.AUTO,
+                    width: 700,
+                    height: 800,
+                    parent: 'game-container',
+                    scene: GameScene
+                };
+
+                gameInstance = new Phaser.Game(config);
+            }
+
+            function displayFinalScore() {
+                gameContainer.innerHTML = ''; // Clear canvas container
+                gameContainer.classList.add('hidden');
+                
+                let scoreHTML = `<h1 class="text-2xl md:text-3xl font-bold text-center mb-6">Study Session Complete!</h1>`;
+                
+                // Overall Score
+                const percentage = overallScore.total === 0 ? 0 : Math.round((overallScore.correct / allQuestions.length) * 100);
+                scoreHTML += `<div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 mb-6 text-center">
+                                <h2 class="text-xl font-bold">Overall Score</h2>
+                                <p class="text-3xl font-light mt-2">${overallScore.correct} / ${allQuestions.length} (${percentage}%)</p>
+                              </div>`;
+
+                // Per-chapter scores
+                if (Object.keys(chapterScores).length > 1) {
+                    scoreHTML += `<h2 class="text-xl font-bold mb-4">Chapter Breakdown</h2><div class="space-y-3 mb-6">`;
+                    for (const key in chapterScores) {
+                        const score = chapterScores[key];
+                        const chapPercentage = score.attempted === 0 ? 0 : Math.round((score.correct / score.attempted) * 100);
+                        scoreHTML += `<div class="flex justify-between items-center bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
+                                        <span class="font-semibold">${score.title}</span>
+                                        <span>${score.correct} / ${score.attempted} (${chapPercentage}%)</span>
+                                      </div>`;
+                    }
+                    scoreHTML += `</div>`;
+                }
+
+                // Missed Questions
+                if (missedQuestions.length > 0) {
+                    scoreHTML += `<h2 class="text-xl font-bold mb-4">Review Missed Questions</h2><div class="space-y-4">`;
+                    missedQuestions.forEach(q => {
+                        scoreHTML += `<div class="bg-red-100 dark:bg-red-900/20 border-l-4 border-red-500 p-4 rounded-r-lg">
+                                        <p class="font-semibold text-gray-800 dark:text-gray-200">${q.id}: ${q.question}</p>
+                                        <p class="mt-2 text-red-700 dark:text-red-400"><span class="font-bold">Your Answer:</span> ${q.yourAnswer}</p>
+                                        <p class="mt-1 text-green-700 dark:text-green-400"><span class="font-bold">Correct Answer:</span> ${q.correctAnswer}</p>
+                                      </div>`;
+                    });
+                    scoreHTML += `</div>`;
+                }
+
+                scoreHTML += `<button id="restart-btn" class="w-full mt-8 bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700">Study Again</button>`;
+
+                scoreContainer.innerHTML = scoreHTML;
+                scoreContainer.classList.remove('hidden');
+
+                document.getElementById('restart-btn').addEventListener('click', () => location.reload());
+            }
+
+
+            // ----- EVENT LISTENERS -----
+            chapterList.addEventListener('change', () => {
+                const anyChapterSelected = document.querySelectorAll('input[name="chapter"]:checked').length > 0;
+                startBtn.disabled = !anyChapterSelected;
+            });
+
+            startBtn.addEventListener('click', startGame);
+
+            // ----- START THE APP -----
+            initializeChapterSelection();
+        }, 50); // 50ms delay
         });
     </script>
 </body>
 </html>
-
 
