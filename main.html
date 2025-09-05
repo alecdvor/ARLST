@@ -90,20 +90,36 @@
         document.addEventListener('DOMContentLoaded', () => {
 
             // ----- DATA -----
-            // An array that maps the chapter number to its corresponding variable from the loaded JS files.
-            // This makes it easy to access the question data based on user selection.
-            const CHAPTER_DATA = [
-                { id: 1, var: chapter1, title: "Commission's Rules" },
-                { id: 2, var: chapter2, title: "Operating Procedures" },
-                { id: 3, var: chapter3, title: "Radio Wave Propagation" },
-                { id: 4, var: chapter4, title: "Amateur Radio Practices" },
-                { id: 5, var: chapter5, title: "Electrical Principles" },
-                { id: 6, var: chapter6, title: "Circuit Components" },
-                { id: 7, var: chapter7, title: "Practical Circuits" },
-                { id: 8, var: chapter8, title: "Signals and Emissions" },
-                { id: 9, var: chapter9, title: "Antennas and Feed Lines" },
-                { id: 10, var: chapter10, title: "Electrical Safety" }
+            // This section now safely builds the CHAPTER_DATA array.
+            // It checks if each chapter's variable (e.g., 'chapter1') exists in the global scope (window)
+            // before trying to add it to the list of available chapters. This prevents the script from crashing.
+            const CHAPTER_DATA = [];
+            const potentialChapters = [
+                { id: 1, name: 'chapter1', title: "Commission's Rules" },
+                { id: 2, name: 'chapter2', title: "Operating Procedures" },
+                { id: 3, name: 'chapter3', title: "Radio Wave Propagation" },
+                { id: 4, name: 'chapter4', title: "Amateur Radio Practices" },
+                { id: 5, name: 'chapter5', title: "Electrical Principles" },
+                { id: 6, name: 'chapter6', title: "Circuit Components" },
+                { id: 7, name: 'chapter7', title: "Practical Circuits" },
+                { id: 8, name: 'chapter8', title: "Signals and Emissions" },
+                { id: 9, name: 'chapter9', title: "Antennas and Feed Lines" },
+                { id: 10, name: 'chapter10', title: "Electrical Safety" }
             ];
+
+            potentialChapters.forEach(chapter => {
+                // `window[chapter.name]` checks if the global variable (e.g., 'chapter1') exists.
+                if (typeof window[chapter.name] !== 'undefined') {
+                    CHAPTER_DATA.push({
+                        id: chapter.id,
+                        var: window[chapter.name],
+                        title: chapter.title
+                    });
+                } else {
+                    console.warn(`Chapter data for "${chapter.name}" not found. The corresponding JS file might be missing or have an error.`);
+                }
+            });
+
 
             // ----- DOM ELEMENT REFERENCES -----
             // Getting references to all the interactive parts of the page we need to manipulate.
