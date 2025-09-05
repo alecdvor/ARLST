@@ -52,223 +52,226 @@
     <script src="questions/g10_questions.js"></script>
 
     <script>
-        // Use the 'window.load' event to ensure everything, including external scripts, is fully loaded.
-        // This solves the timing issue where chapter variables were not ready.
         window.addEventListener('load', () => {
-            // DEBUG: Confirm that the load event has fired.
-            console.log("Window loaded. Starting script execution.");
+            // By wrapping our main logic in a setTimeout with a delay of 0, we push it to the end of the
+            // execution queue. This ensures that all other scripts have been fully parsed and their
+            // global variables are available before this code runs.
+            setTimeout(() => {
+                // DEBUG: Confirm that the load event has fired.
+                console.log("Window loaded. Starting script execution inside setTimeout.");
 
-            // ----- DATA -----
-            const CHAPTER_DATA = [];
-            const potentialChapters = [
-                { id: 1, name: 'chapter1', title: "Commission's Rules" },
-                { id: 2, name: 'chapter2', title: "Operating Procedures" },
-                { id: 3, name: 'chapter3', title: "Radio Wave Propagation" },
-                { id: 4, name: 'chapter4', title: "Amateur Radio Practices" },
-                { id: 5, name: 'chapter5', title: "Electrical Principles" },
-                { id: 6, name: 'chapter6', title: "Circuit Components" },
-                { id: 7, name: 'chapter7', title: "Practical Circuits" },
-                { id: 8, name: 'chapter8', title: "Signals and Emissions" },
-                { id: 9, name: 'chapter9', title: "Antennas and Feed Lines" },
-                { id: 10, name: 'chapter10', title: "Electrical Safety" }
-            ];
-            
-            // DEBUG: Log the process of finding chapter data.
-            console.log("Searching for chapter data on the window object...");
-            potentialChapters.forEach(chapter => {
-                if (typeof window[chapter.name] !== 'undefined') {
-                    // DEBUG: Log each successfully found chapter.
-                    console.log(`Found data for: ${chapter.name}`);
-                    CHAPTER_DATA.push({ id: chapter.id, var: window[chapter.name], title: chapter.title });
-                } else {
-                    // This is expected if a question file is missing or named incorrectly.
-                    console.warn(`Chapter data for "${chapter.name}" not found.`);
-                }
-            });
-
-            // DEBUG: Show the final populated CHAPTER_DATA array.
-            console.log("Final CHAPTER_DATA array:", CHAPTER_DATA);
-
-            // ----- DOM ELEMENT REFERENCES -----
-            const selectionContainer = document.getElementById('selection-container');
-            const gameContainer = document.getElementById('game-container');
-            const chapterList = document.getElementById('chapter-list');
-            const startBtn = document.getElementById('start-btn');
-
-            // ----- GLOBAL GAME STATE -----
-            let allQuestions = [];
-            let gameInstance = null;
-
-            // ----- INITIALIZATION -----
-            function initializeChapterSelection() {
-                // DEBUG: Confirm this function is called and log the data it's working with.
-                console.log("Initializing chapter selection screen with data:", CHAPTER_DATA);
-
-                chapterList.innerHTML = ''; // Clear any previous content
-                CHAPTER_DATA.forEach(chapter => {
-                    // DEBUG: Confirm the loop for creating checkboxes is running.
-                    console.log(`Creating checkbox for Chapter ${chapter.id}`);
-
-                    const div = document.createElement('div');
-                    const input = document.createElement('input');
-                    input.type = 'checkbox';
-                    input.id = `chapter-${chapter.id}`;
-                    input.name = 'chapter';
-                    input.value = chapter.id;
-                    input.classList.add('hidden', 'chapter-checkbox');
-
-                    const label = document.createElement('label');
-                    label.htmlFor = `chapter-${chapter.id}`;
-                    label.textContent = `Chapter ${chapter.id}`;
-                    label.classList.add('block', 'w-full', 'text-center', 'p-4', 'rounded-lg', 'border', 'border-gray-300', 'dark:border-gray-600', 'cursor-pointer', 'hover:bg-gray-100', 'dark:hover:bg-gray-700', 'transition-colors');
-                    
-                    div.appendChild(input);
-                    div.appendChild(label);
-                    chapterList.appendChild(div);
-                });
-            }
-
-            // ----- PHASER GAME SCENE -----
-            // This class contains all the logic for the actual quiz game canvas.
-            class GameScene extends Phaser.Scene {
-                constructor() {
-                    super('GameScene');
-                }
-
-                preload() {
-                    // Preload the figure image asset so it's ready to be used.
-                    this.load.image('figureG7_1', 'figureG7_1.png');
-                }
-
-                create() {
-                    this.cameras.main.setBackgroundColor('#ffffff'); // Set a white background
-                    this.currentQuestionIndex = 0;
-                    this.questionObjects = []; // To keep track of objects to destroy later
-                    this.displayQuestion();
-                }
+                // ----- DATA -----
+                const CHAPTER_DATA = [];
+                const potentialChapters = [
+                    { id: 1, name: 'chapter1', title: "Commission's Rules" },
+                    { id: 2, name: 'chapter2', title: "Operating Procedures" },
+                    { id: 3, name: 'chapter3', title: "Radio Wave Propagation" },
+                    { id: 4, name: 'chapter4', title: "Amateur Radio Practices" },
+                    { id: 5, name: 'chapter5', title: "Electrical Principles" },
+                    { id: 6, name: 'chapter6', title: "Circuit Components" },
+                    { id: 7, name: 'chapter7', title: "Practical Circuits" },
+                    { id: 8, name: 'chapter8', title: "Signals and Emissions" },
+                    { id: 9, name: 'chapter9', title: "Antennas and Feed Lines" },
+                    { id: 10, name: 'chapter10', title: "Electrical Safety" }
+                ];
                 
-                displayQuestion() {
-                    // Clear all objects from the previous question.
-                    this.questionObjects.forEach(obj => obj.destroy());
-                    this.questionObjects = [];
+                // DEBUG: Log the process of finding chapter data.
+                console.log("Searching for chapter data on the window object...");
+                potentialChapters.forEach(chapter => {
+                    if (typeof window[chapter.name] !== 'undefined') {
+                        // DEBUG: Log each successfully found chapter.
+                        console.log(`Found data for: ${chapter.name}`);
+                        CHAPTER_DATA.push({ id: chapter.id, var: window[chapter.name], title: chapter.title });
+                    } else {
+                        // This is expected if a question file is missing or named incorrectly.
+                        console.warn(`Chapter data for "${chapter.name}" not found.`);
+                    }
+                });
 
-                    if (this.currentQuestionIndex >= allQuestions.length) {
-                        this.showEndScreen();
-                        return;
+                // DEBUG: Show the final populated CHAPTER_DATA array.
+                console.log("Final CHAPTER_DATA array:", CHAPTER_DATA);
+
+                // ----- DOM ELEMENT REFERENCES -----
+                const selectionContainer = document.getElementById('selection-container');
+                const gameContainer = document.getElementById('game-container');
+                const chapterList = document.getElementById('chapter-list');
+                const startBtn = document.getElementById('start-btn');
+
+                // ----- GLOBAL GAME STATE -----
+                let allQuestions = [];
+                let gameInstance = null;
+
+                // ----- INITIALIZATION -----
+                function initializeChapterSelection() {
+                    // DEBUG: Confirm this function is called and log the data it's working with.
+                    console.log("Initializing chapter selection screen with data:", CHAPTER_DATA);
+
+                    chapterList.innerHTML = ''; // Clear any previous content
+                    CHAPTER_DATA.forEach(chapter => {
+                        // DEBUG: Confirm the loop for creating checkboxes is running.
+                        console.log(`Creating checkbox for Chapter ${chapter.id}`);
+
+                        const div = document.createElement('div');
+                        const input = document.createElement('input');
+                        input.type = 'checkbox';
+                        input.id = `chapter-${chapter.id}`;
+                        input.name = 'chapter';
+                        input.value = chapter.id;
+                        input.classList.add('hidden', 'chapter-checkbox');
+
+                        const label = document.createElement('label');
+                        label.htmlFor = `chapter-${chapter.id}`;
+                        label.textContent = `Chapter ${chapter.id}`;
+                        label.classList.add('block', 'w-full', 'text-center', 'p-4', 'rounded-lg', 'border', 'border-gray-300', 'dark:border-gray-600', 'cursor-pointer', 'hover:bg-gray-100', 'dark:hover:bg-gray-700', 'transition-colors');
+                        
+                        div.appendChild(input);
+                        div.appendChild(label);
+                        chapterList.appendChild(div);
+                    });
+                }
+
+                // ----- PHASER GAME SCENE -----
+                // This class contains all the logic for the actual quiz game canvas.
+                class GameScene extends Phaser.Scene {
+                    constructor() {
+                        super('GameScene');
                     }
 
-                    const question = allQuestions[this.currentQuestionIndex];
-                    const canvasWidth = this.sys.game.config.width;
+                    preload() {
+                        // Preload the figure image asset so it's ready to be used.
+                        this.load.image('figureG7_1', 'figureG7_1.png');
+                    }
 
-                    // Text styles
-                    const textStyle = { fontFamily: 'Inter', fontSize: '18px', color: '#1f2937', align: 'left', wordWrap: { width: canvasWidth - 40 } };
-                    const idStyle = { fontFamily: 'Inter', fontSize: '14px', color: '#4b5563' };
-                    const optionStyle = { fontFamily: 'Inter', fontSize: '16px', color: '#111827', backgroundColor: '#f9fafb', padding: { x: 10, y: 5 }, wordWrap: { width: canvasWidth - 60 } };
-
-                    // Display Question Info
-                    let yPos = 20;
-                    const progressText = this.add.text(20, yPos, `Question ${this.currentQuestionIndex + 1} of ${allQuestions.length}`, idStyle);
-                    yPos += 25;
-                    const idText = this.add.text(20, yPos, `ID: ${question.id}`, idStyle);
-                    yPos += 30;
-                    const qText = this.add.text(20, yPos, question.question, textStyle);
-                    yPos += qText.height + 20;
+                    create() {
+                        this.cameras.main.setBackgroundColor('#ffffff'); // Set a white background
+                        this.currentQuestionIndex = 0;
+                        this.questionObjects = []; // To keep track of objects to destroy later
+                        this.displayQuestion();
+                    }
                     
-                    this.questionObjects.push(progressText, idText, qText);
+                    displayQuestion() {
+                        // Clear all objects from the previous question.
+                        this.questionObjects.forEach(obj => obj.destroy());
+                        this.questionObjects = [];
 
-                    // Display Image if it exists
-                    if (question.image) {
-                        const img = this.add.image(canvasWidth / 2, yPos + 100, 'figureG7_1').setScale(0.5);
-                        yPos += img.displayHeight + 20;
-                        this.questionObjects.push(img);
+                        if (this.currentQuestionIndex >= allQuestions.length) {
+                            this.showEndScreen();
+                            return;
+                        }
+
+                        const question = allQuestions[this.currentQuestionIndex];
+                        const canvasWidth = this.sys.game.config.width;
+
+                        // Text styles
+                        const textStyle = { fontFamily: 'Inter', fontSize: '18px', color: '#1f2937', align: 'left', wordWrap: { width: canvasWidth - 40 } };
+                        const idStyle = { fontFamily: 'Inter', fontSize: '14px', color: '#4b5563' };
+                        const optionStyle = { fontFamily: 'Inter', fontSize: '16px', color: '#111827', backgroundColor: '#f9fafb', padding: { x: 10, y: 5 }, wordWrap: { width: canvasWidth - 60 } };
+
+                        // Display Question Info
+                        let yPos = 20;
+                        const progressText = this.add.text(20, yPos, `Question ${this.currentQuestionIndex + 1} of ${allQuestions.length}`, idStyle);
+                        yPos += 25;
+                        const idText = this.add.text(20, yPos, `ID: ${question.id}`, idStyle);
+                        yPos += 30;
+                        const qText = this.add.text(20, yPos, question.question, textStyle);
+                        yPos += qText.height + 20;
+                        
+                        this.questionObjects.push(progressText, idText, qText);
+
+                        // Display Image if it exists
+                        if (question.image) {
+                            const img = this.add.image(canvasWidth / 2, yPos + 100, 'figureG7_1').setScale(0.5);
+                            yPos += img.displayHeight + 20;
+                            this.questionObjects.push(img);
+                        }
+
+                        // Display Options
+                        question.options.forEach(optionText => {
+                            const option = this.add.text(20, yPos, optionText, optionStyle)
+                                .setInteractive({ useHandCursor: true });
+                            
+                            option.on('pointerdown', () => {
+                                this.handleOptionClick(option, question.answer, question.options);
+                            });
+                            
+                            yPos += option.height + 15;
+                            this.questionObjects.push(option);
+                        });
                     }
 
-                    // Display Options
-                    question.options.forEach(optionText => {
-                        const option = this.add.text(20, yPos, optionText, optionStyle)
+                    handleOptionClick(selectedOption, correctAnswer, allOptions) {
+                        // Disable all options after one is clicked
+                        this.questionObjects.filter(o => o.type === 'Text' && allOptions.includes(o.text)).forEach(o => o.disableInteractive());
+                        
+                        if (selectedOption.text === correctAnswer) {
+                            selectedOption.setStyle({ color: '#ffffff', backgroundColor: '#22c55e' });
+                        } else {
+                            selectedOption.setStyle({ color: '#ffffff', backgroundColor: '#ef4444' });
+                            // Highlight the correct answer
+                            this.questionObjects.find(o => o.text === correctAnswer).setStyle({ color: '#ffffff', backgroundColor: '#22c55e' });
+                        }
+
+                        // Show "Next" button
+                        const nextBtn = this.add.text(this.sys.game.config.width / 2, this.sys.game.config.height - 40, 'Next Question', { fontSize: '20px', color: '#ffffff', backgroundColor: '#3b82f6', padding: {x: 15, y: 10}})
+                            .setOrigin(0.5)
+                            .setInteractive({ useHandCursor: true });
+
+                        nextBtn.on('pointerdown', () => {
+                            this.currentQuestionIndex++;
+                            this.displayQuestion();
+                        });
+                        this.questionObjects.push(nextBtn);
+                    }
+
+                    showEndScreen() {
+                         const centerX = this.sys.game.config.width / 2;
+                         const centerY = this.sys.game.config.height / 2;
+                         this.add.text(centerX, centerY - 50, 'Congratulations!', { fontSize: '28px', color: '#1f2937', fontFamily: 'Inter' }).setOrigin(0.5);
+                         this.add.text(centerX, centerY, `You've completed all ${allQuestions.length} questions.`, { fontSize: '18px', color: '#4b5563', fontFamily: 'Inter' }).setOrigin(0.5);
+                         const restartBtn = this.add.text(centerX, centerY + 60, 'Study Again', { fontSize: '20px', color: '#ffffff', backgroundColor: '#3b82f6', padding: {x: 15, y: 10}})
+                            .setOrigin(0.5)
                             .setInteractive({ useHandCursor: true });
                         
-                        option.on('pointerdown', () => {
-                            this.handleOptionClick(option, question.answer, question.options);
-                        });
-                        
-                        yPos += option.height + 15;
-                        this.questionObjects.push(option);
-                    });
-                }
-
-                handleOptionClick(selectedOption, correctAnswer, allOptions) {
-                    // Disable all options after one is clicked
-                    this.questionObjects.filter(o => o.type === 'Text' && allOptions.includes(o.text)).forEach(o => o.disableInteractive());
-                    
-                    if (selectedOption.text === correctAnswer) {
-                        selectedOption.setStyle({ color: '#ffffff', backgroundColor: '#22c55e' });
-                    } else {
-                        selectedOption.setStyle({ color: '#ffffff', backgroundColor: '#ef4444' });
-                        // Highlight the correct answer
-                        this.questionObjects.find(o => o.text === correctAnswer).setStyle({ color: '#ffffff', backgroundColor: '#22c55e' });
+                        restartBtn.on('pointerdown', () => location.reload());
                     }
+                }
+                
+                // ----- START GAME FUNCTION -----
+                function startGame() {
+                    const selectedChapters = Array.from(document.querySelectorAll('input[name="chapter"]:checked')).map(cb => parseInt(cb.value));
+                    if (selectedChapters.length === 0) return;
 
-                    // Show "Next" button
-                    const nextBtn = this.add.text(this.sys.game.config.width / 2, this.sys.game.config.height - 40, 'Next Question', { fontSize: '20px', color: '#ffffff', backgroundColor: '#3b82f6', padding: {x: 15, y: 10}})
-                        .setOrigin(0.5)
-                        .setInteractive({ useHandCursor: true });
+                    const questionSets = CHAPTER_DATA.filter(ch => selectedChapters.includes(ch.id)).map(ch => ch.var.questions);
+                    allQuestions = questionSets.flat().sort(() => Math.random() - 0.5);
 
-                    nextBtn.on('pointerdown', () => {
-                        this.currentQuestionIndex++;
-                        this.displayQuestion();
-                    });
-                    this.questionObjects.push(nextBtn);
+                    selectionContainer.classList.add('hidden');
+                    gameContainer.classList.remove('hidden');
+
+                    // Phaser game configuration
+                    const config = {
+                        type: Phaser.AUTO,
+                        width: 700,
+                        height: 800,
+                        parent: 'game-container',
+                        scene: GameScene
+                    };
+
+                    gameInstance = new Phaser.Game(config);
                 }
 
-                showEndScreen() {
-                     const centerX = this.sys.game.config.width / 2;
-                     const centerY = this.sys.game.config.height / 2;
-                     this.add.text(centerX, centerY - 50, 'Congratulations!', { fontSize: '28px', color: '#1f2937', fontFamily: 'Inter' }).setOrigin(0.5);
-                     this.add.text(centerX, centerY, `You've completed all ${allQuestions.length} questions.`, { fontSize: '18px', color: '#4b5563', fontFamily: 'Inter' }).setOrigin(0.5);
-                     const restartBtn = this.add.text(centerX, centerY + 60, 'Study Again', { fontSize: '20px', color: '#ffffff', backgroundColor: '#3b82f6', padding: {x: 15, y: 10}})
-                        .setOrigin(0.5)
-                        .setInteractive({ useHandCursor: true });
-                    
-                    restartBtn.on('pointerdown', () => location.reload());
-                }
-            }
-            
-            // ----- START GAME FUNCTION -----
-            function startGame() {
-                const selectedChapters = Array.from(document.querySelectorAll('input[name="chapter"]:checked')).map(cb => parseInt(cb.value));
-                if (selectedChapters.length === 0) return;
+                // ----- EVENT LISTENERS -----
+                chapterList.addEventListener('change', () => {
+                    const anyChapterSelected = document.querySelectorAll('input[name="chapter"]:checked').length > 0;
+                    startBtn.disabled = !anyChapterSelected;
+                });
 
-                const questionSets = CHAPTER_DATA.filter(ch => selectedChapters.includes(ch.id)).map(ch => ch.var.questions);
-                allQuestions = questionSets.flat().sort(() => Math.random() - 0.5);
+                startBtn.addEventListener('click', startGame);
 
-                selectionContainer.classList.add('hidden');
-                gameContainer.classList.remove('hidden');
-
-                // Phaser game configuration
-                const config = {
-                    type: Phaser.AUTO,
-                    width: 700,
-                    height: 800,
-                    parent: 'game-container',
-                    scene: GameScene
-                };
-
-                gameInstance = new Phaser.Game(config);
-            }
-
-            // ----- EVENT LISTENERS -----
-            chapterList.addEventListener('change', () => {
-                const anyChapterSelected = document.querySelectorAll('input[name="chapter"]:checked').length > 0;
-                startBtn.disabled = !anyChapterSelected;
-            });
-
-            startBtn.addEventListener('click', startGame);
-
-            // ----- START THE APP -----
-            // DEBUG: Explicitly calling the function to start the process.
-            console.log("Calling initializeChapterSelection()...");
-            initializeChapterSelection();
+                // ----- START THE APP -----
+                // DEBUG: Explicitly calling the function to start the process.
+                console.log("Calling initializeChapterSelection()...");
+                initializeChapterSelection();
+            }, 0);
         });
     </script>
 </body>
