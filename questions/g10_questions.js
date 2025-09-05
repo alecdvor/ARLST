@@ -1,4 +1,4 @@
-const chapter10 = {
+const g10_questions = {
   "name": "Electrical Safety",
   "questions": [
     {
