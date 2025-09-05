@@ -9,13 +9,13 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            touch-action: manipulation;
+            touch-action: manipulation; /* Prevents double-tap zoom on mobile, improving button responsiveness */
         }
         .option-btn {
             transition: background-color 0.2s ease-in-out, transform 0.1s ease;
         }
         .option-btn:active {
-            transform: scale(0.98);
+            transform: scale(0.98); /* Adds a "press" effect to buttons */
         }
         .correct {
             background-color: #22c55e !important; /* Tailwind green-500 */
@@ -25,15 +25,34 @@
             background-color: #ef4444 !important; /* Tailwind red-500 */
             color: white !important;
         }
+        /* Custom checkbox style */
+        .chapter-checkbox:checked + label {
+            background-color: #3b82f6; /* Tailwind blue-500 */
+            border-color: #3b82f6;
+            color: white;
+        }
     </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex items-center justify-center min-h-screen p-4">
 
-    <div id="game-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8">
-        <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-2">General Class Exam Prep</h1>
-        <p id="progress-text" class="text-center text-gray-500 dark:text-gray-400 mb-6">Question 1 of 514</p>
+    <!-- Chapter Selection Screen -->
+    <div id="selection-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8">
+        <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-4">Select Chapters to Study</h1>
+        <p class="text-center text-gray-500 dark:text-gray-400 mb-6">Choose one or more chapters to begin.</p>
+        <div id="chapter-list" class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
+            <!-- Checkboxes will be dynamically inserted here -->
+        </div>
+        <button id="start-btn" class="w-full bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 transition-all duration-300 disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed" disabled>
+            Start Game
+        </button>
+    </div>
 
-        <!-- Image container -->
+    <!-- Main Game Screen (Initially Hidden) -->
+    <div id="game-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 hidden">
+        <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-2">General Class Exam Prep</h1>
+        <p id="progress-text" class="text-center text-gray-500 dark:text-gray-400 mb-6"></p>
+
+        <!-- Image container for questions that have a figure -->
         <div id="image-container" class="mb-6 text-center">
             <img id="question-image" src="" alt="Question Figure" class="max-w-full h-auto mx-auto rounded-lg shadow-md hidden">
         </div>
@@ -44,7 +63,7 @@
         </div>
 
         <div id="options-container" class="space-y-4">
-            <!-- Options will be dynamically inserted here -->
+            <!-- Option buttons will be dynamically inserted here -->
         </div>
 
         <div class="mt-8 text-center">
@@ -55,48 +74,132 @@
     </div>
 
     <!-- Chapter Question Files -->
-    <script src="study/g1_questions.js"></script>
-    <script src="study/g2_questions.js"></script>
-    <script src="study/g3_questions.js"></script>
-    <script src="study/g4_questions.js"></script>
-    <script src="study/g5_questions.js"></script>
-    <script src="study/g6_questions.js"></script>
-    <script src="study/g7_questions.js"></script>
-    <script src="study/g8_questions.js"></script>
-    <script src="study/g9_questions.js"></script>
-    <script src="study/g10_questions.js"></script>
+    <script src="questions/g1_questions.js"></script>
+    <script src="questions/g2_questions.js"></script>
+    <script src="questions/g3_questions.js"></script>
+    <script src="questions/g4_questions.js"></script>
+    <script src="questions/g5_questions.js"></script>
+    <script src="questions/g6_questions.js"></script>
+    <script src="questions/g7_questions.js"></script>
+    <script src="questions/g8_questions.js"></script>
+    <script src="questions/g9_questions.js"></script>
+    <script src="questions/g10_questions.js"></script>
 
     <script>
+        // This event listener waits for the HTML document to be fully loaded before running the script.
         document.addEventListener('DOMContentLoaded', () => {
-            // NOTE: The variable names (chapter1, chapter2, etc.) are defined inside the loaded JS files.
-            // They must match what's in those files, regardless of the filename.
-            const allChapters = [chapter1, chapter2, chapter3, chapter4, chapter5, chapter6, chapter7, chapter8, chapter9, chapter10];
-            const allQuestions = allChapters.flatMap(chapter => chapter.questions);
-            const totalQuestions = allQuestions.length;
 
-            let currentQuestionIndex = 0;
-            let optionsDisabled = false;
+            // ----- DATA -----
+            // An array that maps the chapter number to its corresponding variable from the loaded JS files.
+            // This makes it easy to access the question data based on user selection.
+            const CHAPTER_DATA = [
+                { id: 1, var: chapter1, title: "Commission's Rules" },
+                { id: 2, var: chapter2, title: "Operating Procedures" },
+                { id: 3, var: chapter3, title: "Radio Wave Propagation" },
+                { id: 4, var: chapter4, title: "Amateur Radio Practices" },
+                { id: 5, var: chapter5, title: "Electrical Principles" },
+                { id: 6, var: chapter6, title: "Circuit Components" },
+                { id: 7, var: chapter7, title: "Practical Circuits" },
+                { id: 8, var: chapter8, title: "Signals and Emissions" },
+                { id: 9, var: chapter9, title: "Antennas and Feed Lines" },
+                { id: 10, var: chapter10, title: "Electrical Safety" }
+            ];
 
+            // ----- DOM ELEMENT REFERENCES -----
+            // Getting references to all the interactive parts of the page we need to manipulate.
+            const selectionContainer = document.getElementById('selection-container');
+            const gameContainer = document.getElementById('game-container');
+            const chapterList = document.getElementById('chapter-list');
+            const startBtn = document.getElementById('start-btn');
+            const nextBtn = document.getElementById('next-btn');
             const progressText = document.getElementById('progress-text');
             const questionIdText = document.getElementById('question-id');
             const questionText = document.getElementById('question-text');
             const optionsContainer = document.getElementById('options-container');
-            const nextBtn = document.getElementById('next-btn');
             const questionImage = document.getElementById('question-image');
 
+            // ----- GAME STATE VARIABLES -----
+            // These variables will keep track of the game's progress.
+            let allQuestions = []; // Will be filled with questions from selected chapters.
+            let currentQuestionIndex = 0;
+            let optionsDisabled = false; // Prevents multiple answers from being selected.
+
+            // ----- INITIALIZATION -----
+            
+            /**
+             * Populates the chapter selection list on the initial screen.
+             */
+            function initializeChapterSelection() {
+                CHAPTER_DATA.forEach(chapter => {
+                    const div = document.createElement('div');
+                    const input = document.createElement('input');
+                    input.type = 'checkbox';
+                    input.id = `chapter-${chapter.id}`;
+                    input.name = 'chapter';
+                    input.value = chapter.id;
+                    input.classList.add('hidden', 'chapter-checkbox'); // Hide default checkbox
+
+                    const label = document.createElement('label');
+                    label.htmlFor = `chapter-${chapter.id}`;
+                    label.textContent = `Chapter ${chapter.id}`;
+                    label.classList.add('block', 'w-full', 'text-center', 'p-4', 'rounded-lg', 'border', 'border-gray-300', 'dark:border-gray-600', 'cursor-pointer', 'hover:bg-gray-100', 'dark:hover:bg-gray-700', 'transition-colors');
+                    
+                    div.appendChild(input);
+                    div.appendChild(label);
+                    chapterList.appendChild(div);
+                });
+            }
+
+            /**
+             * Starts the game with questions from the chapters the user selected.
+             */
+            function startGame() {
+                // Find all checked checkboxes.
+                const selectedChapters = Array.from(document.querySelectorAll('input[name="chapter"]:checked'))
+                                              .map(cb => parseInt(cb.value));
+
+                // If no chapters are selected, do nothing.
+                if (selectedChapters.length === 0) return;
+
+                // Filter CHAPTER_DATA to get the data for the selected chapters.
+                const questionSets = CHAPTER_DATA.filter(ch => selectedChapters.includes(ch.id))
+                                                 .map(ch => ch.var.questions);
+
+                // Combine the questions from all selected chapters into a single array.
+                allQuestions = questionSets.flat();
+                // Optional: Shuffle the questions for a random order each time.
+                allQuestions.sort(() => Math.random() - 0.5);
+
+                // Reset game state.
+                currentQuestionIndex = 0;
+                
+                // Switch from the selection screen to the game screen.
+                selectionContainer.classList.add('hidden');
+                gameContainer.classList.remove('hidden');
+
+                // Display the first question.
+                displayQuestion(currentQuestionIndex);
+            }
+
+            // ----- CORE GAME LOGIC -----
+
+            /**
+             * Displays a question and its options on the screen.
+             * @param {number} index - The index of the question to display from the allQuestions array.
+             */
             function displayQuestion(index) {
                 optionsDisabled = false;
                 const question = allQuestions[index];
 
-                // Update text content
-                progressText.textContent = `Question ${index + 1} of ${totalQuestions}`;
+                // Update progress text.
+                progressText.textContent = `Question ${index + 1} of ${allQuestions.length}`;
                 questionIdText.textContent = `ID: ${question.id}`;
                 questionText.textContent = question.question;
 
-                // Clear previous options
+                // Clear out options from the previous question.
                 optionsContainer.innerHTML = '';
 
-                // Display options
+                // Create and display a button for each answer option.
                 question.options.forEach(option => {
                     const button = document.createElement('button');
                     button.textContent = option;
@@ -105,7 +208,7 @@
                     optionsContainer.appendChild(button);
                 });
 
-                // Handle image display
+                // Show the image if the question data includes one.
                 if (question.image) {
                     questionImage.src = question.image;
                     questionImage.alt = `Figure for question ${question.id}`;
@@ -114,55 +217,79 @@
                     questionImage.classList.add('hidden');
                 }
 
-                // Disable Next button
+                // Disable the "Next" button until an answer is selected.
                 nextBtn.disabled = true;
             }
 
+            /**
+             * Handles what happens when a user clicks an answer option.
+             * @param {HTMLElement} button - The button element that was clicked.
+             * @param {string} selectedOption - The text content of the selected answer.
+             * @param {string} correctAnswer - The correct answer for the question.
+             */
             function handleOptionClick(button, selectedOption, correctAnswer) {
-                if (optionsDisabled) return;
+                if (optionsDisabled) return; // Stop if an answer has already been chosen.
                 optionsDisabled = true;
 
                 const optionButtons = optionsContainer.querySelectorAll('.option-btn');
-                
+
+                // Check if the selected answer is correct.
                 if (selectedOption === correctAnswer) {
-                    button.classList.add('correct');
+                    button.classList.add('correct'); // Style as correct.
                 } else {
-                    button.classList.add('incorrect');
-                    // Highlight the correct answer
+                    button.classList.add('incorrect'); // Style as incorrect.
+                    // Find and highlight the correct answer so the user can learn.
                     optionButtons.forEach(btn => {
                         if (btn.textContent === correctAnswer) {
                             btn.classList.add('correct');
                         }
                     });
                 }
+                // Enable the "Next" button.
                 nextBtn.disabled = false;
             }
+            
+            /**
+             * Resets the game and returns to the chapter selection screen.
+             */
+            function returnToSelection() {
+                gameContainer.classList.add('hidden');
+                selectionContainer.classList.remove('hidden');
+                
+                // Uncheck all checkboxes for the next round.
+                document.querySelectorAll('input[name="chapter"]:checked').forEach(cb => cb.checked = false);
+                startBtn.disabled = true; // Disable start button.
+            }
 
+            // ----- EVENT LISTENERS -----
+            
+            // When a checkbox is clicked, check if the "Start Game" button should be enabled.
+            chapterList.addEventListener('change', () => {
+                const anyChapterSelected = document.querySelectorAll('input[name="chapter"]:checked').length > 0;
+                startBtn.disabled = !anyChapterSelected;
+            });
+
+            // Start the game when the start button is clicked.
+            startBtn.addEventListener('click', startGame);
+
+            // Move to the next question or end the game.
             nextBtn.addEventListener('click', () => {
                 currentQuestionIndex++;
-                if (currentQuestionIndex < totalQuestions) {
+                if (currentQuestionIndex < allQuestions.length) {
                     displayQuestion(currentQuestionIndex);
                 } else {
-                    // Game over, show summary or restart
-                    questionText.textContent = "Congratulations! You've completed all questions.";
-                    optionsContainer.innerHTML = '';
-                    progressText.textContent = `Completed ${totalQuestions} of ${totalQuestions}`;
-                    questionIdText.textContent = 'Finished!';
-                    nextBtn.textContent = 'Restart';
-                    nextBtn.onclick = () => {
-                        currentQuestionIndex = 0;
-                        displayQuestion(currentQuestionIndex);
-                        nextBtn.textContent = 'Next Question';
-                        nextBtn.onclick = nextButtonClickHandler; // re-assign original handler
-                    };
+                    // Game is over.
+                    gameContainer.innerHTML = `<div class="text-center">
+                        <h2 class="text-2xl font-bold mb-4">Congratulations!</h2>
+                        <p class="mb-6">You've completed all ${allQuestions.length} questions from the selected chapters.</p>
+                        <button id="restart-btn" class="w-full sm:w-auto bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700">Study Again</button>
+                    </div>`;
+                    document.getElementById('restart-btn').addEventListener('click', () => location.reload()); // Simple reload to reset everything.
                 }
             });
-            
-            // Store the original click handler to re-assign it on restart
-            const nextButtonClickHandler = nextBtn.onclick;
 
-            // Start the game
-            displayQuestion(currentQuestionIndex);
+            // ----- START THE APP -----
+            initializeChapterSelection();
         });
     </script>
 </body>
