@@ -1,376 +1,378 @@
-// Subelement G3 – Radio Wave Propagation
-const g3_questions = [
-    // G3A
-    {
-        question: "How does a higher sunspot number affect HF propagation?",
-        answers: {
-            A: "Higher sunspot numbers generally indicate a greater probability of good propagation at higher frequencies",
-            B: "Lower sunspot numbers generally indicate greater probability of sporadic E propagation",
-            C: "A zero sunspot number indicates that radio propagation is not possible on any band",
-            D: "A zero sunspot number indicates undisturbed conditions"
+var g3_questions = {
+    "questions": [
+        {
+            "id": "G3A01",
+            "question": "What is the name of the area of the atmosphere that makes long-distance radio communication possible by bending and reflecting radio waves?",
+            "options": [
+                "A. The troposphere",
+                "B. The stratosphere",
+                "C. The ionosphere",
+                "D. The magnetosphere"
+            ],
+            "answer": "C. The ionosphere"
         },
-        correct: "A"
-    },
-    {
-        question: "What effect does a sudden ionospheric disturbance have on the daytime ionospheric propagation?",
-        answers: {
-            A: "It enhances propagation on all HF frequencies",
-            B: "It disrupts signals on lower frequencies more than those on higher frequencies",
-            C: "It disrupts communications via satellite more than direct communications",
-            D: "None, because only areas on the night side of the Earth are affected"
+        {
+            "id": "G3A02",
+            "question": "What is the primary cause of ionization in the atmosphere?",
+            "options": [
+                "A. Lightning",
+                "B. Solar radiation",
+                "C. The Earth's magnetic field",
+                "D. Volcanic eruptions"
+            ],
+            "answer": "B. Solar radiation"
         },
-        correct: "B"
-    },
-    {
-        question: "Approximately how long does it take the increased ultraviolet and X-ray radiation from a solar flare to affect radio propagation on Earth?",
-        answers: {
-            A: "28 days",
-            B: "1 to 2 hours",
-            C: "8 minutes",
-            D: "20 to 40 hours"
+        {
+            "id": "G3A03",
+            "question": "Which of the following is a result of ionization by solar radiation?",
+            "options": [
+                "A. The formation of the ionosphere",
+                "B. The creation of the aurora",
+                "C. The absorption of radio waves",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "C"
-    },
-    {
-        question: "Which of the following are the least reliable bands for long-distance communications during periods of low solar activity?",
-        answers: {
-            A: "80 meters and 160 meters",
-            B: "60 meters and 40 meters",
-            C: "30 meters and 20 meters",
-            D: "15 meters, 12 meters, and 10 meters"
+        {
+            "id": "G3A04",
+            "question": "What are the names of the three main layers of the ionosphere?",
+            "options": [
+                "A. The A, B, and C layers",
+                "B. The D, E, and F layers",
+                "C. The X, Y, and Z layers",
+                "D. The inner, middle, and outer layers"
+            ],
+            "answer": "B. The D, E, and F layers"
         },
-        correct: "D"
-    },
-    {
-        question: "What is the solar flux index?",
-        answers: {
-            A: "A measure of the highest frequency that is useful for ionospheric propagation between two points on Earth",
-            B: "A count of sunspots that is adjusted for solar emissions",
-            C: "Another name for the American sunspot number",
-            D: "A measure of solar radiation with a wavelength of 10.7 centimeters"
+        {
+            "id": "G3A05",
+            "question": "Which layer of the ionosphere is the lowest?",
+            "options": [
+                "A. The A layer",
+                "B. The D layer",
+                "C. The E layer",
+                "D. The F layer"
+            ],
+            "answer": "B. The D layer"
         },
-        correct: "D"
-    },
-    {
-        question: "What is a geomagnetic storm?",
-        answers: {
-            A: "A sudden drop in the solar flux index",
-            B: "A thunderstorm that affects radio propagation",
-            C: "Ripples in the geomagnetic force",
-            D: "A temporary disturbance in Earth’s geomagnetic field"
+        {
+            "id": "G3A06",
+            "question": "Which layer of the ionosphere is the most absorbent of low-frequency signals during the day?",
+            "options": [
+                "A. The A layer",
+                "B. The D layer",
+                "C. The E layer",
+                "D. The F layer"
+            ],
+            "answer": "B. The D layer"
         },
-        correct: "D"
-    },
-    {
-        question: "At what point in the solar cycle does the 20-meter band usually support worldwide propagation during daylight hours?",
-        answers: {
-            A: "At the summer solstice",
-            B: "Only at the maximum point",
-            C: "Only at the minimum point",
-            D: "At any point"
+        {
+            "id": "G3A07",
+            "question": "What happens to the D layer of the ionosphere at night?",
+            "options": [
+                "A. It splits into two layers",
+                "B. It disappears",
+                "C. It becomes more absorbent",
+                "D. It moves to a higher altitude"
+            ],
+            "answer": "B. It disappears"
         },
-        correct: "D"
-    },
-    {
-        question: "How can a geomagnetic storm affect HF propagation?",
-        answers: {
-            A: "Improve high-latitude HF propagation",
-            B: "Degrade ground wave propagation",
-            C: "Improve ground wave propagation",
-            D: "Degrade high-latitude HF propagation"
+        {
+            "id": "G3A08",
+            "question": "Which layer of the ionosphere is the most responsible for long-distance communication on the HF bands?",
+            "options": [
+                "A. The A layer",
+                "B. The D layer",
+                "C. The E layer",
+                "D. The F layer"
+            ],
+            "answer": "D. The F layer"
         },
-        correct: "D"
-    },
-    {
-        question: "How can high geomagnetic activity benefit radio communications?",
-        answers: {
-            A: "Creates auroras that can reflect VHF signals",
-            B: "Increases signal strength for HF signals passing through the polar regions",
-            C: "Improve HF long path propagation",
-            D: "Reduce long delayed echoes"
+        {
+            "id": "G3A09",
+            "question": "What happens to the F layer of the ionosphere at night?",
+            "options": [
+                "A. It splits into the F1 and F2 layers",
+                "B. It disappears",
+                "C. It combines into a single layer",
+                "D. It moves to a lower altitude"
+            ],
+            "answer": "C. It combines into a single layer"
         },
-        correct: "A"
-    },
-    {
-        question: "What causes HF propagation conditions to vary periodically in a 26- to 28-day cycle?",
-        answers: {
-            A: "Long term oscillations in the upper atmosphere",
-            B: "Cyclic variation in Earth’s radiation belts",
-            C: "Rotation of the Sun’s surface layers around its axis",
-            D: "The position of the Moon in its orbit"
+        {
+            "id": "G3A10",
+            "question": "What is the critical frequency?",
+            "options": [
+                "A. The lowest frequency that will be reflected by the ionosphere",
+                "B. The highest frequency that will be reflected back to Earth when sent straight up",
+                "C. The frequency at which the ionosphere is most absorbent",
+                "D. The frequency at which the ionosphere is most transparent"
+            ],
+            "answer": "B. The highest frequency that will be reflected back to Earth when sent straight up"
         },
-        correct: "C"
-    },
-    {
-        question: "How long does it take a coronal mass ejection to affect radio propagation on Earth?",
-        answers: {
-            A: "28 days",
-            B: "14 days",
-            C: "4 to 8 minutes",
-            D: "15 hours to several days"
+        {
+            "id": "G3A11",
+            "question": "What is the maximum usable frequency (MUF)?",
+            "options": [
+                "A. The lowest frequency that can be used for communication between two points",
+                "B. The highest frequency that can be used for communication between two points",
+                "C. The frequency at which the ionosphere is most absorbent",
+                "D. The frequency at which the ionosphere is most transparent"
+            ],
+            "answer": "B. The highest frequency that can be used for communication between two points"
         },
-        correct: "D"
-    },
-    {
-        question: "What does the K-index measure?",
-        answers: {
-            A: "The relative position of sunspots on the surface of the Sun",
-            B: "The short-term stability of Earth’s geomagnetic field",
-            C: "The short-term stability of the Sun’s magnetic field",
-            D: "The solar radio flux at Boulder, Colorado"
+        {
+            "id": "G3B01",
+            "question": "What is the solar cycle?",
+            "options": [
+                "A. The 11-year cycle of sunspot activity",
+                "B. The 24-hour cycle of the Earth's rotation",
+                "C. The 27-day cycle of the sun's rotation",
+                "D. The 365-day cycle of the Earth's orbit around the sun"
+            ],
+            "answer": "A. The 11-year cycle of sunspot activity"
         },
-        correct: "B"
-    },
-    {
-        question: "What does the A-index measure?",
-        answers: {
-            A: "The relative position of sunspots on the surface of the Sun",
-            B: "The amount of polarization of the Sun’s electric field",
-            C: "The long-term stability of Earth’s geomagnetic field",
-            D: "The solar radio flux at Boulder, Colorado"
+        {
+            "id": "G3B02",
+            "question": "What is the effect of the solar cycle on radio communications?",
+            "options": [
+                "A. Higher sunspot activity leads to better long-distance communication on the higher HF bands",
+                "B. Lower sunspot activity leads to better long-distance communication on the higher HF bands",
+                "C. The solar cycle has no effect on radio communications",
+                "D. The solar cycle only affects communications on the VHF and UHF bands"
+            ],
+            "answer": "A. Higher sunspot activity leads to better long-distance communication on the higher HF bands"
         },
-        correct: "C"
-    },
-    {
-        question: "How is long distance radio communication usually affected by the charged particles that reach Earth from solar coronal holes?",
-        answers: {
-            A: "HF communication is improved",
-            B: "HF communication is disturbed",
-            C: "VHF/UHF ducting is improved",
-            D: "VHF/UHF ducting is disturbed"
+        {
+            "id": "G3B03",
+            "question": "What is a solar flare?",
+            "options": [
+                "A. A sudden eruption of energy from the sun's surface",
+                "B. A dark spot on the sun's surface",
+                "C. A stream of charged particles from the sun",
+                "D. A large loop of gas extending from the sun's surface"
+            ],
+            "answer": "A. A sudden eruption of energy from the sun's surface"
         },
-        correct: "B"
-    },
-    // G3B
-    {
-        question: "What is a characteristic of skywave signals arriving at your location by both short-path and long-path propagation?",
-        answers: {
-            A: "Periodic fading approximately every 10 seconds",
-            B: "Signal strength increased by 3 dB",
-            C: "The signal might be cancelled causing severe attenuation",
-            D: "A slightly delayed echo might be heard"
+        {
+            "id": "G3B04",
+            "question": "What is the effect of a solar flare on radio communications?",
+            "options": [
+                "A. It can cause a sudden increase in radio noise",
+                "B. It can cause a radio blackout on the HF bands",
+                "C. It can improve long-distance communication on the higher HF bands",
+                "D. Both A and B are correct"
+            ],
+            "answer": "D. Both A and B are correct"
         },
-        correct: "D"
-    },
-    {
-        question: "What factors affect the MUF?",
-        answers: {
-            A: "Path distance and location",
-            B: "Time of day and season",
-            C: "Solar radiation and ionospheric disturbances",
-            D: "All these choices are correct"
+        {
+            "id": "G3B05",
+            "question": "What is a coronal mass ejection (CME)?",
+            "options": [
+                "A. A large explosion on the sun's surface that sends a cloud of plasma into space",
+                "B. A dark spot on the sun's surface",
+                "C. A stream of charged particles from the sun",
+                "D. A large loop of gas extending from the sun's surface"
+            ],
+            "answer": "A. A large explosion on the sun's surface that sends a cloud of plasma into space"
         },
-        correct: "D"
-    },
-    {
-        question: "Which frequency will have the least attenuation for long-distance skip propagation?",
-        answers: {
-            A: "Just below the MUF",
-            B: "Just above the LUF",
-            C: "Just below the critical frequency",
-            D: "Just above the critical frequency"
+        {
+            "id": "G3B06",
+            "question": "What is the effect of a coronal mass ejection on radio communications?",
+            "options": [
+                "A. It can cause a radio blackout on the HF bands",
+                "B. It can cause auroral propagation",
+                "C. It can damage satellites",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "A"
-    },
-    {
-        question: "Which of the following is a way to determine current propagation on a desired band from your station?",
-        answers: {
-            A: "Use a network of automated receiving stations on the internet to see where your transmissions are being received",
-            B: "Check the A-index",
-            C: "Send a series of dots and listen for echoes",
-            D: "All these choices are correct"
+        {
+            "id": "G3B07",
+            "question": "What is the K-index?",
+            "options": [
+                "A. A measure of the sun's radio flux",
+                "B. A measure of the Earth's magnetic field activity",
+                "C. A measure of the number of sunspots",
+                "D. A measure of the solar wind speed"
+            ],
+            "answer": "B. A measure of the Earth's magnetic field activity"
         },
-        correct: "A"
-    },
-    {
-        question: "How does the ionosphere affect radio waves with frequencies below the MUF and above the LUF?",
-        answers: {
-            A: "They are refracted back to Earth",
-            B: "They pass through the ionosphere",
-            C: "They are amplified by interaction with the ionosphere",
-            D: "They are refracted and trapped in the ionosphere to circle Earth"
+        {
+            "id": "G3B08",
+            "question": "What is the A-index?",
+            "options": [
+                "A. A daily average of the K-index",
+                "B. A measure of the sun's radio flux",
+                "C. A measure of the number of sunspots",
+                "D. A measure of the solar wind speed"
+            ],
+            "answer": "A. A daily average of the K-index"
         },
-        correct: "A"
-    },
-    {
-        question: "What usually happens to radio waves with frequencies below the LUF?",
-        answers: {
-            A: "They are refracted back to Earth",
-            B: "They pass through the ionosphere",
-            C: "They are attenuated before reaching the destination",
-            D: "They are refracted and trapped in the ionosphere to circle Earth"
+        {
+            "id": "G3B09",
+            "question": "What is the solar flux index?",
+            "options": [
+                "A. A measure of the sun's radio emissions at 10.7 cm",
+                "B. A measure of the Earth's magnetic field activity",
+                "C. A measure of the number of sunspots",
+                "D. A measure of the solar wind speed"
+            ],
+            "answer": "A. A measure of the sun's radio emissions at 10.7 cm"
         },
-        correct: "C"
-    },
-    {
-        question: "What does LUF stand for?",
-        answers: {
-            A: "The Lowest Usable Frequency for communications between two specific points",
-            B: "Lowest Usable Frequency for communications to any point outside a 100-mile radius",
-            C: "The Lowest Usable Frequency during a 24-hour period",
-            D: "Lowest Usable Frequency during the past 60 minutes"
+        {
+            "id": "G3B10",
+            "question": "What is a geomagnetic storm?",
+            "options": [
+                "A. A temporary disturbance of the Earth's magnetosphere",
+                "B. A sudden eruption of energy from the sun's surface",
+                "C. A dark spot on the sun's surface",
+                "D. A stream of charged particles from the sun"
+            ],
+            "answer": "A. A temporary disturbance of the Earth's magnetosphere"
         },
-        correct: "A"
-    },
-    {
-        question: "What does MUF stand for?",
-        answers: {
-            A: "The Minimum Usable Frequency for communications between two points",
-            B: "The Maximum Usable Frequency for communications between two points",
-            C: "The Minimum Usable Frequency during a 24-hour period",
-            D: "The Maximum Usable Frequency during a 24-hour period"
+        {
+            "id": "G3B11",
+            "question": "What is the effect of a geomagnetic storm on radio communications?",
+            "options": [
+                "A. It can cause auroral propagation",
+                "B. It can disrupt HF communications",
+                "C. It can damage satellites",
+                "D. All these choices are correct"
+            ],
+            "answer": "D. All these choices are correct"
         },
-        correct: "B"
-    },
-    {
-        question: "What is the approximate maximum distance along the Earth’s surface normally covered in one hop using the F2 region?",
-        answers: {
-            A: "180 miles",
-            B: "1,200 miles",
-            C: "2,500 miles",
-            D: "12,000 miles"
+        {
+            "id": "G3C01",
+            "question": "What is skip propagation?",
+            "options": [
+                "A. The bending of radio waves by the ionosphere",
+                "B. The reflection of radio waves from the Earth's surface",
+                "C. The absorption of radio waves by the D-region",
+                "D. The scattering of radio waves by the Earth's magnetic field"
+            ],
+            "answer": "A. The bending of radio waves by the ionosphere"
         },
-        correct: "C"
-    },
-    {
-        question: "What is the approximate maximum distance along the Earth’s surface normally covered in one hop using the E region?",
-        answers: {
-            A: "180 miles",
-            B: "1,200 miles",
-            C: "2,500 miles",
-            D: "12,000 miles"
+        {
+            "id": "G3C02",
+            "question": "What is the skip zone?",
+            "options": [
+                "A. The area between the end of the ground wave and the point where the first sky wave returns to Earth",
+                "B. The area where the sky wave is strongest",
+                "C. The area where the ground wave is strongest",
+                "D. The area where there is no radio reception"
+            ],
+            "answer": "A. The area between the end of the ground wave and the point where the first sky wave returns to Earth"
         },
-        correct: "B"
-    },
-    {
-        question: "What happens to HF propagation when the LUF exceeds the MUF?",
-        answers: {
-            A: "Propagation via ordinary skywave communications is not possible over that path",
-            B: "HF communications over the path are enhanced",
-            C: "Double-hop propagation along the path is more common",
-            D: "Propagation over the path on all HF frequencies is enhanced"
+        {
+            "id": "G3C03",
+            "question": "What is the relationship between the skip distance and the frequency of a signal?",
+            "options": [
+                "A. The higher the frequency, the longer the skip distance",
+                "B. The lower the frequency, the longer the skip distance",
+                "C. The skip distance is not affected by the frequency",
+                "D. The skip distance is only affected by the time of day"
+            ],
+            "answer": "A. The higher the frequency, the longer the skip distance"
         },
-        correct: "A"
-    },
-    {
-        question: "Which of the following is typical of the lower HF frequencies during the summer?",
-        answers: {
-            A: "Poor propagation at any time of day",
-            B: "World-wide propagation during daylight hours",
-            C: "Heavy distortion on signals due to photon absorption",
-            D: "High levels of atmospheric noise or static"
+        {
+            "id": "G3C04",
+            "question": "What is the relationship between the skip distance and the height of the ionosphere?",
+            "options": [
+                "A. The higher the ionosphere, the longer the skip distance",
+                "B. The lower the ionosphere, the longer the skip distance",
+                "C. The skip distance is not affected by the height of the ionosphere",
+                "D. The skip distance is only affected by the time of day"
+            ],
+            "answer": "A. The higher the ionosphere, the longer the skip distance"
         },
-        correct: "D"
-    },
-    // G3C
-    {
-        question: "Which ionospheric region is closest to the surface of Earth?",
-        answers: {
-            A: "The D region",
-            B: "The E region",
-            C: "The F1 region",
-            D: "The F2 region"
+        {
+            "id": "G3C05",
+            "question": "What is the maximum single-hop skip distance for the F2 region?",
+            "options": [
+                "A. 1000 miles",
+                "B. 1500 miles",
+                "C. 2000 miles",
+                "D. 2500 miles"
+            ],
+            "answer": "D. 2500 miles"
         },
-        correct: "A"
-    },
-    {
-        question: "What is meant by the term “critical frequency” at a given incidence angle?",
-        answers: {
-            A: "The highest frequency which is refracted back to Earth",
-            B: "The lowest frequency which is refracted back to Earth",
-            C: "The frequency at which the signal-to-noise ratio approaches unity",
-            D: "The frequency at which the signal-to-noise ratio is 6 dB"
+        {
+            "id": "G3C06",
+            "question": "What is the maximum single-hop skip distance for the E region?",
+            "options": [
+                "A. 1000 miles",
+                "B. 1200 miles",
+                "C. 1500 miles",
+                "D. 2000 miles"
+            ],
+            "answer": "B. 1200 miles"
         },
-        correct: "A"
-    },
-    {
-        question: "Why is skip propagation via the F2 region longer than that via the other ionospheric regions?",
-        answers: {
-            A: "Because it is the densest",
-            B: "Because of the Doppler effect",
-            C: "Because it is the highest",
-            D: "Because of temperature inversions"
+        {
+            "id": "G3C07",
+            "question": "What is ground-wave propagation?",
+            "options": [
+                "A. Radio waves that travel along the surface of the Earth",
+                "B. Radio waves that are reflected by the ionosphere",
+                "C. Radio waves that are bent by the troposphere",
+                "D. Radio waves that travel in a straight line"
+            ],
+            "answer": "A. Radio waves that travel along the surface of the Earth"
         },
-        correct: "C"
-    },
-    {
-        question: "What does the term “critical angle” mean, as applied to radio wave propagation?",
-        answers: {
-            A: "The long path azimuth of a distant station",
-            B: "The short path azimuth of a distant station",
-            C: "The lowest takeoff angle that will return a radio wave to Earth under specific ionospheric conditions",
-            D: "The highest takeoff angle that will return a radio wave to Earth under specific ionospheric conditions"
+        {
+            "id": "G3C08",
+            "question": "On which band is ground-wave propagation most effective?",
+            "options": [
+                "A. 160 meters",
+                "B. 80 meters",
+                "C. 40 meters",
+                "D. 20 meters"
+            ],
+            "answer": "A. 160 meters"
         },
-        correct: "D"
-    },
-    {
-        question: "Why is long-distance communication on the 40-, 60-, 80-, and 160-meter bands more difficult during the day?",
-        answers: {
-            A: "The F region absorbs signals at these frequencies during daylight hours",
-            B: "The F region is unstable during daylight hours",
-            C: "The D region absorbs signals at these frequencies during daylight hours",
-            D: "The E region is unstable during daylight hours"
+        {
+            "id": "G3C09",
+            "question": "What is the effect of the Earth's conductivity on ground-wave propagation?",
+            "options": [
+                "A. The higher the conductivity, the better the ground-wave propagation",
+                "B. The lower the conductivity, the better the ground-wave propagation",
+                "C. The Earth's conductivity has no effect on ground-wave propagation",
+                "D. The Earth's conductivity only affects ground-wave propagation over salt water"
+            ],
+            "answer": "A. The higher the conductivity, the better the ground-wave propagation"
         },
-        correct: "C"
-    },
-    {
-        question: "What is a characteristic of HF scatter?",
-        answers: {
-            A: "Phone signals have high intelligibility",
-            B: "Signals have a fluttering sound",
-            C: "There are very large, sudden swings in signal strength",
-            D: "Scatter propagation occurs only at night"
+        {
+            "id": "G3C10",
+            "question": "What is line-of-sight propagation?",
+            "options": [
+                "A. Radio waves that travel in a straight line from the transmitting antenna to the receiving antenna",
+                "B. Radio waves that are reflected by the ionosphere",
+                "C. Radio waves that are bent by the troposphere",
+                "D. Radio waves that travel along the surface of the Earth"
+            ],
+            "answer": "A. Radio waves that travel in a straight line from the transmitting antenna to the receiving antenna"
         },
-        correct: "B"
-    },
-    {
-        question: "What makes HF scatter signals often sound distorted?",
-        answers: {
-            A: "The ionospheric region involved is unstable",
-            B: "Ground waves are absorbing much of the signal",
-            C: "The E region is not present",
-            D: "Energy is scattered into the skip zone through several different paths"
+        {
+            "id": "G3C11",
+            "question": "On which bands is line-of-sight propagation the most common mode of communication?",
+            "options": [
+                "A. The HF bands",
+                "B. The VHF and UHF bands",
+                "C. The MF bands",
+                "D. The LF bands"
+            ],
+            "answer": "B. The VHF and UHF bands"
         },
-        correct: "D"
-    },
-    {
-        question: "Why are HF scatter signals in the skip zone usually weak?",
-        answers: {
-            A: "Only a small part of the signal energy is scattered into the skip zone",
-            B: "Signals are scattered from the magnetosphere, which is not a good reflector",
-            C: "Propagation is via ground waves, which absorb most of the signal energy",
-            D: "Propagation is via ducts in the F region, which absorb most of the energy"
-        },
-        correct: "A"
-    },
-    {
-        question: "What type of propagation allows signals to be heard in the transmitting station’s skip zone?",
-        answers: {
-            A: "Faraday rotation",
-            B: "Scatter",
-            C: "Chordal hop",
-            D: "Short-path"
-        },
-        correct: "B"
-    },
-    {
-        question: "What is near vertical incidence skywave (NVIS) propagation?",
-        answers: {
-            A: "Propagation near the MUF",
-            B: "Short distance MF or HF propagation at high elevation angles",
-            C: "Long path HF propagation at sunrise and sunset",
-            D: "Double hop propagation near the LUF"
-        },
-        correct: "B"
-    },
-    {
-        question: "Which ionospheric region is the most absorbent of signals below 10 MHz during daylight hours?",
-        answers: {
-            A: "The F2 region",
-            B: "The F1 region",
-            C: "The E region",
-            D: "The D region"
-        },
-        correct: "D"
-    }
-];
+        {
+            "id": "G3C12",
+            "question": "What is the radio horizon?",
+            "options": [
+                "A. The point on the Earth's surface where the transmitting antenna is no longer visible",
+                "B. The distance at which the Earth's curvature blocks the line-of-sight path between two antennas",
+                "C. The point where the ground wave ends",
+                "D. The point where the sky wave returns to Earth"
+            ],
+            "answer": "B. The distance at which the Earth's curvature blocks the line-of-sight path between two antennas"
+        }
+    ]
+}
