@@ -3,13 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amateur Radio Exam Study Game - v0.2.2</title>
+    <title>Amateur Radio Exam Study Game</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
             touch-action: manipulation;
+        }
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place it behind all other content */
         }
         .chapter-checkbox:checked + label, .option-checkbox:checked + label {
             background-color: #3b82f6;
@@ -27,60 +36,40 @@
             background-color: #93c5fd; /* blue-300 */
             border-color: #3b82f6;
         }
-        /* Rule to prevent clicks on answered questions in study mode */
         #options-container.answered .option-btn {
             pointer-events: none;
         }
-
-        /* Hover effects for interactive buttons */
         .license-button:hover, .mode-button:hover, #start-btn:not(:disabled):hover, #back-to-license-btn:hover, #view-progress-btn:hover, #restart-btn:hover {
             transform: scale(1.03);
             transition: transform 0.2s ease-in-out;
         }
-        
-        /* Keyframe animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.98); }
             to { opacity: 1; transform: scale(1); }
         }
-
         @keyframes slideInUp {
             from { transform: translateY(20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
             20%, 40%, 60%, 80% { transform: translateX(5px); }
         }
-
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
-
-        /* Animation utility classes */
-        .animate-fade-in {
-            animation: fadeIn 0.4s ease-in-out;
-        }
-
-        .animate-slide-in-up {
-            animation: slideInUp 0.5s ease-in-out forwards;
-            opacity: 0; /* Start hidden */
-        }
-
-        .animate-shake {
-            animation: shake 0.5s ease-in-out;
-        }
-
-        .animate-pulse {
-            animation: pulse 0.5s ease-in-out;
-        }
+        .animate-fade-in { animation: fadeIn 0.4s ease-in-out; }
+        .animate-slide-in-up { animation: slideInUp 0.5s ease-in-out forwards; opacity: 0; }
+        .animate-shake { animation: shake 0.5s ease-in-out; }
+        .animate-pulse { animation: pulse 0.5s ease-in-out; }
     </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <canvas id="bg-canvas"></canvas>
 
     <main class="w-full flex-grow flex items-center justify-center p-4">
         <!-- License Selection Screen -->
@@ -430,7 +419,6 @@
                 });
                 gameHTML += `</div>`;
 
-                // Navigation for Exam Mode
                 if (gameMode === 'exam') {
                     gameHTML += `<div class="mt-6 flex justify-between items-center">
                                     <button id="prev-btn" class="bg-gray-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-600 disabled:bg-gray-400" ${currentQuestionIndex === 0 ? 'disabled' : ''}>Previous</button>
@@ -441,7 +429,6 @@
 
                 gameContainer.innerHTML = gameHTML;
 
-                // Animate question and options
                 const questionText = gameContainer.querySelector('.text-lg');
                 const optionButtons = gameContainer.querySelectorAll('.option-btn');
                 if (questionText) { questionText.classList.add('animate-fade-in'); }
@@ -680,6 +667,96 @@
 
         }, 50); 
         });
+    </script>
+    <script>
+    // ----- Three.js Background Animation -----
+    window.addEventListener('load', () => {
+        if (typeof THREE === 'undefined') {
+            console.error('Three.js library not loaded.');
+            return;
+        }
+
+        let scene, camera, renderer, cubes;
+        let mouseX = 0, mouseY = 0;
+
+        const canvas = document.getElementById('bg-canvas');
+        if (!canvas) return;
+        
+        // 1. Scene Setup
+        scene = new THREE.Scene();
+        
+        // 2. Camera Setup
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 30;
+
+        // 3. Renderer Setup
+        renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x000000, 0); // Transparent background
+
+        // 4. Create Cubes
+        cubes = [];
+        const geometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+        const material = new THREE.MeshLambertMaterial({
+            color: 0x8cb4ff, // A light, subtle blue
+            wireframe: true,
+            transparent: true,
+            opacity: 0.3
+        });
+
+        for (let i = 0; i < 100; i++) {
+            const cube = new THREE.Mesh(geometry, material);
+            cube.position.x = (Math.random() - 0.5) * 100;
+            cube.position.y = (Math.random() - 0.5) * 100;
+            cube.position.z = (Math.random() - 0.5) * 100;
+            cube.rotation.x = Math.random() * 2 * Math.PI;
+            cube.rotation.y = Math.random() * 2 * Math.PI;
+            scene.add(cube);
+            cubes.push(cube);
+        }
+
+        // 5. Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        scene.add(ambientLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(1, 1, 1).normalize();
+        scene.add(directionalLight);
+
+        // 6. Mouse Move Listener
+        function onMouseMove(event) {
+            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        }
+        window.addEventListener('mousemove', onMouseMove, false);
+
+        // 7. Window Resize Listener
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        window.addEventListener('resize', onWindowResize, false);
+
+        // 8. Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Animate cubes
+            cubes.forEach(cube => {
+                cube.rotation.x += 0.001;
+                cube.rotation.y += 0.0015;
+            });
+
+            // Move camera based on mouse position
+            camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;
+            camera.position.y += (mouseY * 5 - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    });
     </script>
     <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
     <script>
