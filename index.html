@@ -1,4 +1,4 @@
-ec<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -150,9 +150,9 @@ ec<!DOCTYPE html>
                     chapters: [
                         { id: 1, title: "Commission's Rules" }, { id: 2, title: "Operating Procedures" },
                         { id: 3, title: "Radio Wave Propagation" }, { id: 4, title: "Amateur Radio Practices" },
-                        { id: 5, title: "Electrical Principles" }, { id: 6, title: "Electronic and Electrical Components" },
+                        { id: 5, title: "Electrical Principles" }, { id: 6, title: "Circuit Components" },
                         { id: 7, title: "Practical Circuits" }, { id: 8, title: "Signals and Emissions" },
-                        { id: 9, title: "Antennas and Feed Lines" }, { id: 10, title: "Safety" }
+                        { id: 9, title: "Antennas and Feed Lines" }, { id: 10, title: "Electrical Safety" }
                     ]
                 },
                 General: {
@@ -164,7 +164,7 @@ ec<!DOCTYPE html>
                         { id: 3, title: "Radio Wave Propagation" }, { id: 4, title: "Amateur Radio Practices" },
                         { id: 5, title: "Electrical Principles" }, { id: 6, title: "Circuit Components" },
                         { id: 7, title: "Practical Circuits" }, { id: 8, title: "Signals and Emissions" },
-                        { id: 9, title: "Antennas and Feed Lines" }, { id: 10, title: "Electrical and RF Safety" }
+                        { id: 9, title: "Antennas and Feed Lines" }, { id: 10, title: "Electrical Safety" }
                     ]
                 },
                 Extra: {
@@ -176,7 +176,7 @@ ec<!DOCTYPE html>
                         { id: 3, title: "Radio Wave Propagation" }, { id: 4, title: "Amateur Radio Practices" },
                         { id: 5, title: "Electrical Principles" }, { id: 6, title: "Circuit Components" },
                         { id: 7, title: "Practical Circuits" }, { id: 8, title: "Signals and Emissions" },
-                        { id: 9, title: "Antennas and Transmission Lines" }, { id: 10, title: "Safety" }
+                        { id: 9, title: "Antennas and Feed Lines" }, { id: 10, title: "Electrical Safety" }
                     ]
                 }
             };
@@ -433,13 +433,16 @@ ec<!DOCTYPE html>
                     if (selectedAnswer === correctAnswer) {
                         overallScore.correct++;
                         chapterScores[question.sourceChapter].correct++;
+                        selectedButton.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'hover:bg-blue-100', 'dark:hover:bg-blue-900');
                         selectedButton.classList.add('bg-green-500', 'text-white');
                     } else {
                         missedQuestions.push({ question: question.question, yourAnswer: selectedAnswer, correctAnswer: correctAnswer, id: question.id });
+                        selectedButton.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'hover:bg-blue-100', 'dark:hover:bg-blue-900');
                         selectedButton.classList.add('bg-red-500', 'text-white');
                         // Highlight the correct answer in green
                         buttons.forEach(b => { 
                             if (b.textContent === correctAnswer) {
+                                b.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'hover:bg-blue-100', 'dark:hover:bg-blue-900');
                                 b.classList.add('bg-green-500', 'text-white');
                             }
                         });
@@ -633,3 +636,4 @@ ec<!DOCTYPE html>
     </script>
 </body>
 </html>
+
