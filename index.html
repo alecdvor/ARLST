@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amateur Radio Exam Study Game - v0.1.2</title>
+    <title>Amateur Radio Exam Study Game - v0.2.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -60,6 +60,9 @@
         <button id="start-btn" class="w-full bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 transition-all duration-300 disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed" disabled>
             Start
         </button>
+        <button id="view-progress-btn" class="w-full mt-4 bg-gray-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-700 transition-colors">
+            View Progress
+        </button>
     </div>
 
     <!-- Main Game Screen (DOM-based) -->
@@ -67,6 +70,9 @@
 
     <!-- Final Score Screen -->
     <div id="score-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 hidden"></div>
+    
+    <!-- Progress Screen -->
+    <div id="progress-container" class="w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 hidden"></div>
 
 
     <!-- Chapter Question Files -->
@@ -109,6 +115,7 @@
             const selectionContainer = document.getElementById('selection-container');
             const gameContainer = document.getElementById('game-container');
             const scoreContainer = document.getElementById('score-container');
+            const progressContainer = document.getElementById('progress-container');
             const chapterList = document.getElementById('chapter-list');
             const startBtn = document.getElementById('start-btn');
             const randomizeCheckbox = document.getElementById('randomize-questions');
@@ -116,6 +123,7 @@
             const modeExamBtn = document.getElementById('mode-exam-btn');
             const studyOptions = document.getElementById('study-options');
             const examOptions = document.getElementById('exam-options');
+            const viewProgressBtn = document.getElementById('view-progress-btn');
 
             // ----- GLOBAL GAME STATE -----
             let allQuestions = [];
@@ -126,6 +134,80 @@
             let gameMode = null; // 'study' or 'exam'
             let examStartTime = null;
             let timerInterval = null;
+            let userProgress = {
+                examHistory: [],
+                chapterPerformance: {}
+            };
+
+            // ----- PROGRESS TRACKING & LOCAL STORAGE -----
+            function loadProgress() {
+                const savedProgress = localStorage.getItem('arlstProgress');
+                if (savedProgress) {
+                    userProgress = JSON.parse(savedProgress);
+                }
+                // Initialize chapter performance if it doesn't exist
+                CHAPTER_DATA.forEach(ch => {
+                    if (!userProgress.chapterPerformance[ch.id]) {
+                        userProgress.chapterPerformance[ch.id] = { correct: 0, attempted: 0, title: ch.title };
+                    }
+                });
+            }
+
+            function saveProgress() {
+                localStorage.setItem('arlstProgress', JSON.stringify(userProgress));
+            }
+
+            function resetProgress() {
+                localStorage.removeItem('arlstProgress');
+                userProgress = { examHistory: [], chapterPerformance: {} };
+                loadProgress(); // Re-initialize
+                displayProgress(); // Refresh the view
+            }
+
+            function displayProgress() {
+                selectionContainer.classList.add('hidden');
+                let progressHTML = `<h1 class="text-2xl md:text-3xl font-bold text-center mb-6">Your Progress</h1>`;
+
+                // Exam History
+                progressHTML += `<div class="mb-8"><h2 class="text-xl font-bold mb-4">Practice Exam History</h2>`;
+                if(userProgress.examHistory.length > 0){
+                    progressHTML += `<div class="overflow-x-auto"><table class="w-full text-left table-auto"><thead><tr class="border-b dark:border-gray-600"><th class="p-2">Date</th><th class="p-2">Score</th><th class="p-2">Result</th><th class="p-2">Time</th></tr></thead><tbody>`;
+                    userProgress.examHistory.slice().reverse().forEach(exam => {
+                        progressHTML += `<tr class="border-b dark:border-gray-700"><td class="p-2">${exam.date}</td><td class="p-2">${exam.score}</td><td class="p-2 ${exam.passed ? 'text-green-500' : 'text-red-500'}">${exam.passed ? 'PASS' : 'FAIL'}</td><td class="p-2">${exam.time}</td></tr>`;
+                    });
+                    progressHTML += `</tbody></table></div>`;
+                } else {
+                    progressHTML += `<p class="text-gray-500 dark:text-gray-400">No practice exams taken yet.</p>`;
+                }
+                progressHTML += `</div>`;
+                
+                // Chapter Performance
+                progressHTML += `<div class="mb-8"><h2 class="text-xl font-bold mb-4">Chapter Performance</h2><div class="space-y-3">`;
+                Object.values(userProgress.chapterPerformance).forEach((chap, index) => {
+                     const percentage = chap.attempted === 0 ? 0 : Math.round((chap.correct / chap.attempted) * 100);
+                     progressHTML += `<div class="flex justify-between items-center bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
+                                        <span class="font-semibold">Ch ${index + 1}: ${chap.title}</span>
+                                        <span>${chap.correct} / ${chap.attempted} (${percentage}%)</span>
+                                      </div>`;
+                });
+                progressHTML += `</div></div>`;
+
+                // Action Buttons
+                progressHTML += `<div class="flex flex-col md:flex-row gap-4 mt-8">
+                                    <button id="back-to-menu-btn" class="w-full bg-gray-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-600">Back to Menu</button>
+                                    <button id="reset-progress-btn" class="w-full bg-red-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-red-700">Reset All Progress</button>
+                                 </div>`;
+
+                progressContainer.innerHTML = progressHTML;
+                progressContainer.classList.remove('hidden');
+
+                document.getElementById('back-to-menu-btn').addEventListener('click', () => {
+                    progressContainer.classList.add('hidden');
+                    selectionContainer.classList.remove('hidden');
+                });
+                document.getElementById('reset-progress-btn').addEventListener('click', resetProgress);
+            }
+
 
             // ----- INITIALIZATION -----
             function initializeChapterSelection() {
@@ -151,6 +233,7 @@
             
             // ----- DOM-BASED GAME LOGIC -----
             function displayQuestion() {
+                // ... This function remains the same as v0.1.2
                 if (currentQuestionIndex >= allQuestions.length) {
                     displayFinalScore();
                     return;
@@ -191,6 +274,7 @@
             }
 
             function handleOptionClick(selectedButton, question) {
+                // ... This function remains the same as v0.1.2
                 const buttons = document.querySelectorAll('.option-btn');
                 buttons.forEach(b => b.disabled = true); // Disable all buttons
 
@@ -252,8 +336,8 @@
                     
                     CHAPTER_DATA.forEach(ch => {
                         if (selectedChapters.includes(ch.id)) {
-                            chapterScores[ch.varName] = { title: `Chapter ${ch.id}: ${ch.title}`, correct: 0, attempted: 0 };
-                            ch.data.questions.forEach(q => allQuestions.push({ ...q, sourceChapter: ch.varName }));
+                            chapterScores[ch.id] = { correct: 0, attempted: 0 };
+                            ch.data.questions.forEach(q => allQuestions.push({ ...q, sourceChapter: ch.id }));
                         }
                     });
                     if (randomizeCheckbox.checked) allQuestions.sort(() => Math.random() - 0.5);
@@ -276,14 +360,35 @@
                 gameContainer.classList.add('hidden');
                 clearInterval(timerInterval);
                 
-                let scoreHTML = ``;
-                if(gameMode === 'exam'){
+                let timeString = '';
+                let passed = false;
+
+                if (gameMode === 'exam') {
                     const elapsedMs = new Date() - examStartTime;
                     const seconds = Math.floor((elapsedMs / 1000) % 60).toString().padStart(2, '0');
                     const minutes = Math.floor(elapsedMs / 60000);
-                    const timeString = `${minutes} minute${minutes !== 1 ? 's' : ''} and ${seconds} second${seconds !== 1 ? 's' : ''}`;
+                    timeString = `${minutes} minute${minutes !== 1 ? 's' : ''} and ${seconds} second${seconds !== 1 ? 's' : ''}`;
+                    passed = overallScore.correct >= 26;
 
-                    const passed = overallScore.correct >= 26;
+                    // Save exam result to progress
+                    userProgress.examHistory.push({
+                        date: new Date().toLocaleDateString(),
+                        score: `${overallScore.correct} / 35`,
+                        passed: passed,
+                        time: timeString
+                    });
+                } else { // Study Mode
+                     // Update chapter performance
+                     for (const chapterId in chapterScores) {
+                        userProgress.chapterPerformance[chapterId].correct += chapterScores[chapterId].correct;
+                        userProgress.chapterPerformance[chapterId].attempted += chapterScores[chapterId].attempted;
+                    }
+                }
+                saveProgress(); // Save updated progress to localStorage
+
+
+                let scoreHTML = ``;
+                if(gameMode === 'exam'){
                     scoreHTML += `<h1 class="text-3xl font-bold text-center mb-2">Practice Exam Complete!</h1>`;
                     scoreHTML += `<p class="text-center text-lg mb-6 ${passed ? 'text-green-500' : 'text-red-500'} font-semibold">${passed ? 'Result: PASS' : 'Result: FAIL'}</p>`;
                      scoreHTML += `<div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 mb-6 text-center">
@@ -298,13 +403,16 @@
                                     <h2 class="text-xl font-bold">Overall Score</h2>
                                     <p class="text-3xl font-light mt-2">${overallScore.correct} / ${allQuestions.length} (${percentage}%)</p>
                                   </div>`;
-                    if (Object.keys(chapterScores).length > 1) {
-                        scoreHTML += `<h2 class="text-xl font-bold mb-4">Chapter Breakdown</h2><div class="space-y-3 mb-6">`;
-                        for (const key in chapterScores) {
-                            const score = chapterScores[key];
+                    
+                    const selectedChapterIds = Object.keys(chapterScores);
+                    if (selectedChapterIds.length > 1) {
+                         scoreHTML += `<h2 class="text-xl font-bold mb-4">Session Chapter Breakdown</h2><div class="space-y-3 mb-6">`;
+                        for (const chapterId of selectedChapterIds) {
+                            const score = chapterScores[chapterId];
+                            const chapInfo = CHAPTER_DATA.find(ch => ch.id == chapterId);
                             const chapPercentage = score.attempted === 0 ? 0 : Math.round((score.correct / score.attempted) * 100);
                             scoreHTML += `<div class="flex justify-between items-center bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
-                                            <span class="font-semibold">${score.title}</span>
+                                            <span class="font-semibold">Chapter ${chapterId}: ${chapInfo.title}</span>
                                             <span>${score.correct} / ${score.attempted} (${chapPercentage}%)</span>
                                           </div>`;
                         }
@@ -357,8 +465,10 @@
                 }
             });
             startBtn.addEventListener('click', startGame);
+            viewProgressBtn.addEventListener('click', displayProgress);
 
             // ----- START THE APP -----
+            loadProgress();
             initializeChapterSelection();
         }, 50);
         });
