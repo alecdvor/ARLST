@@ -21,62 +21,15 @@
              color: white;
         }
         .option-btn {
-            transition: background-color 0.2s, transform 0.2s;
+            transition: background-color 0.2s;
         }
         .option-btn.selected {
             background-color: #93c5fd; /* blue-300 */
             border-color: #3b82f6;
         }
-        /* Rule to prevent clicks on answered questions in study mode */
+        /* Added rule to prevent clicks on answered questions in study mode */
         #options-container.answered .option-btn {
             pointer-events: none;
-        }
-
-        /* Hover effects for interactive buttons */
-        .license-button:hover, .mode-button:hover, #start-btn:not(:disabled):hover, #back-to-license-btn:hover, #view-progress-btn:hover, #restart-btn:hover {
-            transform: scale(1.03);
-            transition: transform 0.2s ease-in-out;
-        }
-        
-        /* Keyframe animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes slideInUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        /* Animation utility classes */
-        .animate-fade-in {
-            animation: fadeIn 0.4s ease-in-out;
-        }
-
-        .animate-slide-in-up {
-            animation: slideInUp 0.5s ease-in-out forwards;
-            opacity: 0; /* Start hidden */
-        }
-
-        .animate-shake {
-            animation: shake 0.5s ease-in-out;
-        }
-
-        .animate-pulse {
-            animation: pulse 0.5s ease-in-out;
         }
     </style>
 </head>
@@ -90,7 +43,7 @@
             <div id="license-list" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <!-- License buttons will be dynamically inserted here -->
             </div>
-             <button id="view-progress-btn" class="w-full bg-gray-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-700 transition-transform">
+             <button id="view-progress-btn" class="w-full bg-gray-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-700 transition-colors">
                 View Progress
             </button>
         </div>
@@ -100,11 +53,11 @@
             <h1 id="selection-header" class="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">Choose a Study Mode</h1>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <button id="mode-study-btn" class="mode-button w-full text-center p-4 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-all">
+                <button id="mode-study-btn" class="mode-button w-full text-center p-4 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <span class="text-lg font-bold">Study by Chapter</span>
                     <p class="text-sm text-gray-500 dark:text-gray-400">Focus on specific topics.</p>
                 </button>
-                <button id="mode-exam-btn" class="mode-button w-full text-center p-4 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-all">
+                <button id="mode-exam-btn" class="mode-button w-full text-center p-4 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <span class="text-lg font-bold">Practice Exam</span>
                     <p id="exam-desc" class="text-sm text-gray-500 dark:text-gray-400"></p>
                 </button>
@@ -151,7 +104,7 @@
     </footer>
 
 
-    <!-- Question Files -->
+    <!-- Technician Class Question Files -->
     <script src="questions/t1_questions.js"></script>
     <script src="questions/t2_questions.js"></script>
     <script src="questions/t3_questions.js"></script>
@@ -162,6 +115,7 @@
     <script src="questions/t8_questions.js"></script>
     <script src="questions/t9_questions.js"></script>
     <script src="questions/t10_questions.js"></script>
+    <!-- General Class Question Files -->
     <script src="questions/g1_questions.js"></script>
     <script src="questions/g2_questions.js"></script>
     <script src="questions/g3_questions.js"></script>
@@ -172,6 +126,7 @@
     <script src="questions/g8_questions.js"></script>
     <script src="questions/g9_questions.js"></script>
     <script src="questions/g10_questions.js"></script>
+    <!-- Extra Class Question Files -->
     <script src="questions/e1_questions.js"></script>
     <script src="questions/e2_questions.js"></script>
     <script src="questions/e3_questions.js"></script>
@@ -275,18 +230,6 @@
             let timerInterval = null;
             let userProgress = {}; // Will be structured as { General: { ... }, Technician: { ... } }
 
-            // ---- Screen Management ----
-            function showScreen(screenToShow) {
-                [licenseContainer, selectionContainer, gameContainer, scoreContainer, progressContainer].forEach(screen => {
-                    screen.classList.add('hidden');
-                    screen.classList.remove('animate-fade-in'); 
-                });
-                screenToShow.classList.remove('hidden');
-                setTimeout(() => {
-                    screenToShow.classList.add('animate-fade-in');
-                }, 10);
-            }
-
             // ----- PROGRESS TRACKING & LOCAL STORAGE -----
             function loadProgress() {
                 const savedProgress = localStorage.getItem('arlstProgress');
@@ -309,14 +252,17 @@
             }
 
             function resetProgress() {
+                // Replaced the blocking confirm() dialog for better stability.
+                // A custom modal could be added here in the future for a better user experience.
                 localStorage.removeItem('arlstProgress');
                 userProgress = {};
-                loadProgress(); 
-                displayProgress(); 
+                loadProgress(); // Re-initialize
+                displayProgress(); // Refresh the view
             }
 
             function displayProgress() {
-                showScreen(progressContainer);
+                licenseContainer.classList.add('hidden');
+                selectionContainer.classList.add('hidden');
                 let progressHTML = `<h1 class="text-2xl md:text-3xl font-bold text-center mb-6">Your Progress</h1>`;
 
                 Object.entries(userProgress).forEach(([className, classData]) => {
@@ -337,7 +283,10 @@
                     progressHTML += `<div class="mb-8"><h3 class="text-xl font-bold mb-4">Chapter Performance</h3><div class="space-y-3">`;
                     Object.entries(classData.chapterPerformance).sort((a,b) => a[0] - b[0]).forEach(([chapId, chap]) => {
                         const percentage = chap.attempted === 0 ? 0 : Math.round((chap.correct / chap.attempted) * 100);
-                        progressHTML += `<div class="flex justify-between items-center bg-gray-100 dark:bg-gray-700 p-3 rounded-lg"><span class="font-semibold">Ch ${chapId}: ${chap.title}</span><span>${chap.correct} / ${chap.attempted} (${percentage}%)</span></div>`;
+                        progressHTML += `<div class="flex justify-between items-center bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
+                                            <span class="font-semibold">Ch ${chapId}: ${chap.title}</span>
+                                            <span>${chap.correct} / ${chap.attempted} (${percentage}%)</span>
+                                          </div>`;
                     });
                     progressHTML += `</div></div></div>`;
                 });
@@ -349,8 +298,12 @@
                                  </div>`;
 
                 progressContainer.innerHTML = progressHTML;
+                progressContainer.classList.remove('hidden');
 
-                document.getElementById('back-to-menu-btn').addEventListener('click', () => showScreen(licenseContainer));
+                document.getElementById('back-to-menu-btn').addEventListener('click', () => {
+                    progressContainer.classList.add('hidden');
+                    licenseContainer.classList.remove('hidden');
+                });
                 document.getElementById('reset-progress-btn').addEventListener('click', resetProgress);
             }
 
@@ -369,11 +322,14 @@
 
             function selectLicense(name) {
                 selectedLicense = availableClasses[name];
+                licenseContainer.classList.add('hidden');
+                
+                // Configure and show mode selection screen
                 selectionHeader.textContent = `${name} Class Study`;
                 examDesc.textContent = `${selectedLicense.examQuestions} random questions.`;
                 examLongDesc.textContent = `Take a simulated ${name} class exam with ${selectedLicense.examQuestions} randomly selected questions from the entire pool. You need ${selectedLicense.passingScore} correct answers to pass. Your time will be recorded.`;
                 initializeChapterSelection(selectedLicense.chapters);
-                showScreen(selectionContainer);
+                selectionContainer.classList.remove('hidden');
             }
 
             function initializeChapterSelection(chapters) {
@@ -389,7 +345,7 @@
 
                     const label = document.createElement('label');
                     label.htmlFor = `chapter-${chapter.id}`;
-                    label.innerHTML = `<span class="font-bold">Chapter ${chapter.id}</span><span class="text-xs mt-1 leading-tight">${chapter.title}</span>`;
+                    label.innerHTML = `<span class="font-bold">Chapter ${chapter.id}</span><span class="text-xs mt-1">${chapter.title}</span>`;
                     label.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'h-full', 'w-full', 'text-center', 'p-2', 'rounded-lg', 'border', 'border-gray-300', 'dark:border-gray-600', 'cursor-pointer', 'hover:bg-gray-100', 'dark:hover:bg-gray-700', 'transition-colors');
                     
                     div.appendChild(input);
@@ -441,29 +397,31 @@
 
                 gameContainer.innerHTML = gameHTML;
 
-                // Animate question and options
-                const questionText = gameContainer.querySelector('.text-lg');
-                const optionButtons = gameContainer.querySelectorAll('.option-btn');
-                if (questionText) { questionText.classList.add('animate-fade-in'); }
-                optionButtons.forEach((btn, index) => {
-                    btn.style.animationDelay = `${index * 100}ms`;
-                    btn.classList.add('animate-slide-in-up');
-                });
-
-
                 document.querySelectorAll('.option-btn').forEach(btn => {
                     btn.addEventListener('click', () => handleOptionClick(btn, question));
                 });
 
                 if (gameMode === 'exam') {
-                    document.getElementById('prev-btn').addEventListener('click', () => { if (currentQuestionIndex > 0) { currentQuestionIndex--; displayQuestion(); } });
-                    document.getElementById('next-btn').addEventListener('click', () => { if (currentQuestionIndex < allQuestions.length - 1) { currentQuestionIndex++; displayQuestion(); } });
+                    document.getElementById('prev-btn').addEventListener('click', () => {
+                        if (currentQuestionIndex > 0) {
+                            currentQuestionIndex--;
+                            displayQuestion();
+                        }
+                    });
+                    document.getElementById('next-btn').addEventListener('click', () => {
+                        if (currentQuestionIndex < allQuestions.length - 1) {
+                            currentQuestionIndex++;
+                            displayQuestion();
+                        }
+                    });
                     checkExamCompletion();
                 }
             }
 
             function handleOptionClick(selectedButton, question) {
                 if (gameMode === 'study') {
+                    // Instead of disabling buttons (which can cause style overrides),
+                    // we'll add a class to the container to prevent further clicks via CSS.
                     document.getElementById('options-container').classList.add('answered');
                     
                     const buttons = document.querySelectorAll('.option-btn');
@@ -471,6 +429,7 @@
                     const correctAnswer = question.answer;
                     const licenseName = Object.keys(availableClasses).find(key => availableClasses[key] === selectedLicense);
                     const sourceChapter = question.sourceChapter;
+
 
                     overallScore.attempted++;
                     chapterScores[question.sourceChapter].attempted++;
@@ -481,20 +440,21 @@
                         chapterScores[question.sourceChapter].correct++;
                          userProgress[licenseName].chapterPerformance[sourceChapter].correct++;
                         selectedButton.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'hover:bg-blue-100', 'dark:hover:bg-blue-900');
-                        selectedButton.classList.add('bg-green-500', 'text-white', 'animate-pulse');
+                        selectedButton.classList.add('bg-green-500', 'text-white');
                     } else {
                         missedQuestions.push({ question: question.question, yourAnswer: selectedAnswer, correctAnswer: correctAnswer, id: question.id });
                         selectedButton.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'hover:bg-blue-100', 'dark:hover:bg-blue-900');
-                        selectedButton.classList.add('bg-red-500', 'text-white', 'animate-shake');
+                        selectedButton.classList.add('bg-red-500', 'text-white');
+                        // Highlight the correct answer in green
                         buttons.forEach(b => { 
                             if (b.textContent === correctAnswer) {
                                 b.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'hover:bg-blue-100', 'dark:hover:bg-blue-900');
-                                b.classList.add('bg-green-500', 'text-white', 'animate-pulse');
+                                b.classList.add('bg-green-500', 'text-white');
                             }
                         });
                     }
 
-                    saveProgress(); 
+                    saveProgress(); // Save progress after each question.
 
                     document.getElementById('live-score').textContent = `Score: ${overallScore.correct} / ${overallScore.attempted}`;
                     
@@ -587,12 +547,13 @@
                     userAnswers = new Array(allQuestions.length).fill(null);
                     timerInterval = setInterval(updateTimer, 1000);
                 }
-                showScreen(gameContainer);
+                selectionContainer.classList.add('hidden');
+                gameContainer.classList.remove('hidden');
                 displayQuestion();
             }
 
             function displayFinalScore() {
-                clearInterval(timerInterval);
+                gameContainer.innerHTML = ''; gameContainer.classList.add('hidden'); clearInterval(timerInterval);
                 let timeString = ''; let passed = false;
                 const licenseName = Object.keys(availableClasses).find(key => availableClasses[key] === selectedLicense);
 
@@ -634,9 +595,9 @@
                     });
                     scoreHTML += `</div>`;
                 }
-                scoreHTML += `<button id="restart-btn" class="w-full mt-8 bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-transform">Return to Main Menu</button>`;
+                scoreHTML += `<button id="restart-btn" class="w-full mt-8 bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700">Return to Main Menu</button>`;
                 scoreContainer.innerHTML = scoreHTML;
-                showScreen(scoreContainer);
+                scoreContainer.classList.remove('hidden');
                 document.getElementById('restart-btn').addEventListener('click', () => location.reload());
             }
 
@@ -662,23 +623,27 @@
             backToLicenseBtn.addEventListener('click', () => location.reload());
 
             // ----- START THE APP -----
+            
+            // This function contains the main application logic.
             function main() {
                 loadProgress();
                 initializeLicenseSelection();
-                showScreen(licenseContainer);
             }
-            
+
+            // This function waits until the first question file's data is loaded,
+            // ensuring the app doesn't start prematurely.
             function waitForDataAndInit() {
+                // Check for the variable from the first General class question file.
                 if (typeof window.g1_questions !== 'undefined') {
-                    main(); 
+                    main(); // If it exists, run the main app logic.
                 } else {
-                    setTimeout(waitForDataAndInit, 100); 
+                    setTimeout(waitForDataAndInit, 100); // Otherwise, check again in 100ms.
                 }
             }
             
-            waitForDataAndInit(); 
+            waitForDataAndInit(); // Start the process.
 
-        }, 50); 
+        }, 50); // The outer setTimeout remains as a fallback.
         });
     </script>
     <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
@@ -692,3 +657,4 @@
     </script>
 </body>
 </html>
+
