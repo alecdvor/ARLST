@@ -131,7 +131,7 @@ var t6_questions = {
                 "D. Double-pole double-throw"
             ],
             "answer": "A. Single-pole single-throw",
-            "image": "figureT-2.png"
+            "image": "figureT-2.jpg"
         },
         {
             "id": "T6B01",
@@ -286,7 +286,7 @@ var t6_questions = {
                 "D. Connector"
             ],
             "answer": "A. Resistor",
-            "image": "figureT-1.png"
+            "image": "figureT-1.jpg"
         },
         {
             "id": "T6C03",
@@ -298,7 +298,7 @@ var t6_questions = {
                 "D. Connector"
             ],
             "answer": "B. Transistor",
-            "image": "figureT-1.png"
+            "image": "figureT-1.jpg"
         },
         {
             "id": "T6C04",
@@ -310,7 +310,7 @@ var t6_questions = {
                 "D. Ground symbol"
             ],
             "answer": "C. Lamp",
-            "image": "figureT-1.png"
+            "image": "figureT-1.jpg"
         },
         {
             "id": "T6C05",
@@ -322,7 +322,7 @@ var t6_questions = {
                 "D. Battery"
             ],
             "answer": "D. Battery",
-            "image": "figureT-1.png"
+            "image": "figureT-1.jpg"
         },
         {
             "id": "T6C06",
@@ -334,7 +334,7 @@ var t6_questions = {
                 "D. Transistor"
             ],
             "answer": "B. Capacitor",
-            "image": "figureT-2.png"
+            "image": "figureT-2.jpg"
         },
         {
             "id": "T6C07",
@@ -346,7 +346,7 @@ var t6_questions = {
                 "D. Light emitting diode"
             ],
             "answer": "D. Light emitting diode",
-            "image": "figureT-2.png"
+            "image": "figureT-2.jpg"
         },
         {
             "id": "T6C08",
@@ -358,7 +358,7 @@ var t6_questions = {
                 "D. Variable transformer"
             ],
             "answer": "C. Variable resistor",
-            "image": "figureT-2.png"
+            "image": "figureT-2.jpg"
         },
         {
             "id": "T6C09",
@@ -370,7 +370,7 @@ var t6_questions = {
                 "D. Transformer"
             ],
             "answer": "D. Transformer",
-            "image": "figureT-2.png"
+            "image": "figureT-2.jpg"
         },
         {
             "id": "T6C10",
@@ -382,7 +382,7 @@ var t6_questions = {
                 "D. Variable inductor"
             ],
             "answer": "D. Variable inductor",
-            "image": "figureT-3.png"
+            "image": "figureT-3.jpg"
         },
         {
             "id": "T6C11",
@@ -394,7 +394,7 @@ var t6_questions = {
                 "D. Ground"
             ],
             "answer": "A. Antenna",
-            "image": "figureT-3.png"
+            "image": "figureT-3.jpg"
         },
         {
             "id": "T6C12",
@@ -516,7 +516,7 @@ var t6_questions = {
                 "D. Convert electrical energy into radio waves"
             ],
             "answer": "C. Control the flow of current",
-            "image": "figureT-1.png"
+            "image": "figureT-1.jpg"
         },
         {
             "id": "T6D11",
