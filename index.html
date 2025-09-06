@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amateur Radio Exam Study Game - v0.2.1</title>
+    <title>Amateur Radio Exam Study Game - v0.2.2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -16,7 +16,7 @@
             border-color: #3b82f6;
             color: white;
         }
-        .mode-button.selected {
+        .mode-button.selected, .license-button.selected {
              background-color: #3b82f6;
              color: white;
         }
@@ -25,11 +25,22 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex items-center justify-center min-h-screen p-4">
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col min-h-screen">
+
+    <main class="w-full flex-grow flex items-center justify-center p-4">
+        <!-- License Selection Screen -->
+        <div id="license-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8">
+            <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">Select License Class</h1>
+            <!-- License buttons will be dynamically inserted here -->
+        </div>
+         <button id="view-progress-btn" class="w-full bg-gray-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-700 transition-colors">
+            View Progress
+        </button>
+    </div>
 
     <!-- Main Selection Screen -->
-    <div id="selection-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8">
-        <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">Choose a Study Mode</h1>
+    <div id="selection-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 hidden">
+        <h1 id="selection-header" class="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">Choose a Study Mode</h1>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <button id="mode-study-btn" class="mode-button w-full text-center p-4 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
@@ -38,7 +49,7 @@
             </button>
             <button id="mode-exam-btn" class="mode-button w-full text-center p-4 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                 <span class="text-lg font-bold">Practice Exam</span>
-                <p class="text-sm text-gray-500 dark:text-gray-400">35 random questions.</p>
+                <p id="exam-desc" class="text-sm text-gray-500 dark:text-gray-400"></p>
             </button>
         </div>
 
@@ -54,15 +65,13 @@
         </div>
 
         <div id="exam-options" class="hidden text-center">
-            <p class="text-gray-600 dark:text-gray-300 mb-6">Take a simulated General class exam with 35 randomly selected questions from the entire pool. You need 26 correct answers to pass. Your time will be recorded.</p>
+            <p id="exam-long-desc" class="text-gray-600 dark:text-gray-300 mb-6"></p>
         </div>
 
         <button id="start-btn" class="w-full bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 transition-all duration-300 disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed" disabled>
             Start
         </button>
-        <button id="view-progress-btn" class="w-full mt-4 bg-gray-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-700 transition-colors">
-            View Progress
-        </button>
+        <button id="back-to-license-btn" class="w-full mt-4 bg-gray-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-600">Back</button>
     </div>
 
     <!-- Main Game Screen (DOM-based) -->
@@ -73,9 +82,14 @@
     
     <!-- Progress Screen -->
     <div id="progress-container" class="w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 hidden"></div>
+    </main>
+
+    <footer class="w-full text-center p-4 text-sm text-gray-500 dark:text-gray-400 shrink-0">
+        <p>Made by: Alec (KQ4IJY) <a href="mailto:alecdvor@gmail.com" class="hover:underline text-blue-500">alecdvor@gmail.com</a></p>
+    </footer>
 
 
-    <!-- Chapter Question Files -->
+    <!-- General Class Question Files -->
     <script src="questions/g1_questions.js"></script>
     <script src="questions/g2_questions.js"></script>
     <script src="questions/g3_questions.js"></script>
@@ -86,32 +100,58 @@
     <script src="questions/g8_questions.js"></script>
     <script src="questions/g9_questions.js"></script>
     <script src="questions/g10_questions.js"></script>
+    <!-- Technician and Extra files can be added here later -->
+
 
     <script>
         window.addEventListener('load', () => {
         setTimeout(() => { 
             // ----- DATA -----
-            const CHAPTER_DATA = [];
-            const potentialChapters = [
-                { id: 1, name: 'g1_questions', title: "Commission's Rules" },
-                { id: 2, name: 'g2_questions', title: "Operating Procedures" },
-                { id: 3, name: 'g3_questions', title: "Radio Wave Propagation" },
-                { id: 4, name: 'g4_questions', title: "Amateur Radio Practices" },
-                { id: 5, name: 'g5_questions', title: "Electrical Principles" },
-                { id: 6, name: 'g6_questions', title: "Circuit Components" },
-                { id: 7, name: 'g7_questions', title: "Practical Circuits" },
-                { id: 8, name: 'g8_questions', title: "Signals and Emissions" },
-                { id: 9, name: 'g9_questions', title: "Antennas and Feed Lines" },
-                { id: 10, name: 'g10_questions', title: "Electrical Safety" }
-            ];
+            const LICENSE_CLASSES = {
+                General: {
+                    prefix: 'g',
+                    examQuestions: 35,
+                    passingScore: 26,
+                    chapters: [
+                        { id: 1, title: "Commission's Rules" }, { id: 2, title: "Operating Procedures" },
+                        { id: 3, title: "Radio Wave Propagation" }, { id: 4, title: "Amateur Radio Practices" },
+                        { id: 5, title: "Electrical Principles" }, { id: 6, title: "Circuit Components" },
+                        { id: 7, title: "Practical Circuits" }, { id: 8, title: "Signals and Emissions" },
+                        { id: 9, title: "Antennas and Feed Lines" }, { id: 10, title: "Electrical Safety" }
+                    ]
+                },
+                Technician: {
+                    prefix: 't',
+                    examQuestions: 35,
+                    passingScore: 26,
+                    chapters: [ /* To be filled in */ ]
+                },
+                Extra: {
+                    prefix: 'e',
+                    examQuestions: 50,
+                    passingScore: 37,
+                    chapters: [ /* To be filled in */ ]
+                }
+            };
+            
+            const availableClasses = {};
 
-            potentialChapters.forEach(chapter => {
-                if (typeof window[chapter.name] !== 'undefined' && window[chapter.name].questions) {
-                    CHAPTER_DATA.push({ id: chapter.id, varName: chapter.name, data: window[chapter.name], title: chapter.title });
+            Object.entries(LICENSE_CLASSES).forEach(([name, config]) => {
+                const chapterData = [];
+                config.chapters.forEach(ch => {
+                    const varName = `${config.prefix}${ch.id}_questions`;
+                    if (typeof window[varName] !== 'undefined' && window[varName].questions) {
+                        chapterData.push({ ...ch, varName: varName, data: window[varName] });
+                    }
+                });
+                if (chapterData.length > 0) {
+                    availableClasses[name] = { ...config, chapters: chapterData };
                 }
             });
 
             // ----- DOM ELEMENT REFERENCES -----
+            const licenseContainer = document.getElementById('license-container');
+            const licenseList = document.getElementById('license-list');
             const selectionContainer = document.getElementById('selection-container');
             const gameContainer = document.getElementById('game-container');
             const scoreContainer = document.getElementById('score-container');
@@ -124,6 +164,10 @@
             const studyOptions = document.getElementById('study-options');
             const examOptions = document.getElementById('exam-options');
             const viewProgressBtn = document.getElementById('view-progress-btn');
+            const backToLicenseBtn = document.getElementById('back-to-license-btn');
+            const selectionHeader = document.getElementById('selection-header');
+            const examDesc = document.getElementById('exam-desc');
+            const examLongDesc = document.getElementById('exam-long-desc');
 
             // ----- GLOBAL GAME STATE -----
             let allQuestions = [];
@@ -132,24 +176,25 @@
             let missedQuestions = [];
             let overallScore = { correct: 0, attempted: 0 };
             let gameMode = null; // 'study' or 'exam'
+            let selectedLicense = null;
             let examStartTime = null;
             let timerInterval = null;
-            let userProgress = {
-                examHistory: [],
-                chapterPerformance: {}
-            };
+            let userProgress = {}; // Will be structured as { General: { ... }, Technician: { ... } }
 
             // ----- PROGRESS TRACKING & LOCAL STORAGE -----
             function loadProgress() {
                 const savedProgress = localStorage.getItem('arlstProgress');
-                if (savedProgress) {
-                    userProgress = JSON.parse(savedProgress);
-                }
-                // Initialize chapter performance if it doesn't exist
-                CHAPTER_DATA.forEach(ch => {
-                    if (!userProgress.chapterPerformance[ch.id]) {
-                        userProgress.chapterPerformance[ch.id] = { correct: 0, attempted: 0, title: ch.title };
+                userProgress = savedProgress ? JSON.parse(savedProgress) : {};
+
+                Object.keys(availableClasses).forEach(className => {
+                    if (!userProgress[className]) {
+                        userProgress[className] = { examHistory: [], chapterPerformance: {} };
                     }
+                    availableClasses[className].chapters.forEach(ch => {
+                         if (!userProgress[className].chapterPerformance[ch.id]) {
+                            userProgress[className].chapterPerformance[ch.id] = { correct: 0, attempted: 0, title: ch.title };
+                        }
+                    });
                 });
             }
 
@@ -158,41 +203,46 @@
             }
 
             function resetProgress() {
-                localStorage.removeItem('arlstProgress');
-                userProgress = { examHistory: [], chapterPerformance: {} };
-                loadProgress(); // Re-initialize
-                displayProgress(); // Refresh the view
+                if (confirm("Are you sure you want to delete all your progress data? This cannot be undone.")) {
+                    localStorage.removeItem('arlstProgress');
+                    userProgress = {};
+                    loadProgress(); // Re-initialize
+                    displayProgress(); // Refresh the view
+                }
             }
 
             function displayProgress() {
+                licenseContainer.classList.add('hidden');
                 selectionContainer.classList.add('hidden');
                 let progressHTML = `<h1 class="text-2xl md:text-3xl font-bold text-center mb-6">Your Progress</h1>`;
 
-                // Exam History
-                progressHTML += `<div class="mb-8"><h2 class="text-xl font-bold mb-4">Practice Exam History</h2>`;
-                if(userProgress.examHistory.length > 0){
-                    progressHTML += `<div class="overflow-x-auto"><table class="w-full text-left table-auto"><thead><tr class="border-b dark:border-gray-600"><th class="p-2">Date</th><th class="p-2">Score</th><th class="p-2">Result</th><th class="p-2">Time</th></tr></thead><tbody>`;
-                    userProgress.examHistory.slice().reverse().forEach(exam => {
-                        progressHTML += `<tr class="border-b dark:border-gray-700"><td class="p-2">${exam.date}</td><td class="p-2">${exam.score}</td><td class="p-2 ${exam.passed ? 'text-green-500' : 'text-red-500'}">${exam.passed ? 'PASS' : 'FAIL'}</td><td class="p-2">${exam.time}</td></tr>`;
-                    });
-                    progressHTML += `</tbody></table></div>`;
-                } else {
-                    progressHTML += `<p class="text-gray-500 dark:text-gray-400">No practice exams taken yet.</p>`;
-                }
-                progressHTML += `</div>`;
-                
-                // Chapter Performance
-                progressHTML += `<div class="mb-8"><h2 class="text-xl font-bold mb-4">Chapter Performance</h2><div class="space-y-3">`;
-                Object.values(userProgress.chapterPerformance).forEach((chap, index) => {
-                     const percentage = chap.attempted === 0 ? 0 : Math.round((chap.correct / chap.attempted) * 100);
-                     progressHTML += `<div class="flex justify-between items-center bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
-                                        <span class="font-semibold">Ch ${index + 1}: ${chap.title}</span>
-                                        <span>${chap.correct} / ${chap.attempted} (${percentage}%)</span>
-                                      </div>`;
-                });
-                progressHTML += `</div></div>`;
+                Object.entries(userProgress).forEach(([className, classData]) => {
+                    progressHTML += `<div class="mb-10"><h2 class="text-2xl font-bold mb-4 text-center border-b pb-2">${className} Class</h2>`;
+                    
+                    progressHTML += `<div class="mb-8"><h3 class="text-xl font-bold mb-4">Practice Exam History</h3>`;
+                    if(classData.examHistory.length > 0){
+                         progressHTML += `<div class="overflow-x-auto"><table class="w-full text-left table-auto"><thead><tr class="border-b dark:border-gray-600"><th class="p-2">Date</th><th class="p-2">Score</th><th class="p-2">Result</th><th class="p-2">Time</th></tr></thead><tbody>`;
+                        classData.examHistory.slice().reverse().forEach(exam => {
+                            progressHTML += `<tr class="border-b dark:border-gray-700"><td class="p-2">${exam.date}</td><td class="p-2">${exam.score}</td><td class="p-2 ${exam.passed ? 'text-green-500' : 'text-red-500'}">${exam.passed ? 'PASS' : 'FAIL'}</td><td class="p-2">${exam.time}</td></tr>`;
+                        });
+                        progressHTML += `</tbody></table></div>`;
+                    } else {
+                        progressHTML += `<p class="text-gray-500 dark:text-gray-400">No practice exams taken yet for this class.</p>`;
+                    }
+                     progressHTML += `</div>`;
 
-                // Action Buttons
+                    progressHTML += `<div class="mb-8"><h3 class="text-xl font-bold mb-4">Chapter Performance</h3><div class="space-y-3">`;
+                    Object.entries(classData.chapterPerformance).sort((a,b) => a[0] - b[0]).forEach(([chapId, chap]) => {
+                        const percentage = chap.attempted === 0 ? 0 : Math.round((chap.correct / chap.attempted) * 100);
+                        progressHTML += `<div class="flex justify-between items-center bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
+                                            <span class="font-semibold">Ch ${chapId}: ${chap.title}</span>
+                                            <span>${chap.correct} / ${chap.attempted} (${percentage}%)</span>
+                                          </div>`;
+                    });
+                    progressHTML += `</div></div></div>`;
+                });
+
+
                 progressHTML += `<div class="flex flex-col md:flex-row gap-4 mt-8">
                                     <button id="back-to-menu-btn" class="w-full bg-gray-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-600">Back to Menu</button>
                                     <button id="reset-progress-btn" class="w-full bg-red-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-red-700">Reset All Progress</button>
@@ -203,15 +253,38 @@
 
                 document.getElementById('back-to-menu-btn').addEventListener('click', () => {
                     progressContainer.classList.add('hidden');
-                    selectionContainer.classList.remove('hidden');
+                    licenseContainer.classList.remove('hidden');
                 });
                 document.getElementById('reset-progress-btn').addEventListener('click', resetProgress);
             }
 
 
             // ----- INITIALIZATION -----
-            function initializeChapterSelection() {
-                CHAPTER_DATA.forEach(chapter => {
+            function initializeLicenseSelection() {
+                Object.keys(availableClasses).forEach(name => {
+                    const button = document.createElement('button');
+                    button.textContent = name;
+                    button.classList.add('license-button', 'w-full', 'text-center', 'p-6', 'rounded-lg', 'border', 'border-gray-300', 'dark:border-gray-600', 'cursor-pointer', 'hover:bg-gray-100', 'dark:hover:bg-gray-700', 'transition-colors', 'text-lg', 'font-bold');
+                    button.addEventListener('click', () => selectLicense(name));
+                    licenseList.appendChild(button);
+                });
+            }
+
+            function selectLicense(name) {
+                selectedLicense = availableClasses[name];
+                licenseContainer.classList.add('hidden');
+                
+                // Configure and show mode selection screen
+                selectionHeader.textContent = `${name} Class Study`;
+                examDesc.textContent = `${selectedLicense.examQuestions} random questions.`;
+                examLongDesc.textContent = `Take a simulated ${name} class exam with ${selectedLicense.examQuestions} randomly selected questions from the entire pool. You need ${selectedLicense.passingScore} correct answers to pass. Your time will be recorded.`;
+                initializeChapterSelection(selectedLicense.chapters);
+                selectionContainer.classList.remove('hidden');
+            }
+
+            function initializeChapterSelection(chapters) {
+                chapterList.innerHTML = ''; // Clear previous chapters
+                chapters.forEach(chapter => {
                     const div = document.createElement('div');
                     const input = document.createElement('input');
                     input.type = 'checkbox';
@@ -231,84 +304,47 @@
                 });
             }
             
-            // ----- DOM-BASED GAME LOGIC -----
-            function displayQuestion() {
-                // ... This function remains the same as v0.1.2
+            // ----- DOM-BASED GAME LOGIC (Functions are mostly the same) -----
+             function displayQuestion() {
                 if (currentQuestionIndex >= allQuestions.length) {
                     displayFinalScore();
                     return;
                 }
-
                 gameContainer.innerHTML = '';
                 const question = allQuestions[currentQuestionIndex];
-
-                let gameHTML = `<div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
-                                    <p>Question ${currentQuestionIndex + 1} of ${allQuestions.length}</p>
-                                    <div class="text-right">
-                                        <p id="live-score">Score: ${overallScore.correct} / ${overallScore.attempted}</p>
-                                        ${gameMode === 'exam' ? '<p id="timer">Time: 00:00</p>' : ''}
-                                    </div>
-                               </div>`;
-                
+                let gameHTML = `<div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400"><p>Question ${currentQuestionIndex + 1} of ${allQuestions.length}</p><div class="text-right"><p id="live-score">Score: ${overallScore.correct} / ${overallScore.attempted}</p>${gameMode === 'exam' ? '<p id="timer">Time: 00:00</p>' : ''}</div></div>`;
                 gameHTML += `<div class="my-4">`;
-                if(gameMode === 'study'){
-                   gameHTML += `<p class="text-sm text-gray-500 dark:text-gray-400 mb-2">ID: ${question.id || 'N/A'}</p>`;
-                }
+                if(gameMode === 'study'){ gameHTML += `<p class="text-sm text-gray-500 dark:text-gray-400 mb-2">ID: ${question.id || 'N/A'}</p>`; }
                 gameHTML += `<p class="text-lg text-gray-800 dark:text-gray-200">${question.question || '[Missing Question Text]'}</p></div>`;
-
-                if (question.image) {
-                    gameHTML += `<div class="my-4 flex justify-center"><img src="${question.image}" alt="Question Figure" class="max-w-full h-auto rounded-lg"></div>`;
-                }
-                
+                if (question.image) { gameHTML += `<div class="my-4 flex justify-center"><img src="${question.image}" alt="Question Figure" class="max-w-full h-auto rounded-lg"></div>`; }
                 gameHTML += `<div id="options-container" class="space-y-3">`;
-                (question.options || []).forEach(optionText => {
-                    gameHTML += `<button class="option-btn block w-full text-left p-4 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-blue-100 dark:hover:bg-blue-900">${optionText || ''}</button>`;
-                });
+                (question.options || []).forEach(optionText => { gameHTML += `<button class="option-btn block w-full text-left p-4 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-blue-100 dark:hover:bg-blue-900">${optionText || ''}</button>`; });
                 gameHTML += `</div>`;
-
                 gameContainer.innerHTML = gameHTML;
-
-                document.querySelectorAll('.option-btn').forEach(btn => {
-                    btn.addEventListener('click', () => handleOptionClick(btn, question));
-                });
+                document.querySelectorAll('.option-btn').forEach(btn => btn.addEventListener('click', () => handleOptionClick(btn, question)));
             }
 
             function handleOptionClick(selectedButton, question) {
-                // ... This function remains the same as v0.1.2
                 const buttons = document.querySelectorAll('.option-btn');
-                buttons.forEach(b => b.disabled = true); // Disable all buttons
-
+                buttons.forEach(b => b.disabled = true);
                 const selectedAnswer = selectedButton.textContent;
                 const correctAnswer = question.answer;
-
                 overallScore.attempted++;
                 if (gameMode === 'study') chapterScores[question.sourceChapter].attempted++;
-
                 if (selectedAnswer === correctAnswer) {
                     overallScore.correct++;
                     if (gameMode === 'study') chapterScores[question.sourceChapter].correct++;
-                    selectedButton.classList.remove('bg-gray-100', 'dark:bg-gray-700');
                     selectedButton.classList.add('bg-green-500', 'text-white');
                 } else {
                     missedQuestions.push({ question: question.question, yourAnswer: selectedAnswer, correctAnswer: correctAnswer, id: question.id });
-                    selectedButton.classList.remove('bg-gray-100', 'dark:bg-gray-700');
                     selectedButton.classList.add('bg-red-500', 'text-white');
-                    buttons.forEach(b => {
-                        if (b.textContent === correctAnswer) {
-                            b.classList.remove('bg-gray-100', 'dark:bg-gray-700');
-                            b.classList.add('bg-green-500', 'text-white');
-                        }
-                    });
+                    buttons.forEach(b => { if (b.textContent === correctAnswer) b.classList.add('bg-green-500', 'text-white'); });
                 }
                 document.getElementById('live-score').textContent = `Score: ${overallScore.correct} / ${overallScore.attempted}`;
-
                 const nextBtn = document.createElement('button');
                 nextBtn.textContent = 'Next Question';
                 nextBtn.classList.add('w-full', 'mt-6', 'bg-blue-600', 'text-white', 'font-bold', 'py-3', 'px-8', 'rounded-lg', 'hover:bg-blue-700');
-                nextBtn.addEventListener('click', () => {
-                    currentQuestionIndex++;
-                    displayQuestion();
-                });
+                nextBtn.addEventListener('click', () => { currentQuestionIndex++; displayQuestion(); });
                 gameContainer.appendChild(nextBtn);
             }
 
@@ -321,100 +357,67 @@
                 timerEl.textContent = `Time: ${minutes}:${seconds}`;
             }
 
-            // ----- GAME LOGIC FUNCTIONS -----
             function startGame() {
-                allQuestions = [];
-                currentQuestionIndex = 0;
-                missedQuestions = [];
-                chapterScores = {};
-                overallScore = { correct: 0, attempted: 0 };
-                clearInterval(timerInterval);
-
+                allQuestions = []; currentQuestionIndex = 0; missedQuestions = []; chapterScores = {};
+                overallScore = { correct: 0, attempted: 0 }; clearInterval(timerInterval);
                 if (gameMode === 'study') {
                     const selectedChapters = Array.from(document.querySelectorAll('input[name="chapter"]:checked')).map(cb => parseInt(cb.value));
                     if (selectedChapters.length === 0) return;
-                    
-                    CHAPTER_DATA.forEach(ch => {
+                    selectedLicense.chapters.forEach(ch => {
                         if (selectedChapters.includes(ch.id)) {
                             chapterScores[ch.id] = { correct: 0, attempted: 0 };
                             ch.data.questions.forEach(q => allQuestions.push({ ...q, sourceChapter: ch.id }));
                         }
                     });
                     if (randomizeCheckbox.checked) allQuestions.sort(() => Math.random() - 0.5);
-                
                 } else if (gameMode === 'exam') {
                     examStartTime = new Date();
-                    const fullPool = CHAPTER_DATA.map(ch => ch.data.questions).flat();
-                    fullPool.sort(() => Math.random() - 0.5); // Shuffle
-                    allQuestions = fullPool.slice(0, 35);
+                    const fullPool = selectedLicense.chapters.map(ch => ch.data.questions).flat();
+                    fullPool.sort(() => Math.random() - 0.5);
+                    allQuestions = fullPool.slice(0, selectedLicense.examQuestions);
                     timerInterval = setInterval(updateTimer, 1000);
                 }
-                
                 selectionContainer.classList.add('hidden');
                 gameContainer.classList.remove('hidden');
                 displayQuestion();
             }
 
             function displayFinalScore() {
-                gameContainer.innerHTML = ''; 
-                gameContainer.classList.add('hidden');
-                clearInterval(timerInterval);
-                
-                let timeString = '';
-                let passed = false;
+                gameContainer.innerHTML = ''; gameContainer.classList.add('hidden'); clearInterval(timerInterval);
+                let timeString = ''; let passed = false;
+                const licenseName = Object.keys(availableClasses).find(key => availableClasses[key] === selectedLicense);
 
                 if (gameMode === 'exam') {
                     const elapsedMs = new Date() - examStartTime;
                     const seconds = Math.floor((elapsedMs / 1000) % 60).toString().padStart(2, '0');
                     const minutes = Math.floor(elapsedMs / 60000);
-                    timeString = `${minutes} minute${minutes !== 1 ? 's' : ''} and ${seconds} second${seconds !== 1 ? 's' : ''}`;
-                    passed = overallScore.correct >= 26;
-
-                    // Save exam result to progress
-                    userProgress.examHistory.push({
-                        date: new Date().toLocaleDateString(),
-                        score: `${overallScore.correct} / 35`,
-                        passed: passed,
-                        time: timeString
-                    });
-                } else { // Study Mode
-                     // Update chapter performance
+                    timeString = `${minutes}m ${seconds}s`;
+                    passed = overallScore.correct >= selectedLicense.passingScore;
+                    userProgress[licenseName].examHistory.push({ date: new Date().toLocaleDateString(), score: `${overallScore.correct} / ${selectedLicense.examQuestions}`, passed: passed, time: timeString });
+                } else {
                      for (const chapterId in chapterScores) {
-                        userProgress.chapterPerformance[chapterId].correct += chapterScores[chapterId].correct;
-                        userProgress.chapterPerformance[chapterId].attempted += chapterScores[chapterId].attempted;
+                        userProgress[licenseName].chapterPerformance[chapterId].correct += chapterScores[chapterId].correct;
+                        userProgress[licenseName].chapterPerformance[chapterId].attempted += chapterScores[chapterId].attempted;
                     }
                 }
-                saveProgress(); // Save updated progress to localStorage
-
+                saveProgress();
 
                 let scoreHTML = ``;
                 if(gameMode === 'exam'){
-                    scoreHTML += `<h1 class="text-3xl font-bold text-center mb-2">Practice Exam Complete!</h1>`;
-                    scoreHTML += `<p class="text-center text-lg mb-6 ${passed ? 'text-green-500' : 'text-red-500'} font-semibold">${passed ? 'Result: PASS' : 'Result: FAIL'}</p>`;
-                     scoreHTML += `<div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 mb-6 text-center">
-                                    <h2 class="text-xl font-bold">Final Score</h2>
-                                    <p class="text-3xl font-light mt-2">${overallScore.correct} / 35</p>
-                                    <p class="text-md text-gray-500 dark:text-gray-400 mt-2">Time Taken: ${timeString}</p>
-                                  </div>`;
-                } else { // Study Mode
+                    scoreHTML += `<h1 class="text-3xl font-bold text-center mb-2">Practice Exam Complete!</h1><p class="text-center text-lg mb-6 ${passed ? 'text-green-500' : 'text-red-500'} font-semibold">${passed ? 'Result: PASS' : 'Result: FAIL'}</p>`;
+                    scoreHTML += `<div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 mb-6 text-center"><h2 class="text-xl font-bold">Final Score</h2><p class="text-3xl font-light mt-2">${overallScore.correct} / ${selectedLicense.examQuestions}</p><p class="text-md text-gray-500 dark:text-gray-400 mt-2">Time Taken: ${timeString}</p></div>`;
+                } else {
                     scoreHTML = `<h1 class="text-2xl md:text-3xl font-bold text-center mb-6">Study Session Complete!</h1>`;
                     const percentage = allQuestions.length === 0 ? 0 : Math.round((overallScore.correct / allQuestions.length) * 100);
-                    scoreHTML += `<div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 mb-6 text-center">
-                                    <h2 class="text-xl font-bold">Overall Score</h2>
-                                    <p class="text-3xl font-light mt-2">${overallScore.correct} / ${allQuestions.length} (${percentage}%)</p>
-                                  </div>`;
-                    
+                    scoreHTML += `<div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 mb-6 text-center"><h2 class="text-xl font-bold">Overall Score</h2><p class="text-3xl font-light mt-2">${overallScore.correct} / ${allQuestions.length} (${percentage}%)</p></div>`;
                     const selectedChapterIds = Object.keys(chapterScores);
                     if (selectedChapterIds.length > 1) {
                          scoreHTML += `<h2 class="text-xl font-bold mb-4">Session Chapter Breakdown</h2><div class="space-y-3 mb-6">`;
                         for (const chapterId of selectedChapterIds) {
                             const score = chapterScores[chapterId];
-                            const chapInfo = CHAPTER_DATA.find(ch => ch.id == chapterId);
+                            const chapInfo = selectedLicense.chapters.find(ch => ch.id == chapterId);
                             const chapPercentage = score.attempted === 0 ? 0 : Math.round((score.correct / score.attempted) * 100);
-                            scoreHTML += `<div class="flex justify-between items-center bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
-                                            <span class="font-semibold">Chapter ${chapterId}: ${chapInfo.title}</span>
-                                            <span>${score.correct} / ${score.attempted} (${chapPercentage}%)</span>
-                                          </div>`;
+                            scoreHTML += `<div class="flex justify-between items-center bg-gray-100 dark:bg-gray-700 p-3 rounded-lg"><span class="font-semibold">Chapter ${chapterId}: ${chapInfo.title}</span><span>${score.correct} / ${score.attempted} (${chapPercentage}%)</span></div>`;
                         }
                         scoreHTML += `</div>`;
                     }
@@ -423,15 +426,10 @@
                 if (missedQuestions.length > 0) {
                     scoreHTML += `<h2 class="text-xl font-bold mb-4">Review Missed Questions</h2><div class="space-y-4">`;
                     missedQuestions.forEach(q => {
-                        scoreHTML += `<div class="bg-red-100 dark:bg-red-900/20 border-l-4 border-red-500 p-4 rounded-r-lg">
-                                        <p class="font-semibold text-gray-800 dark:text-gray-200">${q.id}: ${q.question}</p>
-                                        <p class="mt-2 text-red-700 dark:text-red-400"><span class="font-bold">Your Answer:</span> ${q.yourAnswer}</p>
-                                        <p class="mt-1 text-green-700 dark:text-green-400"><span class="font-bold">Correct Answer:</span> ${q.correctAnswer}</p>
-                                      </div>`;
+                        scoreHTML += `<div class="bg-red-100 dark:bg-red-900/20 border-l-4 border-red-500 p-4 rounded-r-lg"><p class="font-semibold text-gray-800 dark:text-gray-200">${q.id}: ${q.question}</p><p class="mt-2 text-red-700 dark:text-red-400"><span class="font-bold">Your Answer:</span> ${q.yourAnswer}</p><p class="mt-1 text-green-700 dark:text-green-400"><span class="font-bold">Correct Answer:</span> ${q.correctAnswer}</p></div>`;
                     });
                     scoreHTML += `</div>`;
                 }
-
                 scoreHTML += `<button id="restart-btn" class="w-full mt-8 bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700">Return to Main Menu</button>`;
                 scoreContainer.innerHTML = scoreHTML;
                 scoreContainer.classList.remove('hidden');
@@ -440,39 +438,32 @@
 
             // ----- EVENT LISTENERS -----
             function selectMode(mode) {
-                gameMode = mode;
-                startBtn.disabled = false;
+                gameMode = mode; startBtn.disabled = false;
                 startBtn.textContent = mode === 'study' ? 'Start Study Session' : 'Start Practice Exam';
                 if (mode === 'study') {
-                    modeStudyBtn.classList.add('selected');
-                    modeExamBtn.classList.remove('selected');
-                    studyOptions.classList.remove('hidden');
-                    examOptions.classList.add('hidden');
+                    modeStudyBtn.classList.add('selected'); modeExamBtn.classList.remove('selected');
+                    studyOptions.classList.remove('hidden'); examOptions.classList.add('hidden');
                     startBtn.disabled = document.querySelectorAll('input[name="chapter"]:checked').length === 0;
-                } else { // exam
-                    modeExamBtn.classList.add('selected');
-                    modeStudyBtn.classList.remove('selected');
-                    examOptions.classList.remove('hidden');
-                    studyOptions.classList.add('hidden');
+                } else {
+                    modeExamBtn.classList.add('selected'); modeStudyBtn.classList.remove('selected');
+                    examOptions.classList.remove('hidden'); studyOptions.classList.add('hidden');
                 }
             }
             
             modeStudyBtn.addEventListener('click', () => selectMode('study'));
             modeExamBtn.addEventListener('click', () => selectMode('exam'));
-            chapterList.addEventListener('change', () => {
-                if(gameMode === 'study') {
-                    startBtn.disabled = document.querySelectorAll('input[name="chapter"]:checked').length === 0;
-                }
-            });
+            chapterList.addEventListener('change', () => { if(gameMode === 'study') { startBtn.disabled = document.querySelectorAll('input[name="chapter"]:checked').length === 0; } });
             startBtn.addEventListener('click', startGame);
             viewProgressBtn.addEventListener('click', displayProgress);
+            backToLicenseBtn.addEventListener('click', () => location.reload());
 
             // ----- START THE APP -----
             loadProgress();
-            initializeChapterSelection();
+            initializeLicenseSelection();
         }, 50);
         });
     </script>
 </body>
 </html>
+
 
