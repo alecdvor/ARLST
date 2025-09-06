@@ -5,22 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amateur Radio Exam Study Game - v0.1.2</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
             touch-action: manipulation;
         }
-        /* Custom checkbox style */
         .chapter-checkbox:checked + label, .option-checkbox:checked + label {
-            background-color: #3b82f6; /* Tailwind blue-500 */
+            background-color: #3b82f6;
             border-color: #3b82f6;
             color: white;
         }
         .mode-button.selected {
              background-color: #3b82f6;
              color: white;
+        }
+        .option-btn {
+            transition: background-color 0.2s;
         }
     </style>
 </head>
@@ -30,7 +31,6 @@
     <div id="selection-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8">
         <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">Choose a Study Mode</h1>
         
-        <!-- Mode Selection Buttons -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <button id="mode-study-btn" class="mode-button w-full text-center p-4 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                 <span class="text-lg font-bold">Study by Chapter</span>
@@ -42,12 +42,9 @@
             </button>
         </div>
 
-        <!-- Study by Chapter Options (Initially Hidden) -->
         <div id="study-options" class="hidden">
             <p class="text-center text-gray-500 dark:text-gray-400 mb-6">Choose one or more chapters to begin.</p>
-            <div id="chapter-list" class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
-                <!-- Chapter checkboxes will be dynamically inserted here -->
-            </div>
+            <div id="chapter-list" class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6"></div>
             <div class="flex items-center justify-center mb-8">
                 <input type="checkbox" id="randomize-questions" name="randomize" class="hidden option-checkbox" checked>
                 <label for="randomize-questions" class="flex items-center justify-center w-auto px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
@@ -56,7 +53,6 @@
             </div>
         </div>
 
-        <!-- Practice Exam Options (Initially Hidden) -->
         <div id="exam-options" class="hidden text-center">
             <p class="text-gray-600 dark:text-gray-300 mb-6">Take a simulated General class exam with 35 randomly selected questions from the entire pool. You need 26 correct answers to pass. Your time will be recorded.</p>
         </div>
@@ -66,8 +62,8 @@
         </button>
     </div>
 
-    <!-- Main Game Screen (Phaser will inject canvas here) -->
-    <div id="game-container" class="w-full max-w-2xl mx-auto hidden"></div>
+    <!-- Main Game Screen (DOM-based) -->
+    <div id="game-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 hidden"></div>
 
     <!-- Final Score Screen -->
     <div id="score-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 hidden"></div>
@@ -123,12 +119,13 @@
 
             // ----- GLOBAL GAME STATE -----
             let allQuestions = [];
-            let gameInstance = null;
+            let currentQuestionIndex = 0;
             let chapterScores = {};
             let missedQuestions = [];
             let overallScore = { correct: 0, attempted: 0 };
             let gameMode = null; // 'study' or 'exam'
             let examStartTime = null;
+            let timerInterval = null;
 
             // ----- INITIALIZATION -----
             function initializeChapterSelection() {
@@ -151,127 +148,103 @@
                     chapterList.appendChild(div);
                 });
             }
+            
+            // ----- DOM-BASED GAME LOGIC -----
+            function displayQuestion() {
+                if (currentQuestionIndex >= allQuestions.length) {
+                    displayFinalScore();
+                    return;
+                }
 
-            // ----- PHASER GAME SCENE -----
-            class GameScene extends Phaser.Scene {
-                constructor() { super('GameScene'); }
-                preload() { this.load.image('figureG7_1', 'figureG7_1.png'); }
+                gameContainer.innerHTML = '';
+                const question = allQuestions[currentQuestionIndex];
 
-                create() {
-                    this.cameras.main.setBackgroundColor('#ffffff'); 
-                    this.currentQuestionIndex = 0;
-                    this.questionObjects = []; 
+                let gameHTML = `<div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+                                    <p>Question ${currentQuestionIndex + 1} of ${allQuestions.length}</p>
+                                    <div class="text-right">
+                                        <p id="live-score">Score: ${overallScore.correct} / ${overallScore.attempted}</p>
+                                        ${gameMode === 'exam' ? '<p id="timer">Time: 00:00</p>' : ''}
+                                    </div>
+                               </div>`;
+                
+                gameHTML += `<div class="my-4">`;
+                if(gameMode === 'study'){
+                   gameHTML += `<p class="text-sm text-gray-500 dark:text-gray-400 mb-2">ID: ${question.id || 'N/A'}</p>`;
+                }
+                gameHTML += `<p class="text-lg text-gray-800 dark:text-gray-200">${question.question || '[Missing Question Text]'}</p></div>`;
 
-                    this.scoreText = this.add.text(this.sys.game.config.width - 20, 20, '', { fontFamily: 'Inter', fontSize: '16px', color: '#4b5563', align: 'right' }).setOrigin(1, 0);
-                    this.questionObjects.push(this.scoreText);
-
-                    if (gameMode === 'exam') {
-                        this.timerText = this.add.text(this.sys.game.config.width - 20, 45, 'Time: 00:00', { fontFamily: 'Inter', fontSize: '16px', color: '#4b5563', align: 'right' }).setOrigin(1, 0);
-                        this.questionObjects.push(this.timerText);
-                        this.time.addEvent({ delay: 1000, callback: this.updateTimer, callbackScope: this, loop: true });
-                    }
-
-                    this.displayQuestion();
+                if (question.image) {
+                    gameHTML += `<div class="my-4 flex justify-center"><img src="${question.image}" alt="Question Figure" class="max-w-full h-auto rounded-lg"></div>`;
                 }
                 
-                updateTimer() {
-                    const elapsedMs = new Date() - examStartTime;
-                    const seconds = Math.floor((elapsedMs / 1000) % 60).toString().padStart(2, '0');
-                    const minutes = Math.floor(elapsedMs / 60000).toString().padStart(2, '0');
-                    this.timerText.setText(`Time: ${minutes}:${seconds}`);
-                }
+                gameHTML += `<div id="options-container" class="space-y-3">`;
+                (question.options || []).forEach(optionText => {
+                    gameHTML += `<button class="option-btn block w-full text-left p-4 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-blue-100 dark:hover:bg-blue-900">${optionText || ''}</button>`;
+                });
+                gameHTML += `</div>`;
 
-                displayQuestion() {
-                    this.questionObjects.forEach(obj => obj.destroy());
-                    this.questionObjects = [this.scoreText];
-                    if (this.timerText) this.questionObjects.push(this.timerText);
+                gameContainer.innerHTML = gameHTML;
 
-
-                    if (this.currentQuestionIndex >= allQuestions.length) {
-                        this.showEndScreen();
-                        return;
-                    }
-                    
-                    this.scoreText.setText(`Score: ${overallScore.correct} / ${overallScore.attempted}`);
-
-                    const question = allQuestions[this.currentQuestionIndex];
-                    const canvasWidth = this.sys.game.config.width;
-
-                    const textStyle = { fontFamily: 'Inter', fontSize: '18px', color: '#1f2937', align: 'left', wordWrap: { width: canvasWidth - 40 } };
-                    const idStyle = { fontFamily: 'Inter', fontSize: '14px', color: '#4b5563' };
-                    const optionStyle = { fontFamily: 'Inter', fontSize: '16px', color: '#111827', backgroundColor: '#f9fafb', padding: { x: 10, y: 5 }, wordWrap: { width: canvasWidth - 60 }, fixedWidth: canvasWidth - 40, };
-
-                    let yPos = 20;
-                    const progressText = this.add.text(20, yPos, `Question ${this.currentQuestionIndex + 1} of ${allQuestions.length}`, idStyle);
-                    yPos += 25;
-                     if(gameMode === 'study'){ // Only show ID in study mode
-                        const idText = this.add.text(20, yPos, `ID: ${question.id || 'N/A'}`, idStyle);
-                        this.questionObjects.push(idText);
-                        yPos += 30;
-                    }
-                    const qText = this.add.text(20, yPos, question.question || '[Missing Question Text]', textStyle);
-                    yPos += qText.height + 20;
-                    
-                    this.questionObjects.push(progressText, qText);
-
-                    if (question.image) {
-                        const img = this.add.image(canvasWidth / 2, yPos + 100, 'figureG7_1').setScale(0.5);
-                        yPos += img.displayHeight + 20;
-                        this.questionObjects.push(img);
-                    }
-
-                    (question.options || []).forEach(optionText => {
-                        const option = this.add.text(20, yPos, optionText || '', optionStyle)
-                            .setInteractive({ useHandCursor: true });
-                        option.on('pointerdown', () => this.handleOptionClick(option, question));
-                        yPos += option.height + 15;
-                        this.questionObjects.push(option);
-                    });
-                }
-
-                handleOptionClick(selectedOption, question) {
-                     const selectedAnswer = selectedOption.text;
-                    const correctAnswer = question.answer;
-                    
-                    overallScore.attempted++;
-                    if(gameMode === 'study') chapterScores[question.sourceChapter].attempted++;
-
-                    this.questionObjects.filter(o => o.type === 'Text' && question.options.includes(o.text)).forEach(o => o.disableInteractive());
-                    
-                    if (selectedAnswer === correctAnswer) {
-                        overallScore.correct++;
-                        if(gameMode === 'study') chapterScores[question.sourceChapter].correct++;
-                        selectedOption.setStyle({ color: '#ffffff', backgroundColor: '#22c55e' });
-                    } else {
-                        missedQuestions.push({ question: question.question, yourAnswer: selectedAnswer, correctAnswer: correctAnswer, id: question.id });
-                        selectedOption.setStyle({ color: '#ffffff', backgroundColor: '#ef4444' });
-                        this.questionObjects.find(o => o.text === correctAnswer).setStyle({ color: '#ffffff', backgroundColor: '#22c55e' });
-                    }
-                    
-                    this.scoreText.setText(`Score: ${overallScore.correct} / ${overallScore.attempted}`);
-
-                    const nextBtn = this.add.text(this.sys.game.config.width / 2, this.sys.game.config.height - 40, 'Next Question', { fontSize: '20px', color: '#ffffff', backgroundColor: '#3b82f6', padding: {x: 15, y: 10}})
-                        .setOrigin(0.5)
-                        .setInteractive({ useHandCursor: true });
-                    nextBtn.on('pointerdown', () => {
-                        this.currentQuestionIndex++;
-                        this.displayQuestion();
-                    });
-                    this.questionObjects.push(nextBtn);
-                }
-
-                showEndScreen() {
-                     displayFinalScore();
-                     this.game.destroy(true);
-                }
+                document.querySelectorAll('.option-btn').forEach(btn => {
+                    btn.addEventListener('click', () => handleOptionClick(btn, question));
+                });
             }
-            
+
+            function handleOptionClick(selectedButton, question) {
+                const buttons = document.querySelectorAll('.option-btn');
+                buttons.forEach(b => b.disabled = true); // Disable all buttons
+
+                const selectedAnswer = selectedButton.textContent;
+                const correctAnswer = question.answer;
+
+                overallScore.attempted++;
+                if (gameMode === 'study') chapterScores[question.sourceChapter].attempted++;
+
+                if (selectedAnswer === correctAnswer) {
+                    overallScore.correct++;
+                    if (gameMode === 'study') chapterScores[question.sourceChapter].correct++;
+                    selectedButton.classList.remove('bg-gray-100', 'dark:bg-gray-700');
+                    selectedButton.classList.add('bg-green-500', 'text-white');
+                } else {
+                    missedQuestions.push({ question: question.question, yourAnswer: selectedAnswer, correctAnswer: correctAnswer, id: question.id });
+                    selectedButton.classList.remove('bg-gray-100', 'dark:bg-gray-700');
+                    selectedButton.classList.add('bg-red-500', 'text-white');
+                    buttons.forEach(b => {
+                        if (b.textContent === correctAnswer) {
+                            b.classList.remove('bg-gray-100', 'dark:bg-gray-700');
+                            b.classList.add('bg-green-500', 'text-white');
+                        }
+                    });
+                }
+                document.getElementById('live-score').textContent = `Score: ${overallScore.correct} / ${overallScore.attempted}`;
+
+                const nextBtn = document.createElement('button');
+                nextBtn.textContent = 'Next Question';
+                nextBtn.classList.add('w-full', 'mt-6', 'bg-blue-600', 'text-white', 'font-bold', 'py-3', 'px-8', 'rounded-lg', 'hover:bg-blue-700');
+                nextBtn.addEventListener('click', () => {
+                    currentQuestionIndex++;
+                    displayQuestion();
+                });
+                gameContainer.appendChild(nextBtn);
+            }
+
+            function updateTimer() {
+                const timerEl = document.getElementById('timer');
+                if(!timerEl) return;
+                const elapsedMs = new Date() - examStartTime;
+                const seconds = Math.floor((elapsedMs / 1000) % 60).toString().padStart(2, '0');
+                const minutes = Math.floor(elapsedMs / 60000).toString().padStart(2, '0');
+                timerEl.textContent = `Time: ${minutes}:${seconds}`;
+            }
+
             // ----- GAME LOGIC FUNCTIONS -----
             function startGame() {
                 allQuestions = [];
+                currentQuestionIndex = 0;
                 missedQuestions = [];
                 chapterScores = {};
                 overallScore = { correct: 0, attempted: 0 };
+                clearInterval(timerInterval);
 
                 if (gameMode === 'study') {
                     const selectedChapters = Array.from(document.querySelectorAll('input[name="chapter"]:checked')).map(cb => parseInt(cb.value));
@@ -290,18 +263,18 @@
                     const fullPool = CHAPTER_DATA.map(ch => ch.data.questions).flat();
                     fullPool.sort(() => Math.random() - 0.5); // Shuffle
                     allQuestions = fullPool.slice(0, 35);
+                    timerInterval = setInterval(updateTimer, 1000);
                 }
                 
                 selectionContainer.classList.add('hidden');
                 gameContainer.classList.remove('hidden');
-
-                const config = { type: Phaser.AUTO, width: 700, height: 800, parent: 'game-container', scene: GameScene };
-                gameInstance = new Phaser.Game(config);
+                displayQuestion();
             }
 
             function displayFinalScore() {
                 gameContainer.innerHTML = ''; 
                 gameContainer.classList.add('hidden');
+                clearInterval(timerInterval);
                 
                 let scoreHTML = ``;
                 if(gameMode === 'exam'){
@@ -339,7 +312,6 @@
                     }
                 }
 
-                // Missed Questions (for both modes)
                 if (missedQuestions.length > 0) {
                     scoreHTML += `<h2 class="text-xl font-bold mb-4">Review Missed Questions</h2><div class="space-y-4">`;
                     missedQuestions.forEach(q => {
