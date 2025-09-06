@@ -355,7 +355,7 @@
                 gameHTML += `<div class="my-4">`;
                 if(gameMode === 'study'){ gameHTML += `<p class="text-sm text-gray-500 dark:text-gray-400 mb-2">ID: ${question.id || 'N/A'}</p>`; }
                 gameHTML += `<p class="text-lg text-gray-800 dark:text-gray-200">${question.question || '[Missing Question Text]'}</p></div>`;
-                if (question.image) { gameHTML += `<div class="my-4 flex justify-center"><img src="${question.image}" alt="Question Figure" class="max-w-full h-auto rounded-lg"></div>`; }
+                if (question.image) { gameHTML += `<div class="my-4 flex justify-center"><img src="img/${question.image}" alt="Question Figure" class="max-w-full h-auto rounded-lg"></div>`; }
                 
                 gameHTML += `<div id="options-container" class="space-y-3">`;
                 (question.options || []).forEach(optionText => {
