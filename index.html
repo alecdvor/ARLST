@@ -23,6 +23,10 @@
         .option-btn {
             transition: background-color 0.2s;
         }
+        .option-btn.selected {
+            background-color: #93c5fd; /* blue-300 */
+            border-color: #3b82f6;
+        }
     </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col min-h-screen">
@@ -31,57 +35,58 @@
         <!-- License Selection Screen -->
         <div id="license-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8">
             <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">Select License Class</h1>
+            <div id="license-list" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <!-- License buttons will be dynamically inserted here -->
-        </div>
-         <button id="view-progress-btn" class="w-full bg-gray-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-700 transition-colors">
-            View Progress
-        </button>
-    </div>
-
-    <!-- Main Selection Screen -->
-    <div id="selection-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 hidden">
-        <h1 id="selection-header" class="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">Choose a Study Mode</h1>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <button id="mode-study-btn" class="mode-button w-full text-center p-4 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                <span class="text-lg font-bold">Study by Chapter</span>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Focus on specific topics.</p>
-            </button>
-            <button id="mode-exam-btn" class="mode-button w-full text-center p-4 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                <span class="text-lg font-bold">Practice Exam</span>
-                <p id="exam-desc" class="text-sm text-gray-500 dark:text-gray-400"></p>
-            </button>
-        </div>
-
-        <div id="study-options" class="hidden">
-            <p class="text-center text-gray-500 dark:text-gray-400 mb-6">Choose one or more chapters to begin.</p>
-            <div id="chapter-list" class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6"></div>
-            <div class="flex items-center justify-center mb-8">
-                <input type="checkbox" id="randomize-questions" name="randomize" class="hidden option-checkbox" checked>
-                <label for="randomize-questions" class="flex items-center justify-center w-auto px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                    <span>Randomize Questions</span>
-                </label>
             </div>
+             <button id="view-progress-btn" class="w-full bg-gray-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-700 transition-colors">
+                View Progress
+            </button>
         </div>
 
-        <div id="exam-options" class="hidden text-center">
-            <p id="exam-long-desc" class="text-gray-600 dark:text-gray-300 mb-6"></p>
+        <!-- Main Selection Screen -->
+        <div id="selection-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 hidden">
+            <h1 id="selection-header" class="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">Choose a Study Mode</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <button id="mode-study-btn" class="mode-button w-full text-center p-4 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="text-lg font-bold">Study by Chapter</span>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Focus on specific topics.</p>
+                </button>
+                <button id="mode-exam-btn" class="mode-button w-full text-center p-4 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="text-lg font-bold">Practice Exam</span>
+                    <p id="exam-desc" class="text-sm text-gray-500 dark:text-gray-400"></p>
+                </button>
+            </div>
+
+            <div id="study-options" class="hidden">
+                <p class="text-center text-gray-500 dark:text-gray-400 mb-6">Choose one or more chapters to begin.</p>
+                <div id="chapter-list" class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6"></div>
+                <div class="flex items-center justify-center mb-8">
+                    <input type="checkbox" id="randomize-questions" name="randomize" class="hidden option-checkbox" checked>
+                    <label for="randomize-questions" class="flex items-center justify-center w-auto px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <span>Randomize Questions</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="exam-options" class="hidden text-center">
+                <p id="exam-long-desc" class="text-gray-600 dark:text-gray-300 mb-6"></p>
+            </div>
+
+            <button id="start-btn" class="w-full bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 transition-all duration-300 disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed" disabled>
+                Start
+            </button>
+            <button id="back-to-license-btn" class="w-full mt-4 bg-gray-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-600">Back</button>
         </div>
 
-        <button id="start-btn" class="w-full bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 transition-all duration-300 disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed" disabled>
-            Start
-        </button>
-        <button id="back-to-license-btn" class="w-full mt-4 bg-gray-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-600">Back</button>
-    </div>
+        <!-- Main Game Screen (DOM-based) -->
+        <div id="game-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 hidden"></div>
 
-    <!-- Main Game Screen (DOM-based) -->
-    <div id="game-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 hidden"></div>
-
-    <!-- Final Score Screen -->
-    <div id="score-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 hidden"></div>
-    
-    <!-- Progress Screen -->
-    <div id="progress-container" class="w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 hidden"></div>
+        <!-- Final Score Screen -->
+        <div id="score-container" class="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 hidden"></div>
+        
+        <!-- Progress Screen -->
+        <div id="progress-container" class="w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 hidden"></div>
     </main>
 
     <footer class="w-full text-center p-4 text-sm text-gray-500 dark:text-gray-400 shrink-0">
@@ -171,6 +176,7 @@
 
             // ----- GLOBAL GAME STATE -----
             let allQuestions = [];
+            let userAnswers = [];
             let currentQuestionIndex = 0;
             let chapterScores = {};
             let missedQuestions = [];
@@ -261,6 +267,7 @@
 
             // ----- INITIALIZATION -----
             function initializeLicenseSelection() {
+                licenseList.innerHTML = '';
                 Object.keys(availableClasses).forEach(name => {
                     const button = document.createElement('button');
                     button.textContent = name;
@@ -304,48 +311,124 @@
                 });
             }
             
-            // ----- DOM-BASED GAME LOGIC (Functions are mostly the same) -----
-             function displayQuestion() {
-                if (currentQuestionIndex >= allQuestions.length) {
+            // ----- DOM-BASED GAME LOGIC -----
+            function displayQuestion() {
+                if (gameMode === 'study' && currentQuestionIndex >= allQuestions.length) {
                     displayFinalScore();
                     return;
                 }
                 gameContainer.innerHTML = '';
                 const question = allQuestions[currentQuestionIndex];
-                let gameHTML = `<div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400"><p>Question ${currentQuestionIndex + 1} of ${allQuestions.length}</p><div class="text-right"><p id="live-score">Score: ${overallScore.correct} / ${overallScore.attempted}</p>${gameMode === 'exam' ? '<p id="timer">Time: 00:00</p>' : ''}</div></div>`;
+
+                let gameHTML = `<div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+                                    <p>Question ${currentQuestionIndex + 1} of ${allQuestions.length}</p>
+                                    <div class="text-right">`;
+                if (gameMode === 'study') {
+                    gameHTML += `<p id="live-score">Score: ${overallScore.correct} / ${overallScore.attempted}</p>`;
+                }
+                if (gameMode === 'exam') {
+                    gameHTML += `<p id="timer">Time: 00:00</p>`;
+                }
+                gameHTML += `</div></div>`;
+                
                 gameHTML += `<div class="my-4">`;
                 if(gameMode === 'study'){ gameHTML += `<p class="text-sm text-gray-500 dark:text-gray-400 mb-2">ID: ${question.id || 'N/A'}</p>`; }
                 gameHTML += `<p class="text-lg text-gray-800 dark:text-gray-200">${question.question || '[Missing Question Text]'}</p></div>`;
                 if (question.image) { gameHTML += `<div class="my-4 flex justify-center"><img src="${question.image}" alt="Question Figure" class="max-w-full h-auto rounded-lg"></div>`; }
+                
                 gameHTML += `<div id="options-container" class="space-y-3">`;
-                (question.options || []).forEach(optionText => { gameHTML += `<button class="option-btn block w-full text-left p-4 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-blue-100 dark:hover:bg-blue-900">${optionText || ''}</button>`; });
+                (question.options || []).forEach(optionText => {
+                    const isSelected = gameMode === 'exam' && userAnswers[currentQuestionIndex] === optionText;
+                    gameHTML += `<button class="option-btn block w-full text-left p-4 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-blue-100 dark:hover:bg-blue-900 ${isSelected ? 'selected' : ''}">${optionText || ''}</button>`;
+                });
                 gameHTML += `</div>`;
+
+                // Navigation for Exam Mode
+                if (gameMode === 'exam') {
+                    gameHTML += `<div class="mt-6 flex justify-between items-center">
+                                    <button id="prev-btn" class="bg-gray-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-600 disabled:bg-gray-400" ${currentQuestionIndex === 0 ? 'disabled' : ''}>Previous</button>
+                                    <div id="submit-container"></div>
+                                    <button id="next-btn" class="bg-gray-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-600 disabled:bg-gray-400" ${currentQuestionIndex === allQuestions.length - 1 ? 'disabled' : ''}>Next</button>
+                                 </div>`;
+                }
+
                 gameContainer.innerHTML = gameHTML;
-                document.querySelectorAll('.option-btn').forEach(btn => btn.addEventListener('click', () => handleOptionClick(btn, question)));
+
+                document.querySelectorAll('.option-btn').forEach(btn => {
+                    btn.addEventListener('click', () => handleOptionClick(btn, question));
+                });
+
+                if (gameMode === 'exam') {
+                    document.getElementById('prev-btn').addEventListener('click', () => {
+                        if (currentQuestionIndex > 0) {
+                            currentQuestionIndex--;
+                            displayQuestion();
+                        }
+                    });
+                    document.getElementById('next-btn').addEventListener('click', () => {
+                        if (currentQuestionIndex < allQuestions.length - 1) {
+                            currentQuestionIndex++;
+                            displayQuestion();
+                        }
+                    });
+                    checkExamCompletion();
+                }
             }
 
             function handleOptionClick(selectedButton, question) {
-                const buttons = document.querySelectorAll('.option-btn');
-                buttons.forEach(b => b.disabled = true);
-                const selectedAnswer = selectedButton.textContent;
-                const correctAnswer = question.answer;
-                overallScore.attempted++;
-                if (gameMode === 'study') chapterScores[question.sourceChapter].attempted++;
-                if (selectedAnswer === correctAnswer) {
-                    overallScore.correct++;
-                    if (gameMode === 'study') chapterScores[question.sourceChapter].correct++;
-                    selectedButton.classList.add('bg-green-500', 'text-white');
-                } else {
-                    missedQuestions.push({ question: question.question, yourAnswer: selectedAnswer, correctAnswer: correctAnswer, id: question.id });
-                    selectedButton.classList.add('bg-red-500', 'text-white');
-                    buttons.forEach(b => { if (b.textContent === correctAnswer) b.classList.add('bg-green-500', 'text-white'); });
+                if (gameMode === 'study') {
+                    const buttons = document.querySelectorAll('.option-btn');
+                    buttons.forEach(b => b.disabled = true);
+                    const selectedAnswer = selectedButton.textContent;
+                    const correctAnswer = question.answer;
+                    overallScore.attempted++;
+                    chapterScores[question.sourceChapter].attempted++;
+                    if (selectedAnswer === correctAnswer) {
+                        overallScore.correct++;
+                        chapterScores[question.sourceChapter].correct++;
+                        selectedButton.classList.add('bg-green-500', 'text-white');
+                    } else {
+                        missedQuestions.push({ question: question.question, yourAnswer: selectedAnswer, correctAnswer: correctAnswer, id: question.id });
+                        selectedButton.classList.add('bg-red-500', 'text-white');
+                        buttons.forEach(b => { if (b.textContent === correctAnswer) b.classList.add('bg-green-500', 'text-white'); });
+                    }
+                    document.getElementById('live-score').textContent = `Score: ${overallScore.correct} / ${overallScore.attempted}`;
+                    const nextBtn = document.createElement('button');
+                    nextBtn.textContent = 'Next Question';
+                    nextBtn.classList.add('w-full', 'mt-6', 'bg-blue-600', 'text-white', 'font-bold', 'py-3', 'px-8', 'rounded-lg', 'hover:bg-blue-700');
+                    nextBtn.addEventListener('click', () => { currentQuestionIndex++; displayQuestion(); });
+                    gameContainer.appendChild(nextBtn);
+                } else { // Exam mode
+                    userAnswers[currentQuestionIndex] = selectedButton.textContent;
+                    document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+                    selectedButton.classList.add('selected');
+                    checkExamCompletion();
                 }
-                document.getElementById('live-score').textContent = `Score: ${overallScore.correct} / ${overallScore.attempted}`;
-                const nextBtn = document.createElement('button');
-                nextBtn.textContent = 'Next Question';
-                nextBtn.classList.add('w-full', 'mt-6', 'bg-blue-600', 'text-white', 'font-bold', 'py-3', 'px-8', 'rounded-lg', 'hover:bg-blue-700');
-                nextBtn.addEventListener('click', () => { currentQuestionIndex++; displayQuestion(); });
-                gameContainer.appendChild(nextBtn);
+            }
+
+            function checkExamCompletion() {
+                const allAnswered = !userAnswers.includes(null);
+                const submitContainer = document.getElementById('submit-container');
+                if (allAnswered && submitContainer) {
+                    submitContainer.innerHTML = `<button id="grade-exam-btn" class="bg-green-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-700">Grade Exam</button>`;
+                    document.getElementById('grade-exam-btn').addEventListener('click', gradeExam);
+                } else if(submitContainer) {
+                    submitContainer.innerHTML = ``;
+                }
+            }
+            
+            function gradeExam() {
+                allQuestions.forEach((question, index) => {
+                    const userAnswer = userAnswers[index];
+                    const correctAnswer = question.answer;
+                    overallScore.attempted++;
+                    if(userAnswer === correctAnswer) {
+                        overallScore.correct++;
+                    } else {
+                        missedQuestions.push({ question: question.question, yourAnswer: userAnswer, correctAnswer: correctAnswer, id: question.id });
+                    }
+                });
+                displayFinalScore();
             }
 
             function updateTimer() {
@@ -375,6 +458,7 @@
                     const fullPool = selectedLicense.chapters.map(ch => ch.data.questions).flat();
                     fullPool.sort(() => Math.random() - 0.5);
                     allQuestions = fullPool.slice(0, selectedLicense.examQuestions);
+                    userAnswers = new Array(allQuestions.length).fill(null);
                     timerInterval = setInterval(updateTimer, 1000);
                 }
                 selectionContainer.classList.add('hidden');
@@ -465,5 +549,4 @@
     </script>
 </body>
 </html>
-
 
