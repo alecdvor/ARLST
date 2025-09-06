@@ -182,8 +182,6 @@
                 }
 
                 displayQuestion() {
-                    // ... existing displayQuestion logic ...
-                    // This function remains largely the same, just with the timer being present in exam mode.
                     this.questionObjects.forEach(obj => obj.destroy());
                     this.questionObjects = [this.scoreText];
                     if (this.timerText) this.questionObjects.push(this.timerText);
@@ -207,11 +205,11 @@
                     const progressText = this.add.text(20, yPos, `Question ${this.currentQuestionIndex + 1} of ${allQuestions.length}`, idStyle);
                     yPos += 25;
                      if(gameMode === 'study'){ // Only show ID in study mode
-                        const idText = this.add.text(20, yPos, `ID: ${question.id}`, idStyle);
+                        const idText = this.add.text(20, yPos, `ID: ${question.id || 'N/A'}`, idStyle);
                         this.questionObjects.push(idText);
                         yPos += 30;
                     }
-                    const qText = this.add.text(20, yPos, question.question, textStyle);
+                    const qText = this.add.text(20, yPos, question.question || '[Missing Question Text]', textStyle);
                     yPos += qText.height + 20;
                     
                     this.questionObjects.push(progressText, qText);
@@ -222,8 +220,8 @@
                         this.questionObjects.push(img);
                     }
 
-                    question.options.forEach(optionText => {
-                        const option = this.add.text(20, yPos, optionText, optionStyle)
+                    (question.options || []).forEach(optionText => {
+                        const option = this.add.text(20, yPos, optionText || '', optionStyle)
                             .setInteractive({ useHandCursor: true });
                         option.on('pointerdown', () => this.handleOptionClick(option, question));
                         yPos += option.height + 15;
@@ -232,8 +230,6 @@
                 }
 
                 handleOptionClick(selectedOption, question) {
-                    // ... existing handleOptionClick logic ...
-                    // This function remains the same.
                      const selectedAnswer = selectedOption.text;
                     const correctAnswer = question.answer;
                     
