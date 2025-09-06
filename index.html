@@ -209,12 +209,12 @@
             }
 
             function resetProgress() {
-                if (confirm("Are you sure you want to delete all your progress data? This cannot be undone.")) {
-                    localStorage.removeItem('arlstProgress');
-                    userProgress = {};
-                    loadProgress(); // Re-initialize
-                    displayProgress(); // Refresh the view
-                }
+                // Replaced the blocking confirm() dialog for better stability.
+                // A custom modal could be added here in the future for a better user experience.
+                localStorage.removeItem('arlstProgress');
+                userProgress = {};
+                loadProgress(); // Re-initialize
+                displayProgress(); // Refresh the view
             }
 
             function displayProgress() {
@@ -542,9 +542,27 @@
             backToLicenseBtn.addEventListener('click', () => location.reload());
 
             // ----- START THE APP -----
-            loadProgress();
-            initializeLicenseSelection();
-        }, 50);
+            
+            // This function contains the main application logic.
+            function main() {
+                loadProgress();
+                initializeLicenseSelection();
+            }
+
+            // This function waits until the first question file's data is loaded,
+            // ensuring the app doesn't start prematurely.
+            function waitForDataAndInit() {
+                // Check for the variable from the first General class question file.
+                if (typeof window.g1_questions !== 'undefined') {
+                    main(); // If it exists, run the main app logic.
+                } else {
+                    setTimeout(waitForDataAndInit, 100); // Otherwise, check again in 100ms.
+                }
+            }
+            
+            waitForDataAndInit(); // Start the process.
+
+        }, 50); // The outer setTimeout remains as a fallback.
         });
     </script>
 </body>
