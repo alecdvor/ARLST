@@ -345,8 +345,8 @@
 
                     const label = document.createElement('label');
                     label.htmlFor = `chapter-${chapter.id}`;
-                    label.textContent = `Chapter ${chapter.id}`;
-                    label.classList.add('block', 'w-full', 'text-center', 'p-4', 'rounded-lg', 'border', 'border-gray-300', 'dark:border-gray-600', 'cursor-pointer', 'hover:bg-gray-100', 'dark:hover:bg-gray-700', 'transition-colors');
+                    label.innerHTML = `<span class="font-bold">Chapter ${chapter.id}</span><span class="text-xs mt-1">${chapter.title}</span>`;
+                    label.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'h-full', 'w-full', 'text-center', 'p-2', 'rounded-lg', 'border', 'border-gray-300', 'dark:border-gray-600', 'cursor-pointer', 'hover:bg-gray-100', 'dark:hover:bg-gray-700', 'transition-colors');
                     
                     div.appendChild(input);
                     div.appendChild(label);
